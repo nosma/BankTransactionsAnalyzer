@@ -13,7 +13,7 @@ import org.joda.time.LocalDate;
 public class BankTransaction implements Serializable {
 
   @Id
-  @GeneratedValue //(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "ID")
   private int id;
 
