@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 /**
  * @author fragkakise on 11/09/2015.
