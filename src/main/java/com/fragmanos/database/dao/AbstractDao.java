@@ -17,7 +17,7 @@ public abstract class AbstractDao {
       entityManager.persist(entity);
     }
 
-    public List<BankTransaction> selectAll(){
+    public List selectAll(){
       return entityManager.createQuery("from " + BankTransaction.class.getName()).getResultList();
     }
 

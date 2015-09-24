@@ -6,7 +6,7 @@
 //import java.util.Date;
 //import java.util.List;
 //
-//import com.fragmanos.database.configuration.AppConfig;
+//import com.fragmanos.AppConfig;
 //import com.fragmanos.database.model.BankTransaction;
 //import com.fragmanos.database.service.BankTransactionService;
 //import org.joda.time.LocalDate;

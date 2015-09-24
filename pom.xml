@@ -53,4 +53,31 @@
     </dependency>
   </dependencies>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+  <!--TODO DISTRIBUTION SETUP-->
+  <!--<distributionManagement>-->
+    <!--<repository>-->
+      <!--<uniqueVersion>false</uniqueVersion>-->
+      <!--<id>0.1</id>-->
+      <!--<name>Bank Financials Repository</name>-->
+      <!--<url>scp://file://C:/Users/fragkakise/IdeaProjects/TDDTestingProject/Repository</url>-->
+      <!--<layout>default</layout>-->
+    <!--</repository>-->
+    <!--<snapshotRepository>-->
+      <!--<uniqueVersion>true</uniqueVersion>-->
+      <!--<id>0.1</id>-->
+      <!--<name>Bank Financials Repository</name>-->
+      <!--<url>scp://file://C:/Users/fragkakise/IdeaProjects/TDDTestingProject/Snapshot</url>-->
+      <!--<layout>legacy</layout>-->
+    <!--</snapshotRepository>-->
+  <!--</distributionManagement>-->
+
 </project>
