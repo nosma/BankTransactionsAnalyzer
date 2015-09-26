@@ -21,9 +21,9 @@
 // * @author fragkakise on 11/09/2015.
 // */
 //@SpringBootApplication
-//public class AppMain extends WebMvcConfigurerAdapter {
+//static class AppMain extends WebMvcConfigurerAdapter {
 //
-////  public static void main(String[] args) {
+////  static static void main(String[] args) {
 //////    SpringApplication.run(AppMain.class, args);
 ////    AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 ////    BankTransactionService service = (BankTransactionService)context.getBean("bankTransactionService");
@@ -79,7 +79,7 @@
 ////    return date;
 ////  }
 //
-//  public static void main(String[] args) {
+//  static static void main(String[] args) {
 //    ApplicationContext ctx = SpringApplication.run(AppConfig.class, args);
 //
 //    System.out.println("Let's inspect the beans provided by Spring Boot:");

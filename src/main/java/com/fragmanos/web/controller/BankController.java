@@ -1,29 +1,28 @@
-package com.fragmanos.database.controller;
+package com.fragmanos.web.controller;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.fragmanos.database.dao.BankTransactionDao;
 import com.fragmanos.database.model.BankTransaction;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class BankController {
 
     @Autowired
     BankTransactionDao bankTransactionDao;
+//
+//    @RequestMapping("/")
+//    public String greeting() {
+//        return "Welcome !";
+//    }
 
-    @RequestMapping("/")
-    public String greeting() {
-        return "Welcome !";
-    }
-
+//    @RequestMapping(value = "/transaction/{descr}" , method = RequestMethod.GET)
     @RequestMapping("/transaction")
-    public List<BankTransaction> transaction(@RequestParam(value = "descr", defaultValue = "Default Description") String descr) {
+//    public List<BankTransaction> transaction(@PathVariable String descr) {
+    public List<BankTransaction> transaction() {
         BankTransaction transaction1 = new BankTransaction(new LocalDate(),"Shoes",60d);
         BankTransaction transaction2 = new BankTransaction(new LocalDate(),"Hat",10d);
         bankTransactionDao.saveBankTransaction(transaction1);

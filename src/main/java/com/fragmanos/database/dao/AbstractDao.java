@@ -32,7 +32,7 @@ public abstract class AbstractDao {
     }
   }
 
-//  public BankTransaction update(BankTransaction transaction){
+//  static BankTransaction update(BankTransaction transaction){
 //    return entityManager.
 //  }
 }
