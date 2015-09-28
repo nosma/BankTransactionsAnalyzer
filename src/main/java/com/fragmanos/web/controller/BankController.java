@@ -1,23 +1,20 @@
 package com.fragmanos.web.controller;
 
-import java.util.*;
-
 import com.fragmanos.database.dao.BankTransactionDao;
 import com.fragmanos.database.model.BankTransaction;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class BankController {
 
     @Autowired
     BankTransactionDao bankTransactionDao;
-//
-//    @RequestMapping("/")
-//    public String greeting() {
-//        return "Welcome !";
-//    }
 
 //    @RequestMapping(value = "/transaction/{descr}" , method = RequestMethod.GET)
     @RequestMapping("/transaction")

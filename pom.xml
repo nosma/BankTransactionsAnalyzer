@@ -4,15 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>TDDTestingProject</groupId>
-  <artifactId>TDDTestingProject</artifactId>
-  <version>1.0-SNAPSHOT</version>
-
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>1.2.5.RELEASE</version>
   </parent>
+
+  <groupId>TDDTestingProject</groupId>
+  <artifactId>TDDTestingProject</artifactId>
+  <version>1.0-SNAPSHOT</version>
 
   <properties>
     <joda.version>2.8.2</joda.version>
@@ -87,23 +87,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <!--TODO DISTRIBUTION SETUP-->
-  <!--<distributionManagement>-->
-    <!--<repository>-->
-      <!--<uniqueVersion>false</uniqueVersion>-->
-      <!--<id>0.1</id>-->
-      <!--<name>Bank Financials Repository</name>-->
-      <!--<url>scp://file://C:/Users/fragkakise/IdeaProjects/TDDTestingProject/Repository</url>-->
-      <!--<layout>default</layout>-->
-    <!--</repository>-->
-    <!--<snapshotRepository>-->
-      <!--<uniqueVersion>true</uniqueVersion>-->
-      <!--<id>0.1</id>-->
-      <!--<name>Bank Financials Repository</name>-->
-      <!--<url>scp://file://C:/Users/fragkakise/IdeaProjects/TDDTestingProject/Snapshot</url>-->
-      <!--<layout>legacy</layout>-->
-    <!--</snapshotRepository>-->
-  <!--</distributionManagement>-->
 
 </project>
