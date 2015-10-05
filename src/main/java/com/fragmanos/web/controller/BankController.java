@@ -20,10 +20,14 @@ public class BankController {
     @RequestMapping("/transaction")
 //    public List<BankTransaction> transaction(@PathVariable String descr) {
     public List<BankTransaction> transaction() {
-        BankTransaction transaction1 = new BankTransaction(new LocalDate(),"Shoes",60d);
-        BankTransaction transaction2 = new BankTransaction(new LocalDate(),"Hat",10d);
-        bankTransactionDao.saveBankTransaction(transaction1);
-        bankTransactionDao.saveBankTransaction(transaction2);
+        return getBankTransactions();
+    }
+
+    public List<BankTransaction> getBankTransactions() {
+//        BankTransaction transaction1 = new BankTransaction(new LocalDate(),"Shoes",60d);
+//        BankTransaction transaction2 = new BankTransaction(new LocalDate(),"Hat",10d);
+//        bankTransactionDao.saveBankTransaction(transaction1);
+//        bankTransactionDao.saveBankTransaction(transaction2);
 
         // select all from database
         List<BankTransaction> transactionList = new ArrayList<BankTransaction>();
