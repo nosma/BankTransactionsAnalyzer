@@ -24,12 +24,6 @@ public class BankController {
     }
 
     public List<BankTransaction> getBankTransactions() {
-//        BankTransaction transaction1 = new BankTransaction(new LocalDate(),"Shoes",60d);
-//        BankTransaction transaction2 = new BankTransaction(new LocalDate(),"Hat",10d);
-//        bankTransactionDao.saveBankTransaction(transaction1);
-//        bankTransactionDao.saveBankTransaction(transaction2);
-
-        // select all from database
         List<BankTransaction> transactionList = new ArrayList<BankTransaction>();
         List<BankTransaction> allBankTransactions = bankTransactionDao.findAllBankTransactions();
         for(BankTransaction myTransaction : allBankTransactions){
@@ -37,6 +31,13 @@ public class BankController {
             transactionList.add(myTransaction);
         }
         return transactionList;
+    }
+
+    public void populateDatabase() {
+        BankTransaction transaction1 = new BankTransaction(new LocalDate(),"Shoes",60d);
+        BankTransaction transaction2 = new BankTransaction(new LocalDate(),"Hat",10d);
+        bankTransactionDao.saveBankTransaction(transaction1);
+        bankTransactionDao.saveBankTransaction(transaction2);
     }
 
     private static void printTransactionStatement(BankTransaction myTransaction) {
