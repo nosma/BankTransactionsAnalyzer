@@ -1,10 +1,9 @@
 package com.fragmanos;
 
 import com.fragmanos.web.controller.BankController;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.annotations.Test;
 
 import java.io.File;
 
@@ -14,7 +13,7 @@ import static junit.framework.Assert.assertEquals;
  * @author macuser on 9/27/15.
  */
 @ContextConfiguration(classes = AppConfig.class)
-public class DatabaseTests extends AbstractTestNGSpringContextTests {
+public class DatabaseTests {
 
     private static final String FILENAME = "Financials";
 
@@ -32,7 +31,7 @@ public class DatabaseTests extends AbstractTestNGSpringContextTests {
         assertEquals(true, isTRACEDatabaseFileCreated());
     }
 
-    @Test(dependsOnMethods = "mvDatabaseFileCreated")
+    @Test //(dependsOnMethods = "mvDatabaseFileCreated")
     public void insertTransactionsIntoDatabase() {
         bankController.populateDatabase();
         assertEquals(2, bankController.getBankTransactions().size());
