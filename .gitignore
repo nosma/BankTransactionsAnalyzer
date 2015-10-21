@@ -4,7 +4,7 @@
 
 *.iml
 *.xml
-*.db
+#*.db
 !pom.xml
 ## Directory-based project format:
 .idea/
