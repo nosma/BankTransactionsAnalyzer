@@ -33,13 +33,6 @@ public class BankController {
         return transactionList;
     }
 
-    public void populateDatabase() {
-        BankTransaction transaction1 = new BankTransaction(new LocalDate(),"Shoes",60d);
-        BankTransaction transaction2 = new BankTransaction(new LocalDate(),"Hat",10d);
-        bankTransactionDao.saveBankTransaction(transaction1);
-        bankTransactionDao.saveBankTransaction(transaction2);
-    }
-
     private static void printTransactionStatement(BankTransaction myTransaction) {
         StringBuilder sb = new StringBuilder("");
         String line = "\n===========================";
