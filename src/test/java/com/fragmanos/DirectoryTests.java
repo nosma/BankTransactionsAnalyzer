@@ -1,28 +1,27 @@
 package com.fragmanos;
 
 import com.fragmanos.directory.DirectoryReader;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
-import static org.junit.Assert.assertEquals;
-
+import static org.junit.Assert.*;
 
 /**
  * @author macuser on 10/9/15.
  */
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(classes = {AppConfig.class}):
 public class DirectoryTests {
 
-    private static final String INPUT_DIRECTORY = "input_files";
+  private static final String INPUT_DIRECTORY = System.getProperty("user.dir") + "\\" + "input_files" + "\\";
 
-    DirectoryReader directoryReader;
+  DirectoryReader directoryReader = new DirectoryReader();
 
-    @Test
-    public void readCSVsFromDirectory(){
-        String csvFilesDirectory = System.getProperty("user.dir") + "\\" + INPUT_DIRECTORY + "\\";
-        assertEquals(6,  directoryReader.csvScanner(csvFilesDirectory));
-    }
+  @Test
+  public void checkIfCSVDirectoryIsEmpty() {
+    assertFalse(directoryReader.isDirectoryEmpty(INPUT_DIRECTORY));
+  }
 
-
+  @Test(dependsOnMethods = "checkIfCSVDirectoryIsEmpty")
+  public void readCSVsFromDirectory() {
+    assertEquals(1, directoryReader.csvScanner(INPUT_DIRECTORY).size());
+  }
 
 }
