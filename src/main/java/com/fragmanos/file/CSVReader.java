@@ -15,9 +15,9 @@ import java.util.List;
  */
 public class CSVReader {
 
-    public List<BankTransaction> bankTransactionList = new ArrayList<BankTransaction>();
 
     public List<BankTransaction> readCSV(String csvFile) throws ParseException, IOException {
+    List<BankTransaction> bankTransactionList = new ArrayList<BankTransaction>();
         BufferedReader bufferedReader = null;
         String csvLine;
         String splitByCharacter = ",";

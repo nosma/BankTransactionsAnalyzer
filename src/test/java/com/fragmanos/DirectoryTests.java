@@ -28,20 +28,19 @@ public class DirectoryTests {
 
   @Test(dependsOnMethods = "checkIfCSVDirectoryIsEmpty")
   public void readCSVsFromDirectory() {
-    assertEquals(1, directoryReader.csvScanner(INPUT_DIRECTORY).size());
+    assertEquals(2, directoryReader.csvScanner(INPUT_DIRECTORY).size());
   }
 
   @Test(dependsOnMethods = "readCSVsFromDirectory")
   public void readCSVFile() throws IOException, ParseException {
-    List<BankTransaction> bankTransactions = getBankTransactionsFromDirectory();
-    assertEquals(10,bankTransactions.size());
+    assertEquals(20,getBankTransactionsFromDirectory().size());
   }
 
   private List<BankTransaction> getBankTransactionsFromDirectory() throws ParseException, IOException {
     List<BankTransaction> bankTransactions = new ArrayList<BankTransaction>();
-    List<String> filenameList = directoryReader.csvScanner(INPUT_DIRECTORY);
-    for (String file : filenameList){
-      bankTransactions.addAll(csvReader.readCSV(INPUT_DIRECTORY+file));
+    for (String file : directoryReader.csvScanner(INPUT_DIRECTORY)){
+      List<BankTransaction> bankTransactionList = csvReader.readCSV(INPUT_DIRECTORY + file);
+      bankTransactions.addAll(bankTransactionList);
     }
     return bankTransactions;
   }
