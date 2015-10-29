@@ -7,22 +7,45 @@ import java.util.*;
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.directory.DirectoryReader;
 import com.fragmanos.file.CSVReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author fragkakise on 28/10/2015.
  */
 public class TransactionController {
 
+  private static final Logger log = LoggerFactory.getLogger(TransactionController.class);
   CSVReader csvReader = new CSVReader();
   DirectoryReader directoryReader = new DirectoryReader();
 
   public List<BankTransaction> getBankTransactionsFromDirectory(String inputDirectory) throws ParseException, IOException {
-    List<BankTransaction> bankTransactions = new ArrayList<BankTransaction>();
-    for (String file : directoryReader.csvScanner(inputDirectory)){
-      List<BankTransaction> bankTransactionList = csvReader.readCSV(inputDirectory + file);
-      bankTransactions.addAll(bankTransactionList);
+    List<BankTransaction> totalBankTransactions = new ArrayList<BankTransaction>();
+    for(String file : directoryReader.csvScanner(inputDirectory)) {
+      List<BankTransaction> fileBankTransactionList = csvReader.readCSV(inputDirectory + file);
+      if(!totalBankTransactions.isEmpty()) {
+        totalBankTransactions = filterUniqueBankTransactions(totalBankTransactions, fileBankTransactionList);
+      } else {
+        totalBankTransactions.addAll(fileBankTransactionList);
+      }
     }
-    return bankTransactions;
+    return totalBankTransactions;
+  }
+
+  //TODO FIX filtering to keep ONLY unique bankTransactions.
+  private List<BankTransaction> filterUniqueBankTransactions(List<BankTransaction> totalBankTransactionList, List<BankTransaction> fileBankTransactionList) {
+    List<BankTransaction> localBankTransactionList = new ArrayList<BankTransaction>();
+    for(BankTransaction bankTransactionFromFile : fileBankTransactionList) {
+      for(BankTransaction bankTransactionFromTotal : totalBankTransactionList) {
+        if(!bankTransactionFromFile.equals(bankTransactionFromTotal)
+        && !localBankTransactionList.contains(bankTransactionFromFile)) {
+          localBankTransactionList.add(bankTransactionFromFile);
+        } else {
+          log.warn("DUPLICATE BANK TRANSACTION", bankTransactionFromFile.toString());
+        }
+      }
+    }
+    return localBankTransactionList;
   }
 
 }

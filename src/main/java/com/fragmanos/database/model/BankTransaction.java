@@ -21,7 +21,7 @@ public class BankTransaction implements Serializable {
   private LocalDate transactiondate;
 
   @Column(name = "DESCRIPTION", nullable = false)
-  private String Description;
+  private String description;
 
   @Column(name = "COST", nullable = false)
   private double cost;
@@ -35,11 +35,11 @@ public class BankTransaction implements Serializable {
   }
 
   public String getDescription() {
-    return Description;
+    return description;
   }
 
   public void setDescription(String description) {
-    Description = description;
+    this.description = description;
   }
 
   public double getCost() {
@@ -55,7 +55,42 @@ public class BankTransaction implements Serializable {
 
   public BankTransaction(LocalDate transactiondate, String description, double cost) {
     this.transactiondate = transactiondate;
-    Description = description;
+    this.description = description;
     this.cost = cost;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if(this == o) return true;
+    if(o == null || getClass() != o.getClass()) return false;
+    BankTransaction cmpBankTransaction = (BankTransaction)o;
+
+    if(transactiondate!=null ? transactiondate.equals(cmpBankTransaction.transactiondate) : cmpBankTransaction.transactiondate!=null ) return false;
+    if(description!=null ? description.equals(cmpBankTransaction.description) : cmpBankTransaction.description!=null ) return false;
+//    if(cost==0 ? cost == cmpBankTransaction.cost : cmpBankTransaction.cost!=0 ) return false;
+    if(Double.compare(cmpBankTransaction.cost, cost) != 0) return false;
+//    if(!transactiondate.equals(cmpBankTransaction.transactiondate)) return false;
+//    return description.equals(cmpBankTransaction.description);
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int result;
+    long temp;
+    result = transactiondate.hashCode();
+    result = 31 * result + description.hashCode();
+    temp = Double.doubleToLongBits(cost);
+    result = 31 * result + (int)(temp ^ (temp >>> 32));
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "BankTransaction{" +
+             "transactiondate=" + transactiondate +
+             ", description='" + description + '\'' +
+             ", cost=" + cost +
+             '}';
   }
 }
