@@ -24,7 +24,7 @@ public class BankTransaction implements Serializable {
   private String description;
 
   @Column(name = "COST", nullable = false)
-  private double cost;
+  private Double cost;
 
   public LocalDate getTransactiondate() {
     return transactiondate;
@@ -46,14 +46,14 @@ public class BankTransaction implements Serializable {
     return cost;
   }
 
-  public void setCost(double cost) {
+  public void setCost(Double cost) {
     this.cost = cost;
   }
 
   public BankTransaction() {
   }
 
-  public BankTransaction(LocalDate transactiondate, String description, double cost) {
+  public BankTransaction(LocalDate transactiondate, String description, Double cost) {
     this.transactiondate = transactiondate;
     this.description = description;
     this.cost = cost;
@@ -63,15 +63,16 @@ public class BankTransaction implements Serializable {
   public boolean equals(Object o) {
     if(this == o) return true;
     if(o == null || getClass() != o.getClass()) return false;
-    BankTransaction cmpBankTransaction = (BankTransaction)o;
-
-    if(transactiondate!=null ? transactiondate.equals(cmpBankTransaction.transactiondate) : cmpBankTransaction.transactiondate!=null ) return false;
-    if(description!=null ? description.equals(cmpBankTransaction.description) : cmpBankTransaction.description!=null ) return false;
-//    if(cost==0 ? cost == cmpBankTransaction.cost : cmpBankTransaction.cost!=0 ) return false;
-    if(Double.compare(cmpBankTransaction.cost, cost) != 0) return false;
-//    if(!transactiondate.equals(cmpBankTransaction.transactiondate)) return false;
-//    return description.equals(cmpBankTransaction.description);
-    return true;
+    if(o instanceof BankTransaction) {
+      BankTransaction cmpBankTransaction = (BankTransaction)o;
+      if((transactiondate != null) && (cmpBankTransaction.transactiondate != null) && transactiondate.equals(cmpBankTransaction.transactiondate)) {
+        if((description != null) && (cmpBankTransaction.description != null) && description.equals(cmpBankTransaction.description)
+                && (cost != null) && cmpBankTransaction.cost !=null && cost.equals(cmpBankTransaction.cost) ) {
+           return true;
+        }
+      }
+    }
+    return false;
   }
 
   @Override
@@ -87,10 +88,10 @@ public class BankTransaction implements Serializable {
 
   @Override
   public String toString() {
-    return "BankTransaction{" +
-             "transactiondate=" + transactiondate +
-             ", description='" + description + '\'' +
-             ", cost=" + cost +
+    return "BankTransaction { " +
+             "transactiondate= " + transactiondate +
+             ", description= '" + description + '\'' +
+             ", cost= " + cost +
              '}';
   }
 }
