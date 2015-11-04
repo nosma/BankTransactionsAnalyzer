@@ -21,31 +21,30 @@ public class TransactionController {
 
   public List<BankTransaction> getBankTransactionsFromDirectory(String inputDirectory) throws ParseException, IOException {
     List<BankTransaction> totalBankTransactions = new ArrayList<BankTransaction>();
-    for(String file : directoryReader.csvScanner(inputDirectory)) {
+    for (String file : directoryReader.csvScanner(inputDirectory)) {
       List<BankTransaction> fileBankTransactionList = csvReader.readCSV(inputDirectory + file);
-      if(!totalBankTransactions.isEmpty()) {
-        totalBankTransactions = filterUniqueBankTransactions(totalBankTransactions, fileBankTransactionList);
-      } else {
-        totalBankTransactions.addAll(fileBankTransactionList);
-      }
+//      filterUniqueBankTransactions(totalBankTransactions, fileBankTransactionList);
+      totalBankTransactions.addAll(fileBankTransactionList);
     }
     return totalBankTransactions;
   }
 
   //TODO FIX filtering to keep ONLY unique bankTransactions.
   private List<BankTransaction> filterUniqueBankTransactions(List<BankTransaction> totalBankTransactionList, List<BankTransaction> fileBankTransactionList) {
-    List<BankTransaction> localBankTransactionList = new ArrayList<BankTransaction>();
-    for(BankTransaction bankTransactionFromFile : fileBankTransactionList) {
-      for(BankTransaction bankTransactionFromTotal : totalBankTransactionList) {
-        if(!bankTransactionFromFile.equals(bankTransactionFromTotal)
-        && !localBankTransactionList.contains(bankTransactionFromFile)) {
-          localBankTransactionList.add(bankTransactionFromFile);
-        } else {
-          log.warn("DUPLICATE BANK TRANSACTION", bankTransactionFromFile.toString());
+    if (!totalBankTransactionList.isEmpty()) {
+      List<BankTransaction> localBankTransactionList = new ArrayList<BankTransaction>();
+      for (BankTransaction bankTransactionFromTotal : totalBankTransactionList) {
+        for (BankTransaction bankTransactionFromFile : fileBankTransactionList) {
+          if (!bankTransactionFromFile.equals(bankTransactionFromTotal)) {
+            localBankTransactionList.add(bankTransactionFromFile);
+          } else { log.warn("Duplicate Bank Transaction: ", bankTransactionFromFile); }
         }
       }
+      return localBankTransactionList;
+    } else {
+      totalBankTransactionList.addAll(fileBankTransactionList);
+      return totalBankTransactionList;
     }
-    return localBankTransactionList;
   }
 
 }
