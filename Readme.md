@@ -11,3 +11,10 @@ Statistics needed
 =======================================================================
 1. [ ] Monthly Income / Outcome / Profit
 2. [ ] General Income / Outcome / Profit
+
+Web Interface
+=======================================================================
+1. [ ] Show table with bank transactions
+2. [ ] Show graph with bank transactions
+3. [ ] Show table with bank statistics
+4. [ ] Show graph with bank statistics
