@@ -1,12 +1,15 @@
 package com.fragmanos.web.controller;
 
+import com.fragmanos.controller.TransactionController;
 import com.fragmanos.database.dao.BankTransactionDao;
 import com.fragmanos.database.model.BankTransaction;
-import org.joda.time.LocalDate;
+import com.fragmanos.directory.DirectoryReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +18,22 @@ public class BankController {
 
     @Autowired
     BankTransactionDao bankTransactionDao;
+
+    @RequestMapping("/api/bank/allTransactions")
+    public List<BankTransaction> fillTable() throws IOException, ParseException {
+        DirectoryReader directoryReader = new DirectoryReader();
+        TransactionController transactionController = new TransactionController();
+        String input_directory = System.getProperty("user.dir") + "/input_files/";
+
+        if(!directoryReader.isDirectoryEmpty(input_directory)){
+            List<BankTransaction> bankTransactionsFromDirectory = transactionController.getBankTransactionsFromDirectory(input_directory);
+            for (BankTransaction bt : bankTransactionsFromDirectory){
+               bankTransactionDao.saveBankTransaction(bt);
+           }
+        }
+
+    return bankTransactionDao.findAllBankTransactions();
+    }
 
 //    @RequestMapping(value = "/transaction/{descr}" , method = RequestMethod.GET)
     @RequestMapping("/transaction")

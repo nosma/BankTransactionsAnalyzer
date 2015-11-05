@@ -1,7 +1,23 @@
-var app = angular.module('app', ['ngAnimate', 'ngTouch', 'ui.grid']);
+'use strict';
 
-app.controller('MainCtrl', ['$scope', function ($scope) {
+var app = angular.module('app', ['ngRoute', 'ngResource', 'ui.bootstrap', 'ngAnimate', 'ngTouch', 'ui.grid']);
 
+app.config(['$routeProvider', function ($routeProvider) {
+    $routeProvider
+        .when('/Transactions', {
+            templateUrl: 'transactions.html'
+        })
+        .when('/Statistics', {
+            templateUrl: 'statistics.html',
+            controller: 'statistics'
+        })
+        .otherwise({
+            templateUrl: 'home.html',
+            controller: 'home'
+        });
+}]);
+
+app.controller('MainCtrl', ['$scope', function ($scope, $http) {
 
     $scope.myData = [
         {
@@ -43,5 +59,18 @@ app.controller('MainCtrl', ['$scope', function ($scope) {
 
     $scope.id = "1";
     $scope.content = "Manos";
+
+}]);
+
+app.controller('home', ['$scope', '$resource', function ($scope) {
+
+    $scope.bankTransactions = function(){
+        $http.get("/api/bank/allTransactions").then(
+            function successCallback(response) {
+                $scope.allTransactions = response.data;
+            }, function errorCallback(response) {
+                $scope.allTransactions = null;
+            });
+    };
 
 }]);
