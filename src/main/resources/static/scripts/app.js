@@ -6,5 +6,6 @@ var app = angular.module('app', [
   'ui.bootstrap',
   'ngAnimate',
   'ngTouch',
-  'ui.grid'
+  'ui.grid',
+  'ui.grid.exporter'
 ]);

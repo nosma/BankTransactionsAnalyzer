@@ -1,11 +1,16 @@
 'use strict';
 
 app.config(function ($routeProvider) {
-  $routeProvider.when('/Transactions', {
-      templateUrl: 'transactions.html'
+  $routeProvider.
+    when('/Transactions', {
+      templateUrl: 'views/transactions.html',
+      controller: 'transactions'
     }).when('/Statistics', {
-      templateUrl: 'statistics.html', controller: 'statistics'
+      templateUrl: 'views/statistics.html'
+      //controller: 'statistics'
+    }).when('/Home', {
+      templateUrl: 'views/home.html'
     }).otherwise({
-      templateUrl: 'home.html', controller: 'home'
+      templateUrl: 'views/home.html'
     });
 });
