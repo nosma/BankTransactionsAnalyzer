@@ -4,14 +4,21 @@ import com.fragmanos.controller.TransactionController;
 import com.fragmanos.database.dao.BankTransactionDao;
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.directory.DirectoryReader;
+
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 public class BankController {
@@ -19,20 +26,43 @@ public class BankController {
     @Autowired
     BankTransactionDao bankTransactionDao;
 
-    @RequestMapping("/api/bank/allTransactions")
-    public List<BankTransaction> fillTable() throws IOException, ParseException {
+    private static final Logger log = LoggerFactory.getLogger(BankController.class);
+
+    @PostConstruct
+    public void populateDatabase(){
         DirectoryReader directoryReader = new DirectoryReader();
         TransactionController transactionController = new TransactionController();
         String input_directory = System.getProperty("user.dir") + "/input_files/";
 
-        if(!directoryReader.isDirectoryEmpty(input_directory)){
-            List<BankTransaction> bankTransactionsFromDirectory = transactionController.getBankTransactionsFromDirectory(input_directory);
-            for (BankTransaction bt : bankTransactionsFromDirectory){
-               bankTransactionDao.saveBankTransaction(bt);
-           }
+        if (!directoryReader.isDirectoryEmpty(input_directory)) {
+            List<BankTransaction> bankTransactionsFromDirectory = null;
+            try {
+                bankTransactionsFromDirectory = transactionController.getBankTransactionsFromDirectory(input_directory);
+            } catch (ParseException e) {
+                log.error("ParseException while parsing directory",e);
+            } catch (IOException e) {
+                log.error("IO exception while parsing directory", e);
+            }
+            for (BankTransaction bt : bankTransactionsFromDirectory) {
+                bankTransactionDao.saveBankTransaction(bt);
+            }
         }
 
-    return bankTransactionDao.findAllBankTransactions();
+    }
+
+    @RequestMapping("/api/bank/allTransactions")
+    public List<TableObject> fillTable() {
+        List<TableObject> dataForTable = new ArrayList<TableObject>();
+        List<BankTransaction> allBankTransactions = bankTransactionDao.findAllBankTransactions();
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("dd/MM/yyyy");
+        for (BankTransaction bankTransaction : allBankTransactions) {
+            dataForTable.add(new TableObject(
+                    dtf.print(bankTransaction.getTransactiondate()),
+                    bankTransaction.getDescription(),
+                    bankTransaction.getCost()
+            ));
+        }
+        return dataForTable;
     }
 
 //    @RequestMapping(value = "/transaction/{descr}" , method = RequestMethod.GET)
@@ -63,4 +93,41 @@ public class BankController {
           .append(line);
         System.out.println(sb);
     }
+
+    class TableObject {
+        String date;
+        String description;
+        Double cost;
+
+        public TableObject(String date, String description, Double cost) {
+            this.date = date;
+            this.description = description;
+            this.cost = cost;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public Double getCost() {
+            return cost;
+        }
+
+        public void setCost(Double cost) {
+            this.cost = cost;
+        }
+    }
+
 }

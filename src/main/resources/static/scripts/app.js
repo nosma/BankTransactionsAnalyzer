@@ -62,7 +62,7 @@ app.controller('MainCtrl', ['$scope', function ($scope, $http) {
 
 }]);
 
-app.controller('home', ['$scope', '$resource', function ($scope) {
+    app.controller('home', ['$scope','$http', function ($scope, $http) {
 
     $scope.bankTransactions = function(){
         $http.get("/api/bank/allTransactions").then(
@@ -72,5 +72,7 @@ app.controller('home', ['$scope', '$resource', function ($scope) {
                 $scope.allTransactions = null;
             });
     };
+
+        $scope.bankTransactions();
 
 }]);
