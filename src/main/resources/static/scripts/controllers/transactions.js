@@ -14,6 +14,8 @@ app.controller('transactions', function ($scope, $http, uiGridConstants) {
 // ***************************************************************************************************************************** //
 
   $scope.gridOptions = {
+    showGridFooter: true,
+    showColumnFooter: true,
     enableFiltering: true,
     enableGridMenu: true,
     enableSelectAll: true,
@@ -36,7 +38,14 @@ app.controller('transactions', function ($scope, $http, uiGridConstants) {
     exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
     onRegisterApi: function(gridApi){
       $scope.gridApi = gridApi;
-    }
+    },
+
+    columnDefs: [
+      { field: 'date' },
+      { field: 'description' },
+      { field: 'cost', aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true }
+  ]
+
   };
 
 });
