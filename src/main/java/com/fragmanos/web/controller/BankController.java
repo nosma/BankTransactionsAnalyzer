@@ -23,9 +23,6 @@ import org.slf4j.LoggerFactory;
 @RestController
 public class BankController {
 
-    @Value("${transactions.directory}")
-    String TRANSACTIONS_DIRECTORY;
-
     @Autowired
     BankTransactionDao bankTransactionDao;
 
