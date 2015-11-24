@@ -5,10 +5,10 @@ import com.fragmanos.database.dao.BankTransactionDao;
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.directory.DirectoryReader;
 
-import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +23,9 @@ import org.slf4j.LoggerFactory;
 @RestController
 public class BankController {
 
+    @Value("${transactions.directory}")
+    String TRANSACTIONS_DIRECTORY;
+
     @Autowired
     BankTransactionDao bankTransactionDao;
 
@@ -32,10 +35,10 @@ public class BankController {
     public void populateDatabase(){
         DirectoryReader directoryReader = new DirectoryReader();
         TransactionController transactionController = new TransactionController();
-        String input_directory = System.getProperty("user.dir") + "/input_files/";
+        String input_directory = System.getProperty("user.dir") + "\\input_files\\";
 
         if (!directoryReader.isDirectoryEmpty(input_directory)) {
-            List<BankTransaction> bankTransactionsFromDirectory = null;
+            List<BankTransaction> bankTransactionsFromDirectory = new ArrayList<BankTransaction>();
             try {
                 bankTransactionsFromDirectory = transactionController.getBankTransactionsFromDirectory(input_directory);
             } catch (ParseException e) {
@@ -65,9 +68,7 @@ public class BankController {
         return dataForTable;
     }
 
-//    @RequestMapping(value = "/transaction/{descr}" , method = RequestMethod.GET)
     @RequestMapping("/transaction")
-//    public List<BankTransaction> transaction(@PathVariable String descr) {
     public List<BankTransaction> transaction() {
         return getBankTransactions();
     }
@@ -76,7 +77,7 @@ public class BankController {
         List<BankTransaction> transactionList = new ArrayList<BankTransaction>();
         List<BankTransaction> allBankTransactions = bankTransactionDao.findAllBankTransactions();
         for(BankTransaction myTransaction : allBankTransactions){
-            printTransactionStatement(myTransaction);
+//            printTransactionStatement(myTransaction);
             transactionList.add(myTransaction);
         }
         return transactionList;

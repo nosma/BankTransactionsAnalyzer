@@ -25,10 +25,10 @@ public class CSVReader {
         try {
             bufferedReader = new BufferedReader(new FileReader(csvFile));
             while ((csvLine = bufferedReader.readLine()) != null) {
-                bankTransactionList.add(bankCsvDataConvertion(
-                        getDateFromLine(csvLine, splitByCharacter),
-                        getDescriptionFromLine(csvLine, splitByCharacter),
-                        getCostFromLine(csvLine, splitByCharacter)));
+                BankTransaction bankTransaction = bankCsvDataConvertion(getDateFromLine(csvLine, splitByCharacter),
+                                                                         getDescriptionFromLine(csvLine, splitByCharacter),
+                                                                         getCostFromLine(csvLine, splitByCharacter));
+                bankTransactionList.add(bankTransaction);
 //                printTransactions(csvLine, splitByCharacter);
             }
         } catch (IOException e) {
@@ -46,7 +46,7 @@ public class CSVReader {
     }
 
     private void printTransactions(String csvLine, String splitByCharacter) {
-        StringBuilder transaction = null;
+        StringBuilder transaction = new StringBuilder("");
         transaction.append("Incoming Date: ").
                         append(getDateFromLine(csvLine, splitByCharacter))
                     .append("Incoming Cause: ").
