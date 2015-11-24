@@ -20,7 +20,7 @@
     <junit.version>4.4</junit.version>
     <testng.version>6.1.1</testng.version>
     <spring-data-jpa.version>1.9.0.RELEASE</spring-data-jpa.version>
-    <h2.version>1.4.189</h2.version>
+    <derby.version>10.11.1.1</derby.version>
   </properties>
 
   <dependencies>
@@ -57,11 +57,11 @@
       <version>4.12</version>
     </dependency>
     <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>${h2.version}</version>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <version>${derby.version}</version>
+      <scope>runtime</scope>
     </dependency>
-
     <!-- Javascript dependencies -->
     <dependency>
       <groupId>org.webjars</groupId>
@@ -91,6 +91,11 @@
       <artifactId>bootstrap</artifactId>
       <version>3.3.1</version>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+      <version>1</version>
     </dependency>
   </dependencies>
 
