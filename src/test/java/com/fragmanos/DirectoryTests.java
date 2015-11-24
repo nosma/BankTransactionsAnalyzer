@@ -5,6 +5,7 @@ import java.text.ParseException;
 
 import com.fragmanos.controller.TransactionController;
 import com.fragmanos.directory.DirectoryReader;
+import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.Test;
 
 import static org.junit.Assert.*;
@@ -12,9 +13,11 @@ import static org.junit.Assert.*;
 /**
  * @author macuser on 10/9/15.
  */
+@ContextConfiguration(classes = AppConfig.class)
 public class DirectoryTests {
   //  Read directory from properties file is not suggested for tests
   private static final String INPUT_DIRECTORY = System.getProperty("user.dir") + "\\src\\test\\resources\\testTransactions\\";
+
   DirectoryReader directoryReader = new DirectoryReader();
   TransactionController transactionController = new TransactionController();
 
