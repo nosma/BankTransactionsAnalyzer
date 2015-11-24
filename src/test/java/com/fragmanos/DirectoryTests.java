@@ -13,9 +13,8 @@ import static org.junit.Assert.*;
  * @author macuser on 10/9/15.
  */
 public class DirectoryTests {
-  //  TODO read directory from properties file
-//    private static final String INPUT_DIRECTORY = "{{transactions.directory}}";
-  private static final String INPUT_DIRECTORY = System.getProperty("user.dir") + "/src/test/resources/testTransactions/";
+  //  Read directory from properties file is not suggested for tests
+  private static final String INPUT_DIRECTORY = System.getProperty("user.dir") + "\\src\\test\\resources\\testTransactions\\";
   DirectoryReader directoryReader = new DirectoryReader();
   TransactionController transactionController = new TransactionController();
 

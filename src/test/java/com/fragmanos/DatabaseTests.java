@@ -34,8 +34,7 @@ public class DatabaseTests extends AbstractTestNGSpringContextTests {
 
     @Test (dependsOnMethods = "mvDatabaseFileCreated")
     public void insertTransactionsIntoDatabase() {
-        populateDatabase();
-        assertEquals(2, bankController.getBankTransactions().size());
+        assertEquals(36, bankController.getBankTransactions().size());
     }
 
     private boolean isMVDatabaseFileCreated() {
@@ -43,10 +42,4 @@ public class DatabaseTests extends AbstractTestNGSpringContextTests {
         return (f.exists() && !f.isDirectory());
     }
 
-    public void populateDatabase() {
-        BankTransaction transaction1 = new BankTransaction(new LocalDate(),"Shoes",60d);
-        BankTransaction transaction2 = new BankTransaction(new LocalDate(),"Hat",10d);
-        bankTransactionDao.saveBankTransaction(transaction1);
-        bankTransactionDao.saveBankTransaction(transaction2);
-    }
 }
