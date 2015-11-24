@@ -23,24 +23,20 @@ public class TransactionController {
     List<BankTransaction> totalBankTransactions = new ArrayList<BankTransaction>();
     for (String file : directoryReader.csvScanner(inputDirectory)) {
       List<BankTransaction> fileBankTransactionList = csvReader.readCSV(inputDirectory + file);
-//      filterUniqueBankTransactions(totalBankTransactions, fileBankTransactionList);
-      totalBankTransactions.addAll(fileBankTransactionList);
+      totalBankTransactions = filterUniqueBankTransactions(totalBankTransactions, fileBankTransactionList);
     }
     return totalBankTransactions;
   }
 
-  //TODO FIX filtering to keep ONLY unique bankTransactions.
   private List<BankTransaction> filterUniqueBankTransactions(List<BankTransaction> totalBankTransactionList, List<BankTransaction> fileBankTransactionList) {
-    if (!totalBankTransactionList.isEmpty()) {
-      List<BankTransaction> localBankTransactionList = new ArrayList<BankTransaction>();
-      for (BankTransaction bankTransactionFromTotal : totalBankTransactionList) {
-        for (BankTransaction bankTransactionFromFile : fileBankTransactionList) {
-          if (!bankTransactionFromFile.equals(bankTransactionFromTotal)) {
-            localBankTransactionList.add(bankTransactionFromFile);
-          } else { log.warn("Duplicate Bank Transaction: ", bankTransactionFromFile); }
-        }
+    if(!totalBankTransactionList.isEmpty()) {
+      List<BankTransaction> localBankTransactionList = new ArrayList<BankTransaction>(totalBankTransactionList);
+      localBankTransactionList.retainAll(fileBankTransactionList);
+      for(BankTransaction bankTransaction : localBankTransactionList) {
+        totalBankTransactionList.remove(bankTransaction);
       }
-      return localBankTransactionList;
+      totalBankTransactionList.addAll(fileBankTransactionList);
+      return totalBankTransactionList;
     } else {
       totalBankTransactionList.addAll(fileBankTransactionList);
       return totalBankTransactionList;
