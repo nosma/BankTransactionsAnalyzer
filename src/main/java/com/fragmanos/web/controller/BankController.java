@@ -14,6 +14,7 @@ import org.joda.time.Years;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,16 +40,18 @@ public class BankController {
 
     private static final Logger log = LoggerFactory.getLogger(BankController.class);
 
+    @Value("${transactions.directory}")
+    public String inputDirectory;
+
     @PostConstruct
     public void populateDatabase() {
         DirectoryReader directoryReader = new DirectoryReader();
         TransactionController transactionController = new TransactionController();
-        String input_directory = System.getProperty("user.dir") + "\\input_files\\";
 
-        if(!directoryReader.isDirectoryEmpty(input_directory)) {
+        if(!directoryReader.isDirectoryEmpty(inputDirectory)) {
             List<BankTransaction> bankTransactionsFromDirectory = new ArrayList<BankTransaction>();
             try {
-                bankTransactionsFromDirectory = transactionController.getBankTransactionsFromDirectory(input_directory);
+                bankTransactionsFromDirectory = transactionController.getBankTransactionsFromDirectory(inputDirectory);
             } catch(ParseException e) {
                 log.error("ParseException while parsing directory", e);
             } catch(IOException e) {
