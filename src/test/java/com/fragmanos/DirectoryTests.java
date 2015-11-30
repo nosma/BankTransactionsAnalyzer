@@ -33,7 +33,7 @@ public class DirectoryTests {
 
   @Test(dependsOnMethods = "readCSVsFromDirectory")
   public void readCSVFile() throws IOException, ParseException {
-    assertEquals(20,transactionController.getBankTransactionsFromDirectory(INPUT_DIRECTORY).size());
+    assertEquals(36,transactionController.getBankTransactionsFromDirectory(INPUT_DIRECTORY).size());
   }
 
 }
