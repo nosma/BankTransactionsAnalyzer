@@ -8,7 +8,7 @@ import org.joda.time.Years;
  * @author fragkakise on 30/11/2015.
  */
 @Entity
-@Table(name = "YEAR_STAT")
+@Table(name = "YEARSTAT")
 public class YearStat {
 
   @Id

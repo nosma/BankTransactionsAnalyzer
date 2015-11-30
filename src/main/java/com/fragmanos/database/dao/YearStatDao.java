@@ -3,6 +3,7 @@ package com.fragmanos.database.dao;
 import java.util.List;
 
 import com.fragmanos.database.model.YearStat;
+import org.joda.time.Years;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -10,4 +11,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface YearStatDao extends CrudRepository<YearStat, Long> {
   List<YearStat> findAll();
+
+  YearStat findByYear(Years year);
 }

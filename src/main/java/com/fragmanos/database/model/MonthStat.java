@@ -2,8 +2,8 @@ package com.fragmanos.database.model;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Type;
 import org.joda.time.YearMonth;
-
 /**
  * @author fragkakise on 30/11/2015.
  */
@@ -17,6 +17,7 @@ public class MonthStat {
   private Long id;
 
   @Column(name = "YEARMONTH", nullable = false)
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentYearMonthAsString")
   private YearMonth yearMonth;
 
   @Column(name = "INCOME", nullable = false)
@@ -27,6 +28,9 @@ public class MonthStat {
 
   @Column(name = "PROFIT", nullable = false)
   private double profit;
+
+  public MonthStat() {
+  }
 
   public MonthStat(YearMonth yearMonth, double income, double expense, double profit) {
     this.yearMonth = yearMonth;

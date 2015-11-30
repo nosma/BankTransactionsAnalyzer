@@ -3,6 +3,7 @@ package com.fragmanos.database.dao;
 import java.util.List;
 
 import com.fragmanos.database.model.MonthStat;
+import org.joda.time.YearMonth;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -10,4 +11,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface MonthStatDao extends CrudRepository<MonthStat, Long> {
   List<MonthStat> findAll();
+
+  MonthStat findByYearMonth(YearMonth yearMonth);
 }
