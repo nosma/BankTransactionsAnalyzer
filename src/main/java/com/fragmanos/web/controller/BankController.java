@@ -66,18 +66,8 @@ public class BankController {
     }
 
     @RequestMapping("/transaction")
-    public List<BankTransaction> transaction() {
-        return getBankTransactions();
-    }
-
     public List<BankTransaction> getBankTransactions() {
-        List<BankTransaction> transactionList = new ArrayList<BankTransaction>();
-        List<BankTransaction> allBankTransactions = bankTransactionDao.findAllBankTransactions();
-        for(BankTransaction myTransaction : allBankTransactions){
-//            printTransactionStatement(myTransaction);
-            transactionList.add(myTransaction);
-        }
-        return transactionList;
+        return bankTransactionDao.findAllBankTransactions();
     }
 
     private static void printTransactionStatement(BankTransaction myTransaction) {
