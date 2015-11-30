@@ -15,7 +15,7 @@ public class BankTransaction implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "ID")
-  private int id;
+  private Long id;
 
   @Column(name = "TRANSACTIONDATE", nullable = false)
   private LocalDate transactiondate;

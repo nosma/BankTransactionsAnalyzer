@@ -8,7 +8,6 @@ import com.fragmanos.directory.DirectoryReader;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,8 +42,8 @@ public class BankController {
             } catch (IOException e) {
                 log.error("IO exception while parsing directory", e);
             }
-            for (BankTransaction bt : bankTransactionsFromDirectory) {
-                bankTransactionDao.saveBankTransaction(bt);
+            for (BankTransaction bankTransaction : bankTransactionsFromDirectory) {
+                bankTransactionDao.save(bankTransaction);
             }
         }
 
@@ -53,7 +52,7 @@ public class BankController {
     @RequestMapping("/api/bank/allTransactions")
     public List<TableObject> fillTable() {
         List<TableObject> dataForTable = new ArrayList<TableObject>();
-        List<BankTransaction> allBankTransactions = bankTransactionDao.findAllBankTransactions();
+        List<BankTransaction> allBankTransactions = bankTransactionDao.findAll();
         DateTimeFormatter dtf = DateTimeFormat.forPattern("dd/MM/yyyy");
         for (BankTransaction bankTransaction : allBankTransactions) {
             dataForTable.add(new TableObject(
@@ -67,7 +66,7 @@ public class BankController {
 
     @RequestMapping("/transaction")
     public List<BankTransaction> getBankTransactions() {
-        return bankTransactionDao.findAllBankTransactions();
+        return bankTransactionDao.findAll();
     }
 
     private static void printTransactionStatement(BankTransaction myTransaction) {
