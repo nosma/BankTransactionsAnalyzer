@@ -12,5 +12,7 @@ import org.springframework.data.repository.CrudRepository;
 public interface MonthStatDao extends CrudRepository<MonthStat, Long> {
   List<MonthStat> findAll();
 
+  List<MonthStat> findAllByOrderByYearMonthDesc();
+
   MonthStat findByYearMonth(YearMonth yearMonth);
 }

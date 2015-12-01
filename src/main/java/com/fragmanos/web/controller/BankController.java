@@ -6,13 +6,12 @@ import com.fragmanos.database.dao.MonthStatDao;
 import com.fragmanos.database.dao.YearStatDao;
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.database.model.MonthStat;
-import com.fragmanos.database.model.YearStat;
 import com.fragmanos.directory.DirectoryReader;
-
 import org.joda.time.YearMonth;
-import org.joda.time.Years;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,11 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @RestController
 public class BankController {
@@ -49,27 +47,30 @@ public class BankController {
         TransactionController transactionController = new TransactionController();
 
         if(!directoryReader.isDirectoryEmpty(inputDirectory)) {
-            List<BankTransaction> bankTransactionsFromDirectory = new ArrayList<BankTransaction>();
-            try {
-                bankTransactionsFromDirectory = transactionController.getBankTransactionsFromDirectory(inputDirectory);
-            } catch(ParseException e) {
-                log.error("ParseException while parsing directory", e);
-            } catch(IOException e) {
-                log.error("IO exception while parsing directory", e);
-            }
+            List<BankTransaction> bankTransactionsFromDirectory = getBankTransactionsFromDirectory(transactionController);
             for(BankTransaction bankTransaction : bankTransactionsFromDirectory) {
                 bankTransactionDao.save(bankTransaction);
                 setMonthStat(bankTransaction);
-//                setYearStat(bankTransaction);
             }
         }
+    }
 
+    private List<BankTransaction> getBankTransactionsFromDirectory(TransactionController transactionController) {
+        List<BankTransaction> bankTransactionsFromDirectory = new ArrayList<BankTransaction>();
+        try {
+            bankTransactionsFromDirectory = transactionController.getBankTransactionsFromDirectory(inputDirectory);
+        } catch(ParseException e) {
+            log.error("ParseException while parsing directory", e);
+        } catch(IOException e) {
+            log.error("IO exception while parsing directory", e);
+        }
+        return bankTransactionsFromDirectory;
     }
 
     @RequestMapping("/api/bank/allTransactions")
     public List<TableObject> fillTable() {
         List<TableObject> dataForTable = new ArrayList<TableObject>();
-        List<BankTransaction> allBankTransactions = bankTransactionDao.findAll();
+        List<BankTransaction> allBankTransactions = bankTransactionDao.findAllByOrderByTransactiondateDesc();
         DateTimeFormatter dtf = DateTimeFormat.forPattern("dd/MM/yyyy");
         for (BankTransaction bankTransaction : allBankTransactions) {
             dataForTable.add(new TableObject(
@@ -83,12 +84,12 @@ public class BankController {
 
     @RequestMapping("/api/statistics/monthly")
     public List<MonthStat> monthlyStatistics(){
-        return monthStatDao.findAll();
+        return monthStatDao.findAllByOrderByYearMonthDesc();
     }
 
     @RequestMapping("/transaction")
     public List<BankTransaction> getBankTransactions() {
-        return bankTransactionDao.findAll();
+        return bankTransactionDao.findAllByOrderByTransactiondateDesc();
     }
 
     private static void printTransactionStatement(BankTransaction myTransaction) {
@@ -104,6 +105,7 @@ public class BankController {
     }
 
     public void setMonthStat(BankTransaction bankTransaction) {
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
         double income = 0;
         double expense = 0;
         double profit;
@@ -123,38 +125,11 @@ public class BankController {
             if(monthStatForUpdate == null){
                 monthStatDao.save(new MonthStat(yearMonth, income, expense, profit));
             } else {
-                monthStatForUpdate.setIncome(income);
-                monthStatForUpdate.setExpense(expense);
-                monthStatForUpdate.setProfit(profit);
+                // TODO increase the accuracy of the below calculations, avoid double -> string -> double
+                monthStatForUpdate.setIncome(Double.parseDouble(decimalFormat.format(income + monthStatForUpdate.getIncome())));
+                monthStatForUpdate.setExpense(Double.parseDouble(decimalFormat.format(expense + monthStatForUpdate.getExpense())));
+                monthStatForUpdate.setProfit(Double.parseDouble(decimalFormat.format(profit + monthStatForUpdate.getProfit())));
                 monthStatDao.save(monthStatForUpdate);
-            }
-        }
-    }
-
-    public void setYearStat(BankTransaction bankTransaction) {
-        double income = 0;
-        double expense = 0;
-        double profit;
-
-        Years year = Years.years(bankTransaction.getTransactiondate().getYear());
-        if(bankTransaction.getCost() > 0) {
-            income = bankTransaction.getCost();
-        } else {
-            expense = bankTransaction.getCost();
-        }
-        profit = income + expense;
-
-        if(yearStatDao.findAll().isEmpty()){
-            yearStatDao.save(new YearStat(year,income,expense,profit));
-        } else {
-            YearStat yearStatForUpdate = yearStatDao.findByYear(year);
-            if(yearStatForUpdate == null){
-                yearStatDao.save(new YearStat(year,income,expense,profit));
-            } else {
-                yearStatForUpdate.setIncome(income);
-                yearStatForUpdate.setExpense(expense);
-                yearStatForUpdate.setProfit(profit);
-                yearStatDao.save(yearStatForUpdate);
             }
         }
     }
