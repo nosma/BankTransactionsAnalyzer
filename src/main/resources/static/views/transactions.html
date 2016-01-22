@@ -1,11 +1,7 @@
 <div class="container main" role="main">
   <div class="row">
     <div class="starter-template">
-    </div>
-    <div class="starter-template">
-      <div ng-controller="transactions">
         <div id="grid2" ui-grid="gridOptions" ui-grid-exporter class="grid"></div>
-      </div>
     </div>
   </div>
 
@@ -23,15 +19,17 @@
         <th><input st-search="cost" placeholder="search for cost" class="input-sm form-control" type="search"/></th>
       </tr>
       </thead>
-      <tr ng-repeat="transaction in gridOptions.data">
-        <td style="width:30%;">{{transaction.date}}</td>
-        <td style="width:30%;">{{transaction.description}}</td>
-        <td style="width:30%;">{{transaction.cost}}</td>
-      </tr>
+      <tbody>
+        <tr data-ng-repeat="transaction in gridOptions.data">
+          <td style="width:30%;">{{transaction.date}}</td>
+          <td style="width:30%;">{{transaction.description}}</td>
+          <td style="width:30%;">{{transaction.cost}}</td>
+        </tr>
+      </tbody>
       <tfoot>
       <tr>
         <td colspan="7" class="text-center">
-          <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="20"></div>
+          <div st-pagination="" st-items-by-page="30" st-displayed-pages="20"></div>
         </td>
       </tr>
       </tfoot>
