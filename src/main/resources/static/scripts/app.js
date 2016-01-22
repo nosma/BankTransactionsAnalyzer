@@ -7,5 +7,6 @@ var app = angular.module('app', [
   'ngAnimate',
   'ngTouch',
   'ui.grid',
-  'ui.grid.exporter'
+  'ui.grid.exporter',
+  'smart-table'
 ]);

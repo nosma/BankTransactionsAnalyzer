@@ -1,15 +1,14 @@
 'use strict';
 
-app.controller('transactions', function ($scope, $http, uiGridConstants) {
+app.controller('transactions', function ($scope, $resource, $http, uiGridConstants) {
 
-  $scope.bankTransactions = function () {
-    $http.get("/api/bank/allTransactions").then(function successCallback(response) {
-      $scope.gridOptions.data = response.data;
-    }, function errorCallback(response) {
-      $scope.gridOptions.data = null;
-    });
-  };
-  $scope.bankTransactions();
+  $scope.itemsByPage = 50;
+
+  $resource("/api/bank/allTransactions").query(function(result) {
+    $scope.gridOptions.data = result;
+    $scope.transactions = result;
+    $scope.displayedTransactions = [].concat($scope.transactions);
+  });
 
 // ***************************************************************************************************************************** //
 

@@ -1,11 +1,42 @@
-<div class="container" role="main" class="main">
-  <div class="starter-template">
-  </div>
-  <div class="starter-template">
-    <div ng-controller="transactions">
-      <!--<button id='toggleFiltering' ng-click="toggleFiltering()" class="btn btn-success">Toggle Filtering</button>-->
-      <div id="grid2" ui-grid="gridOptions" ui-grid-exporter class="grid"></div>
-      <div class="ui-grid-bottom-panel" style="text-align: center">I am a Custom Grid Footer</div>
+<div class="container main" role="main">
+  <div class="row">
+    <div class="starter-template">
+    </div>
+    <div class="starter-template">
+      <div ng-controller="transactions">
+        <div id="grid2" ui-grid="gridOptions" ui-grid-exporter class="grid"></div>
+      </div>
     </div>
   </div>
+
+  <div class="row">
+    <table st-table="gridOptions.data" st-safe-src="transactions" class="table table-striped">
+      <thead>
+      <tr>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Cost</th>
+      </tr>
+      <tr>
+        <th><input st-search="date" placeholder="search for date" class="input-sm form-control" type="search"/></th>
+        <th><input st-search="description" placeholder="search for description" class="input-sm form-control" type="search"/></th>
+        <th><input st-search="cost" placeholder="search for cost" class="input-sm form-control" type="search"/></th>
+      </tr>
+      </thead>
+      <tr ng-repeat="transaction in gridOptions.data">
+        <td style="width:30%;">{{transaction.date}}</td>
+        <td style="width:30%;">{{transaction.description}}</td>
+        <td style="width:30%;">{{transaction.cost}}</td>
+      </tr>
+      <tfoot>
+      <tr>
+        <td colspan="7" class="text-center">
+          <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="20"></div>
+        </td>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
+
 </div>
+
