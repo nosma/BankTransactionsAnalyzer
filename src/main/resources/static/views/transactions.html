@@ -1,9 +1,9 @@
-<div class="container main" role="main">
-  <div class="row">
-    <div class="starter-template">
-        <div id="grid2" ui-grid="gridOptions" ui-grid-exporter class="grid"></div>
-    </div>
-  </div>
+<div class="container" role="main" class="main">
+  <!--<div class="row">-->
+    <!--<div class="starter-template">-->
+        <!--<div id="grid2" ui-grid="gridOptions" ui-grid-exporter class="grid"></div>-->
+    <!--</div>-->
+  <!--</div>-->
 
   <div class="row">
     <table st-table="gridOptions.data" st-safe-src="transactions" class="table table-striped">
@@ -21,15 +21,15 @@
       </thead>
       <tbody>
         <tr data-ng-repeat="transaction in gridOptions.data">
-          <td style="width:30%;">{{transaction.date}}</td>
-          <td style="width:30%;">{{transaction.description}}</td>
-          <td style="width:30%;">{{transaction.cost}}</td>
+          <td style="width:20%;">{{transaction.date}}</td>
+          <td style="width:60%;">{{transaction.description}}</td>
+          <td style="width:20%;">{{transaction.cost}}</td>
         </tr>
       </tbody>
       <tfoot>
       <tr>
         <td colspan="7" class="text-center">
-          <div st-pagination="" st-items-by-page="30" st-displayed-pages="20"></div>
+          <div st-pagination="" st-items-by-page="15" st-displayed-pages="10"></div>
         </td>
       </tr>
       </tfoot>
