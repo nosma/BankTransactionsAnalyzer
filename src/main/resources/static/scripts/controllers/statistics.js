@@ -2,18 +2,11 @@
 
 app.controller('statistics', function ($scope, $http, $resource) {
 
-  $scope.monthlyStatistics = function () {
-    $http.get("/api/statistics/monthly").then(function successCallback(response) {
-      $scope.gridOptions.data = response.data;
-    }, function errorCallback(response) {
-      $scope.gridOptions.data = null;
-    });
-  };
-  $scope.monthlyStatistics();
-
-  //$resource('/api/statistics/monthly').query(function(result) {
-  //  $scope.monthlyStats = result;
-  //});
+  $resource("/api/statistics/monthly").query(function(result) {
+    $scope.gridOptions.data = result;
+    $scope.transactionsStats = result;
+    $scope.displayedTransactionsStats = [].concat($scope.transactionsStats);
+  });
 
   $scope.gridOptions = {
     showGridFooter: true,

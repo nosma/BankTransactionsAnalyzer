@@ -1,9 +1,47 @@
 <div class="container" role="main" class="main">
-  <div class="starter-template">
+  <!--<div class="row">-->
+    <!--<div class="starter-template">-->
+      <!--<div ng-controller="statistics">-->
+        <!--<div id="grid3" ui-grid="gridOptions" ui-grid-exporter class="grid"></div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+
+  <div class="row">
+    <table st-table="gridOptions.data" st-safe-src="transactionsStats" class="table table-striped">
+      <thead>
+        <tr>
+          <td>Year</td>
+          <td>Month</td>
+          <td>Income</td>
+          <td>Expense</td>
+          <td>Profit</td>
+        </tr>
+      <tr>
+        <th><input st-search="yearMonth.year" placeholder="search for Year" class="input-sm form-control" type="search"/></th>
+        <th><input st-search="yearMonth.monthOfYear" placeholder="search for Month" class="input-sm form-control" type="search"/></th>
+        <th><input st-search="income" placeholder="search for Income" class="input-sm form-control" type="search"/></th>
+        <th><input st-search="expense" placeholder="search for Expense" class="input-sm form-control" type="search"/></th>
+        <th><input st-search="profit" placeholder="search for Profit" class="input-sm form-control" type="search"/></th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr data-ng-repeat="stats in gridOptions.data">
+          <td>{{stats.yearMonth.year}}</td>
+          <td>{{stats.yearMonth.monthOfYear}}</td>
+          <td>{{stats.income}}</td>
+          <td>{{stats.expense}}</td>
+          <td>{{stats.profit}}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="7" class="text-center">
+          <div st-pagination="" st-items-by-page="12" st-displayed-pages="10"></div>
+        </td>
+      </tr>
+      </tfoot>
+    </table>
   </div>
-  <div class="starter-template">
-    <div ng-controller="statistics">
-      <div id="grid3" ui-grid="gridOptions" ui-grid-exporter class="grid"></div>
-    </div>
-  </div>
+
 </div>
