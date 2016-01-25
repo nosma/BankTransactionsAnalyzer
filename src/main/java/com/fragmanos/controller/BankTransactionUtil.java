@@ -13,10 +13,10 @@ import org.slf4j.LoggerFactory;
 /**
  * @author fragkakise on 28/10/2015.
  */
-public class TransactionController {
+public class BankTransactionUtil {
 
   List<BankTransaction> totalBankTransactions = new ArrayList<BankTransaction>();
-  private static final Logger log = LoggerFactory.getLogger(TransactionController.class);
+  private static final Logger log = LoggerFactory.getLogger(BankTransactionUtil.class);
   CSVReader csvReader = new CSVReader();
   DirectoryReader directoryReader = new DirectoryReader();
 
