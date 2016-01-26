@@ -8,8 +8,8 @@ import com.fragmanos.database.dao.MonthStatDao;
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.web.controller.BankStatisticsService;
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -24,7 +24,7 @@ public class StatisticsTests {
   private BankTransactionDao bankTransactionDaoMock;
   private List<BankTransaction> bankTransactionList;
 
-  @Before
+  @BeforeMethod
   public void setUp() throws Exception {
     monthStatDaoMock = mock(MonthStatDao.class);
     bankTransactionDaoMock = mock(BankTransactionDao.class);
