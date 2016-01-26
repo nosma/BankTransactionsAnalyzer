@@ -1,6 +1,6 @@
 package com.fragmanos.web.controller;
 
-import com.fragmanos.controller.TransactionController;
+import com.fragmanos.controller.BankTransactionUtil;
 import com.fragmanos.database.dao.BankTransactionDao;
 import com.fragmanos.database.dao.MonthStatDao;
 import com.fragmanos.database.dao.YearStatDao;
@@ -44,10 +44,10 @@ public class BankController {
     @PostConstruct
     public void populateDatabase() {
         DirectoryReader directoryReader = new DirectoryReader();
-        TransactionController transactionController = new TransactionController();
+        BankTransactionUtil bankTransactionUtil = new BankTransactionUtil();
 
         if(!directoryReader.isDirectoryEmpty(inputDirectory)) {
-            List<BankTransaction> bankTransactionsFromDirectory = getBankTransactionsFromDirectory(transactionController);
+            List<BankTransaction> bankTransactionsFromDirectory = getBankTransactionsFromDirectory(bankTransactionUtil);
             for(BankTransaction bankTransaction : bankTransactionsFromDirectory) {
                 bankTransactionDao.save(bankTransaction);
                 setMonthStat(bankTransaction);
@@ -55,10 +55,10 @@ public class BankController {
         }
     }
 
-    private List<BankTransaction> getBankTransactionsFromDirectory(TransactionController transactionController) {
+    private List<BankTransaction> getBankTransactionsFromDirectory(BankTransactionUtil bankTransactionUtil) {
         List<BankTransaction> bankTransactionsFromDirectory = new ArrayList<BankTransaction>();
         try {
-            bankTransactionsFromDirectory = transactionController.getBankTransactionsFromDirectory(inputDirectory);
+            bankTransactionsFromDirectory = bankTransactionUtil.getBankTransactionsFromDirectory(inputDirectory);
         } catch(ParseException e) {
             log.error("ParseException while parsing directory", e);
         } catch(IOException e) {
@@ -80,11 +80,6 @@ public class BankController {
             ));
         }
         return dataForTable;
-    }
-
-    @RequestMapping("/api/statistics/monthly")
-    public List<MonthStat> monthlyStatistics(){
-        return monthStatDao.findAllByOrderByYearMonthDesc();
     }
 
     @RequestMapping("/transaction")
