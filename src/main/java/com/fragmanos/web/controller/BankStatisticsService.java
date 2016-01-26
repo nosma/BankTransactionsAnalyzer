@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BankStatisticsService {
+public class BankStatisticsService implements BankStatisticsInterface {
 
     private final MonthStatDao monthStatDao;
 
