@@ -6,15 +6,17 @@ import java.util.List;
 import com.fragmanos.database.dao.BankTransactionDao;
 import com.fragmanos.database.dao.MonthStatDao;
 import com.fragmanos.database.model.BankTransaction;
+import com.fragmanos.database.model.MonthStat;
 import com.fragmanos.web.controller.BankStatisticsService;
 import org.joda.time.LocalDate;
+import org.joda.time.YearMonth;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class StatisticsTests {
+public class StatisticServiceTests {
 
   private static final double DOUBLE_DELTA = 1e-15;
 
@@ -23,6 +25,7 @@ public class StatisticsTests {
   private MonthStatDao monthStatDaoMock;
   private BankTransactionDao bankTransactionDaoMock;
   private List<BankTransaction> bankTransactionList;
+  private List<MonthStat> monthStaList;
 
   @BeforeMethod
   public void setUp() throws Exception {
@@ -31,7 +34,10 @@ public class StatisticsTests {
     bankStatisticsService = new BankStatisticsService(monthStatDaoMock, bankTransactionDaoMock);
 
     bankTransactionList = new ArrayList<BankTransaction>();
+    monthStaList = new ArrayList<MonthStat>();
+
     when(bankTransactionDaoMock.findAllByOrderByTransactiondateDesc()).thenReturn(bankTransactionList);
+    when(monthStatDaoMock.findAllByOrderByYearMonthDesc()).thenReturn(monthStaList);
   }
 
   /* Total calculations */
@@ -95,5 +101,12 @@ public class StatisticsTests {
     bankTransactionList.add(new BankTransaction(new LocalDate(2015, 10, 31), "TEST2", -1612.0));
     double monthlyProfit = bankStatisticsService.getMonthlyIncome(10, 2015) + bankStatisticsService.getMonthlyExpenses(10, 2015);
     assertEquals(2484.0, monthlyProfit, DOUBLE_DELTA);
+  }
+
+  @Test
+  public void testMonthlyStatisticsMatchExpected() throws Exception {
+    monthStaList.add(new MonthStat(new YearMonth(),2000.0,1000.0,1000.0));
+    monthStaList.add(new MonthStat(new YearMonth(),3000.0,2000.0,1000.0));
+    assertEquals(2, bankStatisticsService.getMonthlyStatistics().size());
   }
 }
