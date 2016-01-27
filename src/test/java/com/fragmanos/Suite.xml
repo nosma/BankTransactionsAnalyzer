@@ -8,15 +8,4 @@
     </packages>
   </test>
 
-  <!--<test name="directory">-->
-    <!--<classes>-->
-      <!--<class name="com.fragmanos.DirectoryTests" />-->
-    <!--</classes>-->
-  <!--</test>-->
-  <!--<test name="statistics">-->
-    <!--<classes>-->
-      <!--<class name="com.fragmanos.StatisticsTests" />-->
-    <!--</classes>-->
-  <!--</test>-->
-
 </suite>
