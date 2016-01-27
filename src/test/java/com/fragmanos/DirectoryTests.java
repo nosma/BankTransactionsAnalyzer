@@ -1,21 +1,27 @@
 package com.fragmanos;
 
-import com.fragmanos.controller.BankTransactionUtil;
-import com.fragmanos.directory.DirectoryReader;
-import org.testng.annotations.Test;
-
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import com.fragmanos.controller.BankTransactionUtil;
+import com.fragmanos.directory.DirectoryReader;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import static org.junit.Assert.*;
 
 public class DirectoryTests {
-  //  Read directory from properties file is not suggested for tests
-  private static final String INPUT_DIRECTORY = System.getProperty("user.dir") + "/src/test/resources/testTransactions/";
 
-  DirectoryReader directoryReader = new DirectoryReader();
-  BankTransactionUtil bankTransactionUtil = new BankTransactionUtil();
+  private final String INPUT_DIRECTORY = System.getProperty("user.dir") + getTestPath();
+  private DirectoryReader directoryReader;
+  private BankTransactionUtil bankTransactionUtil;
+
+  @BeforeMethod
+  public void setUp() throws Exception {
+    directoryReader = new DirectoryReader();
+    bankTransactionUtil = new BankTransactionUtil();
+  }
 
   @Test
   public void checkIfCSVDirectoryIsEmpty() {
@@ -32,4 +38,8 @@ public class DirectoryTests {
     assertEquals(36, bankTransactionUtil.getBankTransactionsFromDirectory(INPUT_DIRECTORY).size());
   }
 
+  public String getTestPath() {
+    String fs = File.separator;
+    return fs+"src"+fs+"test"+fs+"resources"+fs+"testTransactions"+fs;
+  }
 }

@@ -4,9 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author macuser on 8/22/15.
- */
 public class DirectoryReader {
 
   public List<String> csvScanner(String directoryName) {
@@ -16,9 +13,9 @@ public class DirectoryReader {
 
     if(directory.isDirectory()) {
       files = directory.list();
-      for(int i = 0; i < files.length; i++)
-        if(files[i].contains(".csv"))
-          csvList.add(files[i]);
+      for(String file : files)
+        if(file.contains(".csv"))
+          csvList.add(file);
     }
     return csvList;
   }
@@ -28,8 +25,7 @@ public class DirectoryReader {
     File directory = new File(directoryName);
     if(directory.list().length > 0) {
       for(String file : directory.list()) {
-        if(file.contains(".csv")) emptyDirectory = false;
-        else emptyDirectory = true;
+        emptyDirectory = !file.contains(".csv");
       }
     }
     return emptyDirectory;
