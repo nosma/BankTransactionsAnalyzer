@@ -1,0 +1,22 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="TestAll">
+
+  <test name="Regression1">
+    <packages>
+      <package name="com.fragmanos" />
+    </packages>
+  </test>
+
+  <!--<test name="directory">-->
+    <!--<classes>-->
+      <!--<class name="com.fragmanos.DirectoryTests" />-->
+    <!--</classes>-->
+  <!--</test>-->
+  <!--<test name="statistics">-->
+    <!--<classes>-->
+      <!--<class name="com.fragmanos.StatisticsTests" />-->
+    <!--</classes>-->
+  <!--</test>-->
+
+</suite>
