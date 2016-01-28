@@ -1,22 +1,18 @@
 package com.fragmanos.web.controller;
 
-import java.util.List;
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.PostConstruct;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/bank/")
 public class BankController {
 
-    BankInterface bankInterface;
-
     @Autowired
-    public BankController(BankInterface bankInterface) {
-        this.bankInterface = bankInterface;
-    }
+    private BankInterface bankInterface;
 
     @PostConstruct
     @RequestMapping("populateDatabase")
