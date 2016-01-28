@@ -10,9 +10,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author macuser on 8/23/15.
- */
 public class CSVReader {
 
 
@@ -29,7 +26,6 @@ public class CSVReader {
                                                                          getDescriptionFromLine(csvLine, splitByCharacter),
                                                                          getCostFromLine(csvLine, splitByCharacter));
                 bankTransactionList.add(bankTransaction);
-//                printTransactions(csvLine, splitByCharacter);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -43,16 +39,6 @@ public class CSVReader {
             }
         }
         return bankTransactionList;
-    }
-
-    private void printTransactions(String csvLine, String splitByCharacter) {
-        StringBuilder transaction = new StringBuilder("");
-        transaction.append("Incoming Date: ").
-                        append(getDateFromLine(csvLine, splitByCharacter))
-                    .append("Incoming Cause: ").
-                        append(getDescriptionFromLine(csvLine, splitByCharacter))
-                    .append("Incoming Cost: ").
-                        append(getCostFromLine(csvLine, splitByCharacter));
     }
 
     private static String getCostFromLine(String csvLine, String splitByCharacter) {

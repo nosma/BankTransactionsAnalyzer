@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 
-import com.fragmanos.controller.BankTransactionUtil;
+import com.fragmanos.util.BankTransactionUtil;
 import com.fragmanos.directory.DirectoryReader;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
