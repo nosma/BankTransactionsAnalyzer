@@ -1,12 +1,39 @@
 'use strict';
 
-app.controller('statistics', function ($scope, $http, $resource) {
+app.controller('statistics', ['$scope','$http','$resource','monthlyIncomeService',
+                      function ($scope, $http, $resource, monthlyIncomeService) {
+
+  $scope.moneyFlowSelected = false;
 
   $resource("/api/statistics/monthly").query(function(result) {
     $scope.gridOptions.data = result;
     $scope.transactionsStats = result;
     $scope.displayedTransactionsStats = [].concat($scope.transactionsStats);
   });
+
+  $scope.callMonthlyIncome = function (year,month) {
+    //monthlyIncomeService.async(year,month).then(function (data) {
+    //  $scope.monthStats = data;
+    //});
+    //$http({
+    //  method: 'GET',
+    //  url: 'monthlyExpenses/'+year+'/'+month
+    //}).then(function successCallback(response) {
+    //  $scope.monthStats = response;
+    //}, function errorCallback(response) {
+    //  $scope.monthStats = response;
+    //});
+    $http.get('monthlyExpenses/' + year + '/' + month)
+        .then(function successCallback(response) {
+          $scope.monthStats = response;
+        });
+    $scope.moneyFlowSelected = true;
+  };
+
+  $scope.callMonthlyExpenses = function (year,month) {
+
+  $scope.moneyFlowSelected = true;
+  };
 
   $scope.gridOptions = {
     showGridFooter: true,
@@ -45,4 +72,4 @@ app.controller('statistics', function ($scope, $http, $resource) {
     ]
   };
 
-});
+}]);

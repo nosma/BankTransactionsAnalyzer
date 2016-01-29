@@ -1,7 +1,7 @@
 <div class="container" role="main" class="main">
   <!--<div class="row">-->
     <!--<div class="starter-template">-->
-      <!--<div ng-controller="statistics">-->
+      <!--<div ng-util="statistics">-->
         <!--<div id="grid3" ui-grid="gridOptions" ui-grid-exporter class="grid"></div>-->
       <!--</div>-->
     <!--</div>-->
@@ -29,8 +29,8 @@
         <tr data-ng-repeat="stats in gridOptions.data">
           <td>{{stats.yearMonth.year}}</td>
           <td>{{stats.yearMonth.monthOfYear}}</td>
-          <td>{{stats.income}}</td>
-          <td>{{stats.expense}}</td>
+          <td ng-click="callMonthlyIncome(stats.yearMonth.year,stats.yearMonth.monthOfYear)">{{stats.income}}</td>
+          <td ng-click="callMonthlyExpenses(stats.yearMonth.year,stats.yearMonth.monthOfYear)">{{stats.expense}}</td>
           <td>{{stats.profit}}</td>
         </tr>
       </tbody>
@@ -39,6 +39,32 @@
         <td colspan="7" class="text-center">
           <div st-pagination="" st-items-by-page="12" st-displayed-pages="10"></div>
         </td>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="row" ng-show="moneyFlowSelected">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Cost</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr  data-ng-repeat="monthStat in monthStats">
+        <td>{{monthStat.date}}</td>
+        <td>{{monthStat.description}}</td>
+        <td>{{monthStat.cost}}</td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td> = = = </td>
+        <td> = = = </td>
+        <td> = = = </td>
       </tr>
       </tfoot>
     </table>
