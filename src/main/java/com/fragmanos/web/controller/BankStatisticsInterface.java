@@ -20,4 +20,6 @@ public interface BankStatisticsInterface {
 
   List<MonthStat> getMonthlyStatistics();
 
+  double getInitialBalance();
+
 }

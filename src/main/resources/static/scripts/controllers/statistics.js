@@ -6,9 +6,50 @@ app.controller('statistics', ['$scope','$http','$resource', function ($scope, $h
   $scope.sortType = 'date';
   $scope.sortReverse = false;
 
+  $http({method: 'GET', url: "/api/statistics/initialBalance"
+  }).then(function successCallback(response) {
+    $scope.initialBalance = response.data;
+  }, function errorCallback(response) {
+    $scope.initialBalance = response.data;
+  });
+
+  var roundNumber = function(num){
+    return Math.round(num * 100) / 100
+  };
+
+  var getTotalProfit = function(data){
+    var total = 0;
+    for(var i = 0; i < data.length; i++){
+      total += data[i].expense;
+      total += data[i].income;
+    }
+    return roundNumber(total - $scope.initialBalance);
+  };
+
+  var getTotalExpense = function(data){
+    var total = 0;
+    for(var i = 0; i < data.length; i++){
+        total += data[i].expense;
+    }
+    return roundNumber(total);
+  };
+
+  var getTotalIncome = function(data){
+    var total = 0;
+    for(var i = 0; i < data.length; i++){
+        total += data[i].income;
+    }
+    return roundNumber(total);
+  };
+
   $resource("/api/statistics/monthly").query(function(result) {
     $scope.gridOptions.data = result;
     $scope.transactionsStats = result;
+
+    $scope.expenseTotal = getTotalExpense(result);
+    $scope.incomeTotal = getTotalIncome(result);
+    $scope.profitTotal = getTotalProfit(result);
+
     $scope.displayedTransactionsStats = [].concat($scope.transactionsStats);
   });
 

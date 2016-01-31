@@ -5,6 +5,7 @@ import com.fragmanos.database.dao.MonthStatDao;
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.database.model.MonthStat;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +13,14 @@ import java.util.List;
 @Service
 public class BankStatisticsService implements BankStatisticsInterface {
 
-    private final MonthStatDao monthStatDao;
+    @Value("${initial.balance}")
+    public double initialBalance;
 
+    public double getInitialBalance() {
+        return initialBalance;
+    }
+
+    private final MonthStatDao monthStatDao;
     private final BankTransactionDao bankTransactionDao;
 
     @Autowired

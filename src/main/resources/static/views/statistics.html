@@ -33,6 +33,12 @@
           <td ng-click="callMonthlyExpenses(stats.yearMonth.year,stats.yearMonth.monthOfYear)">{{stats.expense}}</td>
           <td>{{stats.profit}}</td>
         </tr>
+      <tr>
+        <td colspan="2"><b>Total</b></td>
+        <td><b>{{incomeTotal}}</b></td>
+        <td><b>{{expenseTotal}}</b></td>
+        <td><b>{{profitTotal}}</b></td>
+      </tr>
       </tbody>
       <tfoot>
       <tr>
@@ -63,6 +69,11 @@
         <td style="width:20%;">{{monthTransaction.date}}</td>
         <td style="width:60%;">{{monthTransaction.description}}</td>
         <td style="width:20%;">{{monthTransaction.cost}}</td>
+      </tr>
+        <td style="width:20%;"></td>
+        <td style="width:60%;"></td>
+        <td style="width:20%;"></td>
+      <tr>
       </tr>
       </tbody>
       <tfoot>

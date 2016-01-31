@@ -48,4 +48,9 @@ public class BankStatisticsController {
     return bankStatisticsInterface.getYearlyIncome(yearNumber);
   }
 
+  @RequestMapping(value = "initialBalance")
+  public double getInitialBalance(){
+    return bankStatisticsInterface.getInitialBalance();
+  }
+
 }
