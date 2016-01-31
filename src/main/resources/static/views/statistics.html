@@ -11,11 +11,11 @@
     <table st-table="gridOptions.data" st-safe-src="transactionsStats" class="table table-striped">
       <thead>
         <tr>
-          <td>Year</td>
-          <td>Month</td>
-          <td>Income</td>
-          <td>Expense</td>
-          <td>Profit</td>
+          <td st-sort="yearMonth.year">Year</td>
+          <td st-sort="yearMonth.monthOfYear">Month</td>
+          <td st-sort="income">Income</td>
+          <td st-sort="expense">Expense</td>
+          <td st-sort="profit">Profit</td>
         </tr>
       <tr>
         <th><input st-search="yearMonth.year" placeholder="search for Year" class="input-sm form-control" type="search"/></th>
@@ -44,27 +44,32 @@
     </table>
   </div>
 
-  <div class="row" ng-show="moneyFlowSelected">
-    <table class="table table-striped">
+  <div class="row" ng-show="showMonthTransactions">
+    <table st-table="monthList" st-safe-src="displayedMonthList" class="table table-striped">
       <thead>
       <tr>
-        <th>Date</th>
-        <th>Description</th>
-        <th>Cost</th>
+        <th st-sort="date">Date</th>
+        <th st-sort="description">Description</th>
+        <th st-sort="cost">Cost</th>
+      </tr>
+      <tr>
+        <th style="width:20%;"><input st-search="date" placeholder="search for date" class="input-sm form-control" type="search"/></th>
+        <th style="width:60%;"><input st-search="description" placeholder="search for description" class="input-sm form-control" type="search"/></th>
+        <th style="width:20%;"><input st-search="cost" placeholder="search for cost" class="input-sm form-control" type="search"/></th>
       </tr>
       </thead>
       <tbody>
-      <tr  data-ng-repeat="monthStat in monthStats">
-        <td>{{monthStat.date}}</td>
-        <td>{{monthStat.description}}</td>
-        <td>{{monthStat.cost}}</td>
+      <tr  data-ng-repeat="monthTransaction in monthList">
+        <td style="width:20%;">{{monthTransaction.date}}</td>
+        <td style="width:60%;">{{monthTransaction.description}}</td>
+        <td style="width:20%;">{{monthTransaction.cost}}</td>
       </tr>
       </tbody>
       <tfoot>
       <tr>
-        <td> = = = </td>
-        <td> = = = </td>
-        <td> = = = </td>
+        <td colspan="7" class="text-center">
+          <div st-pagination="" st-items-by-page="15" st-displayed-pages="10"></div>
+        </td>
       </tr>
       </tfoot>
     </table>

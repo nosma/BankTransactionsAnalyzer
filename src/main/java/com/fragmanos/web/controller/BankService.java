@@ -1,25 +1,23 @@
 package com.fragmanos.web.controller;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.fragmanos.util.BankTransactionUtil;
 import com.fragmanos.database.dao.BankTransactionDao;
 import com.fragmanos.database.dao.MonthStatDao;
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.database.model.MonthStat;
 import com.fragmanos.directory.DirectoryReader;
+import com.fragmanos.util.BankTransactionUtil;
 import org.joda.time.YearMonth;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BankService implements BankInterface {
@@ -29,28 +27,21 @@ public class BankService implements BankInterface {
   @Value("${transactions.directory}")
   public String inputDirectory;
 
-  MonthStatDao monthStatDao;
-  BankTransactionDao bankTransactionDao;
+  private MonthStatDao monthStatDao;
+  private BankTransactionDao bankTransactionDao;
+  private BankTransactionUtil bankTransactionUtil;
 
   @Autowired
   public BankService(MonthStatDao monthStatDao, BankTransactionDao bankTransactionDao) {
     this.monthStatDao = monthStatDao;
     this.bankTransactionDao = bankTransactionDao;
+    bankTransactionUtil = new BankTransactionUtil();
   }
 
   @Override
   public List<TableObject> getTableObjects() {
-    List<TableObject> dataForTable = new ArrayList<TableObject>();
     List<BankTransaction> allBankTransactions = bankTransactionDao.findAllByOrderByTransactiondateDesc();
-    DateTimeFormatter dtf = DateTimeFormat.forPattern("dd/MM/yyyy");
-    for(BankTransaction bankTransaction : allBankTransactions) {
-      dataForTable.add(new TableObject(
-                                        dtf.print(bankTransaction.getTransactiondate()),
-                                        bankTransaction.getDescription(),
-                                        bankTransaction.getCost()
-      ));
-    }
-    return dataForTable;
+    return bankTransactionUtil.getTableObjectList(allBankTransactions);
   }
 
   @Override
@@ -65,6 +56,32 @@ public class BankService implements BankInterface {
         setMonthStat(bankTransaction);
       }
     }
+  }
+
+  @Override
+  public List<TableObject> getMonthlyExpensesList(int monthNumber, int yearNumber) {
+    List<BankTransaction> bankTransactionList = new ArrayList<BankTransaction>();
+    for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
+      if ((bankTransaction.getTransactiondate().getMonthOfYear() == monthNumber) &&
+            (bankTransaction.getTransactiondate().getYear() == yearNumber) &&
+              (bankTransaction.getCost() < 0)) {
+        bankTransactionList.add(bankTransaction);
+      }
+    }
+    return bankTransactionUtil.getTableObjectList(bankTransactionList);
+  }
+
+  @Override
+  public List<TableObject> getMonthlyIncomeList(int monthNumber, int yearNumber) {
+    List<BankTransaction> bankTransactionList = new ArrayList<BankTransaction>();
+    for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
+      if ((bankTransaction.getTransactiondate().getMonthOfYear() == monthNumber) &&
+              (bankTransaction.getTransactiondate().getYear() == yearNumber) &&
+              (bankTransaction.getCost() > 0)) {
+        bankTransactionList.add(bankTransaction);
+      }
+    }
+    return bankTransactionUtil.getTableObjectList(bankTransactionList);
   }
 
   private List<BankTransaction> getBankTransactionsFromDirectory(BankTransactionUtil bankTransactionUtil) {

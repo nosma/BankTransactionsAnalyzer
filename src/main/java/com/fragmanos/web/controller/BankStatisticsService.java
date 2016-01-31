@@ -22,6 +22,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
         this.bankTransactionDao = bankTransactionDao;
     }
 
+    @Override
     public double getTotalIncome() {
         double totalIncome = 0;
         for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
@@ -30,6 +31,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
         return totalIncome;
     }
 
+    @Override
     public double getTotalExpenses() {
         double totalExpenses = 0;
         for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
@@ -38,7 +40,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
         return totalExpenses;
     }
 
-
+    @Override
     public double getMonthlyIncome(int monthNumber, int yearNumber) {
         double monthlyIncome = 0;
         for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
@@ -50,6 +52,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
         return monthlyIncome;
     }
 
+    @Override
     public double getMonthlyExpenses(int monthNumber, int yearNumber) {
         double monthlyExpenses = 0;
         for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
@@ -61,6 +64,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
         return monthlyExpenses;
     }
 
+    @Override
     public double getYearlyExpenses(int yearNumber) {
         double yearlyExpenses = 0;
         for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
@@ -71,6 +75,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
         return yearlyExpenses;
     }
 
+    @Override
     public double getYearlyIncome(int yearNumber) {
         double yearlyIncome = 0;
         for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
@@ -81,6 +86,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
         return yearlyIncome;
     }
 
+    @Override
     public List<MonthStat> getMonthlyStatistics() {
             return monthStatDao.findAllByOrderByYearMonthDesc();
     }

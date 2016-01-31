@@ -1,9 +1,10 @@
 'use strict';
 
-app.controller('statistics', ['$scope','$http','$resource','monthlyIncomeService',
-                      function ($scope, $http, $resource, monthlyIncomeService) {
+app.controller('statistics', ['$scope','$http','$resource', function ($scope, $http, $resource) {
 
-  $scope.moneyFlowSelected = false;
+  $scope.showMonthTransactions = false;
+  $scope.sortType = 'date';
+  $scope.sortReverse = false;
 
   $resource("/api/statistics/monthly").query(function(result) {
     $scope.gridOptions.data = result;
@@ -12,27 +13,29 @@ app.controller('statistics', ['$scope','$http','$resource','monthlyIncomeService
   });
 
   $scope.callMonthlyIncome = function (year,month) {
-    //monthlyIncomeService.async(year,month).then(function (data) {
-    //  $scope.monthStats = data;
-    //});
-    //$http({
-    //  method: 'GET',
-    //  url: 'monthlyExpenses/'+year+'/'+month
-    //}).then(function successCallback(response) {
-    //  $scope.monthStats = response;
-    //}, function errorCallback(response) {
-    //  $scope.monthStats = response;
-    //});
-    $http.get('monthlyExpenses/' + year + '/' + month)
-        .then(function successCallback(response) {
-          $scope.monthStats = response;
-        });
-    $scope.moneyFlowSelected = true;
+    $http({
+      method: 'GET',
+      url: '/api/bank/monthlyIncomeList/'+year+'/'+month
+    }).then(function successCallback(response) {
+      $scope.monthList = response.data;
+      $scope.displayedMonthList = [].concat(response.data);
+    }, function errorCallback(response) {
+      $scope.monthList = response.data;
+    });
+    $scope.showMonthTransactions = true;
   };
 
   $scope.callMonthlyExpenses = function (year,month) {
-
-  $scope.moneyFlowSelected = true;
+    $http({
+      method: 'GET',
+      url: '/api/bank/monthlyExpensesList/'+year+'/'+month
+    }).then(function successCallback(response) {
+      $scope.monthList = response.data;
+      $scope.displayedMonthList = [].concat(response.data);
+    }, function errorCallback(response) {
+      $scope.monthList = response.data;
+    });
+  $scope.showMonthTransactions = true;
   };
 
   $scope.gridOptions = {
