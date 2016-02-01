@@ -1,5 +1,6 @@
 package com.fragmanos.web.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -58,7 +59,7 @@ public class BankService implements BankInterface {
     DirectoryReader directoryReader = new DirectoryReader();
     BankTransactionUtil bankTransactionUtil = new BankTransactionUtil();
 
-    if(!directoryReader.isDirectoryEmpty(inputDirectory)) {
+    if(!directoryReader.isDirectoryEmpty(getInputDirectory())) {
       List<BankTransaction> bankTransactionsFromDirectory = getBankTransactionsFromDirectory(bankTransactionUtil);
       for(BankTransaction bankTransaction : bankTransactionsFromDirectory) {
         bankTransactionDao.save(bankTransaction);
@@ -67,10 +68,14 @@ public class BankService implements BankInterface {
     }
   }
 
+  private String getInputDirectory() {
+    return inputDirectory + File.separator;
+  }
+
   private List<BankTransaction> getBankTransactionsFromDirectory(BankTransactionUtil bankTransactionUtil) {
     List<BankTransaction> bankTransactionsFromDirectory = new ArrayList<BankTransaction>();
     try {
-      bankTransactionsFromDirectory = bankTransactionUtil.getBankTransactionsFromDirectory(inputDirectory);
+      bankTransactionsFromDirectory = bankTransactionUtil.getBankTransactionsFromDirectory(getInputDirectory());
     } catch(ParseException e) {
       log.error("ParseException while parsing directory", e);
     } catch(IOException e) {
