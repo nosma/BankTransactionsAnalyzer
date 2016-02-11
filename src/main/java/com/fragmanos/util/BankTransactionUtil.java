@@ -6,23 +6,20 @@ import java.util.*;
 
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.directory.DirectoryReader;
-import com.fragmanos.file.CSVReader;
+import com.fragmanos.file.CSVParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author fragkakise on 28/10/2015.
- */
 public class BankTransactionUtil {
 
   List<BankTransaction> totalBankTransactions = new ArrayList<BankTransaction>();
   private static final Logger log = LoggerFactory.getLogger(BankTransactionUtil.class);
-  CSVReader csvReader = new CSVReader();
+  CSVParser csvParser = new CSVParser();
   DirectoryReader directoryReader = new DirectoryReader();
 
   public List<BankTransaction> getBankTransactionsFromDirectory(String inputDirectory) throws ParseException, IOException {
     for (String file : directoryReader.csvScanner(inputDirectory)) {
-      List<BankTransaction> fileBankTransactionList = csvReader.readCSV(inputDirectory + file);
+      List<BankTransaction> fileBankTransactionList = csvParser.getTransactions(inputDirectory + file);
       totalBankTransactions = filterUniqueBankTransactions(totalBankTransactions, fileBankTransactionList);
     }
     return totalBankTransactions;

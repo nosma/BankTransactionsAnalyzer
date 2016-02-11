@@ -7,19 +7,19 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fragmanos.util.BankTransactionUtil;
 import com.fragmanos.database.dao.BankTransactionDao;
 import com.fragmanos.database.dao.MonthStatDao;
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.database.model.MonthStat;
 import com.fragmanos.directory.DirectoryReader;
+import com.fragmanos.properties.PropertiesLoader;
+import com.fragmanos.util.BankTransactionUtil;
 import org.joda.time.YearMonth;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,8 +27,8 @@ public class BankService implements BankInterface {
 
   private static final Logger log = LoggerFactory.getLogger(BankService.class);
 
-  @Value("${transactions.directory}")
-  public String inputDirectory;
+  @Autowired
+  private PropertiesLoader propertiesLoader;
 
   MonthStatDao monthStatDao;
   BankTransactionDao bankTransactionDao;
@@ -69,7 +69,7 @@ public class BankService implements BankInterface {
   }
 
   private String getInputDirectory() {
-    return inputDirectory + File.separator;
+    return propertiesLoader.getInputDirectory() + File.separator;
   }
 
   private List<BankTransaction> getBankTransactionsFromDirectory(BankTransactionUtil bankTransactionUtil) {
