@@ -13,6 +13,20 @@ app.controller('statistics', ['$scope','$http','$resource', function ($scope, $h
     $scope.initialBalance = response.data;
   });
 
+  $http({method: 'GET', url: "/api/statistics/medianMonthlyExpense"
+  }).then(function successCallback(response) {
+    $scope.averageMonthlyExpense = roundNumber(response.data);
+  }, function errorCallback(response) {
+    $scope.averageMonthlyExpense = response.data;
+  });
+
+  $http({method: 'GET', url: "/api/statistics/medianMonthlyIncome"
+  }).then(function successCallback(response) {
+    $scope.averageMonthlyIncome = roundNumber(response.data);
+  }, function errorCallback(response) {
+    $scope.averageMonthlyIncome = response.data;
+  });
+
   var roundNumber = function(num){
     return Math.round(num * 100) / 100
   };

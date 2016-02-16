@@ -4,6 +4,7 @@ import com.fragmanos.database.dao.BankTransactionDao;
 import com.fragmanos.database.dao.MonthStatDao;
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.database.model.MonthStat;
+import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,6 @@ public class BankStatisticsService implements BankStatisticsInterface {
     @Value("${initial.balance}")
     public double initialBalance;
 
-    public double getInitialBalance() {
-        return initialBalance;
-    }
-
     private final MonthStatDao monthStatDao;
     private final BankTransactionDao bankTransactionDao;
 
@@ -27,6 +24,10 @@ public class BankStatisticsService implements BankStatisticsInterface {
     public BankStatisticsService(MonthStatDao monthStatDao, BankTransactionDao bankTransactionDao) {
         this.monthStatDao = monthStatDao;
         this.bankTransactionDao = bankTransactionDao;
+    }
+
+    public double getInitialBalance() {
+        return this.initialBalance;
     }
 
     @Override
@@ -96,5 +97,35 @@ public class BankStatisticsService implements BankStatisticsInterface {
     @Override
     public List<MonthStat> getMonthlyStatistics() {
             return monthStatDao.findAllByOrderByYearMonthDesc();
+    }
+
+    @Override
+    public double getMedianMonthlyExpense() {
+        List<MonthStat> monthStats = monthStatDao.findAll();
+        double medianList[] = new double[monthStats.size()];
+        int counter = 0;
+
+        for (MonthStat monthStat : monthStats) {
+            medianList[counter] = monthStat.getExpense();
+            counter++;
+        }
+
+        Median median = new Median();
+        return median.evaluate(medianList);
+    }
+
+    @Override
+    public double getMedianMonthlyIncome() {
+        List<MonthStat> monthStats = monthStatDao.findAll();
+        double medianList[] = new double[monthStats.size()];
+        int counter = 0;
+
+        for (MonthStat monthStat : monthStats) {
+            medianList[counter] = monthStat.getIncome();
+            counter++;
+        }
+
+        Median median = new Median();
+        return median.evaluate(medianList);
     }
 }

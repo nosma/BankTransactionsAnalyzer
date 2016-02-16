@@ -53,4 +53,14 @@ public class BankStatisticsController {
     return bankStatisticsInterface.getInitialBalance();
   }
 
+  @RequestMapping(value = "medianMonthlyExpense")
+  public double getMedianMonthlyExpense(){
+    return bankStatisticsInterface.getMedianMonthlyExpense();
+  }
+
+  @RequestMapping(value = "medianMonthlyIncome")
+  public double getMedianMonthlyIncome(){
+    return bankStatisticsInterface.getMedianMonthlyIncome();
+  }
+
 }

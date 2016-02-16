@@ -22,4 +22,7 @@ public interface BankStatisticsInterface {
 
   double getInitialBalance();
 
+  double getMedianMonthlyExpense();
+
+  double getMedianMonthlyIncome();
 }
