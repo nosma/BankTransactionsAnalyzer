@@ -29,4 +29,9 @@ public class DateUtilsImpl {
         DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd/yy");
         return dtf.parseLocalDate(s);
     }
+
+    public LocalDate convertMidataTextToDate(String midataDate) {
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("dd/MM/yyyy");
+        return dtf.parseLocalDate(midataDate);
+    }
 }
