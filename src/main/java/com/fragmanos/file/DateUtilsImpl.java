@@ -6,27 +6,26 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.text.ParseException;
 
-/**
- * @author macuser on 8/23/15.
- */
 public class DateUtilsImpl {
-    public LocalDate convertTextToDate(String s) throws ParseException {
-        LocalDate returnedDate = null;
-        if (s.contains("-")) {
-            returnedDate = getDateFromStringWithDashes(s);
-        } else if (s.contains("/")) {
-            returnedDate = getDateFromStringWithSlashes(s);
+    public LocalDate convertTextToDate(String date) throws ParseException {
+        LocalDate returnedDate;
+        if (date.contains("-")) {
+            returnedDate = getDateFromStringWithDashes(date);
+        } else if (date.contains("/")) {
+            returnedDate = getDateFromStringWithSlashes(date);
+        } else {
+            throw new RuntimeException("Unexpected Date seperation character");
         }
         return returnedDate;
     }
 
-    private LocalDate getDateFromStringWithDashes(String s) throws ParseException {
+    private LocalDate getDateFromStringWithDashes(String date) throws ParseException {
         DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd");
-        return dtf.parseLocalDate(s);
+        return dtf.parseLocalDate(date);
     }
 
-    private LocalDate getDateFromStringWithSlashes(String s) throws ParseException {
+    private LocalDate getDateFromStringWithSlashes(String date) throws ParseException {
         DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd/yy");
-        return dtf.parseLocalDate(s);
+        return dtf.parseLocalDate(date);
     }
 }
