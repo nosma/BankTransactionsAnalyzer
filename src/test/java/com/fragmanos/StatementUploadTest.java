@@ -1,10 +1,11 @@
 package com.fragmanos;
 
+import com.fragmanos.database.dao.BankTransactionDao;
+import com.fragmanos.database.dao.MonthStatDao;
 import com.fragmanos.file.CSVParser;
 import com.fragmanos.properties.PropertiesLoader;
-import com.fragmanos.web.controller.BankInterface;
+import com.fragmanos.web.controller.BankService;
 import com.fragmanos.web.controller.UploadController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -29,25 +30,28 @@ public class StatementUploadTest {
     private UploadController uploadController;
     private CSVParser csvParser;
     private File dir;
-
-    @Autowired
-    private BankInterface bankInterface;
+    BankService bankService;
+    MonthStatDao monthStatDao;
+    BankTransactionDao bankTransactionDao;
 
     @BeforeMethod
     public void setUp() throws Exception {
+        monthStatDao = mock(MonthStatDao.class);
+        bankTransactionDao = mock(BankTransactionDao.class);
+        bankService = new BankService(monthStatDao,bankTransactionDao);
         csvParser = new CSVParser();
         statementPath = UPLOAD_TEST_DIR_NAME + File.separator + STATEMENT_FILE;
         statementFile = new File(statementPath);
         dir = new File(UPLOAD_TEST_DIR_NAME);
         createStatementCsvFile();
         FileInputStream inputStatementFile = new FileInputStream(statementFile.getAbsoluteFile());
-        bankInterface = mock(BankInterface.class);
+
         uploadController = new UploadController(new PropertiesLoader() {
             @Override
             public String getInputDirectory() {
                 return UPLOAD_TEST_DIR_NAME;
             }
-        });
+        }, bankService);
         multipartStatementFile = new MockMultipartFile(statementFile.getName(), statementFile.getName(), "multipart/form-data", inputStatementFile);
         inputStatementFile.close();
     }

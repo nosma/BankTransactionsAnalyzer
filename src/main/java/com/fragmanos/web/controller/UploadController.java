@@ -2,7 +2,6 @@ package com.fragmanos.web.controller;
 
 import java.io.*;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fragmanos.database.model.BankTransaction;
@@ -28,17 +27,19 @@ public class UploadController {
   private CSVParser csvParser;
   private BankTransactionUtil btutil;
 
-  private BankInterface bankInterface;
   private BankService bankService;
 
   @Autowired
-  public UploadController(PropertiesLoader propertiesLoader) {
+  public UploadController(PropertiesLoader propertiesLoader, BankService bankService) {
     this.propertiesLoader = propertiesLoader;
+    this.bankService = bankService;
     csvParser = new CSVParser();
   }
 
   @RequestMapping(value = "transactions", method = RequestMethod.POST)
-  public @ResponseBody boolean uploadTransactions(@RequestParam("file") MultipartFile file) throws IOException, ParseException {
+  public
+  @ResponseBody
+  boolean uploadTransactions(@RequestParam("file") MultipartFile file) throws IOException, ParseException {
 
     boolean fileUploaded = false;
     if (!file.isEmpty() && file.getOriginalFilename().contains(".csv")) {
@@ -48,31 +49,32 @@ public class UploadController {
         stream.write(bytes);
         stream.close();
       }
-      if (file.getOriginalFilename().contains(MIDATA_FILE_KEYWORD)) {
-        file.getInputStream();
-        List<BankTransaction> bankTransactionList = csvParser.getMidata(getMidataFilePath(file));
-        bankService.populateDatabase(bankTransactionList);
-        fileUploaded = true;
-        log.info("You successfully uploaded " + file.getOriginalFilename() + "!");
-      } else if (file.getOriginalFilename().contains(STATEMENT_FILE_KEYWORD)) {
-        btutil.saveStatementToDB(propertiesLoader.getInputDirectory(), file.getOriginalFilename());
-        fileUploaded = true;
-        log.info("You successfully uploaded " + file.getOriginalFilename() + "!");
-      } else {
-        log.error("You failed to upload " + file.getOriginalFilename() + " ...");
-      }
+      file.getInputStream();
+      saveFileDataToDatabase(file);
+      fileUploaded = true;
+      log.info("You successfully uploaded " + file.getOriginalFilename() + "!");
     } else {
       log.error("File for upload not in CSV format.");
     }
     return fileUploaded;
   }
 
-  private String getMidataFilePath(@RequestParam("file") MultipartFile file) {
+  private void saveFileDataToDatabase(@RequestParam("file") MultipartFile file) throws ParseException, IOException {
+    if (file.getOriginalFilename().contains(MIDATA_FILE_KEYWORD)) {
+      bankService.populateDatabase(csvParser.getMidata(getFilePath(file)));
+    } else if (file.getOriginalFilename().contains(STATEMENT_FILE_KEYWORD)) {
+      bankService.populateDatabase(csvParser.getTransactions(getFilePath(file)));
+    } else {
+      log.error("Specified file type has not saved " + file.getOriginalFilename() + " ...");
+    }
+  }
+
+  private String getFilePath(@RequestParam("file") MultipartFile file) {
     return propertiesLoader.getInputDirectory() + File.separator + file.getOriginalFilename();
   }
 
   private File saveFileToDir(@RequestParam("file") MultipartFile file) {
-    return new File(getMidataFilePath(file));
+    return new File(getFilePath(file));
   }
 
 }
