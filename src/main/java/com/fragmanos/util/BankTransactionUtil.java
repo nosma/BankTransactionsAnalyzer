@@ -9,8 +9,7 @@ import javax.inject.Named;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Named
 public class BankTransactionUtil {
@@ -18,7 +17,6 @@ public class BankTransactionUtil {
   List<BankTransaction> totalBankTransactions = new ArrayList<>();
   CSVParser csvParser = new CSVParser();
   DirectoryReader directoryReader = new DirectoryReader();
-  BankTransactionDao bankTransactionDao;
 
   public List<BankTransaction> getBankTransactionsFromDirectory(String inputDirectory) throws ParseException, IOException {
     for (String file : directoryReader.csvScanner(inputDirectory)) {
@@ -29,25 +27,13 @@ public class BankTransactionUtil {
 
   public void saveStatementToDB(String inputDirectory, String file) throws ParseException, IOException {
     List<BankTransaction> fileBankTransactionList = csvParser.getTransactions(inputDirectory + File.separator+ file);
-    totalBankTransactions = filterUniqueBankTransactions(totalBankTransactions, fileBankTransactionList);
+    totalBankTransactions = unionOfBankTransactions(totalBankTransactions, fileBankTransactionList);
   }
 
-  public void saveStatementToDB(List<BankTransaction> bankTransactionList){
-    totalBankTransactions = filterUniqueBankTransactions(bankTransactionDao.findAllByOrderByTransactiondateDesc(),bankTransactionList);
-  }
-
-  private List<BankTransaction> filterUniqueBankTransactions(List<BankTransaction> totalBankTransactionList, List<BankTransaction> fileBankTransactionList) {
-    if(!totalBankTransactionList.isEmpty()) {
-      List<BankTransaction> localBankTransactionList = new ArrayList<BankTransaction>(totalBankTransactionList);
-      localBankTransactionList.retainAll(fileBankTransactionList);
-      for(BankTransaction bankTransaction : localBankTransactionList) {
-        totalBankTransactionList.remove(bankTransaction);
-      }
-      totalBankTransactionList.addAll(fileBankTransactionList);
-      return totalBankTransactionList;
-    } else {
-      totalBankTransactionList.addAll(fileBankTransactionList);
-      return totalBankTransactionList;
-    }
+  public List<BankTransaction> unionOfBankTransactions(List<BankTransaction> totalBankTransactionList, List<BankTransaction> fileBankTransactionList) {
+    Set<BankTransaction> set = new HashSet<>();
+    set.addAll(totalBankTransactionList);
+    set.addAll(fileBankTransactionList);
+    return new ArrayList<>(set);
   }
 }
