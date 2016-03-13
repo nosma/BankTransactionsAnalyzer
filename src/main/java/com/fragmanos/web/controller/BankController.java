@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 @RestController
@@ -14,12 +13,6 @@ public class BankController {
 
     @Autowired
     private BankInterface bankInterface;
-
-    @PostConstruct
-    @RequestMapping("populateDatabase")
-    public void populateDatabase() {
-        bankInterface.populateDatabase();
-    }
 
     @RequestMapping("allTransactions")
     //todo the name of this method must change and along the implementation of it, probably a transformer of type should be added

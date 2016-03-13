@@ -8,5 +8,6 @@ var app = angular.module('app', [
   'ngTouch',
   'ui.grid',
   'ui.grid.exporter',
-  'smart-table'
+  'smart-table',
+  'angularFileUpload'
 ]);

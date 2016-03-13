@@ -1,5 +1,7 @@
 package com.fragmanos.web.controller;
 
+import com.fragmanos.database.model.BankTransaction;
+
 import java.util.List;
 
 public interface BankInterface {
@@ -10,4 +12,8 @@ public interface BankInterface {
   List<TableObject> getMonthlyExpensesList(int monthNumber, int yearNumber);
 
   List<TableObject> getMonthlyIncomeList(int monthNumber, int yearNumber);
+  
+  void populateDatabase(List<BankTransaction> bankTransactionList);
+
+  List<BankTransaction> getDbBankTransactions();
 }

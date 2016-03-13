@@ -1,31 +1,32 @@
 package com.fragmanos.web.controller;
 
-import com.fragmanos.database.dao.BankTransactionDao;
+com.fragmanos.database.dao.BankTransactionDao;
 import com.fragmanos.database.dao.MonthStatDao;
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.database.model.MonthStat;
 import com.fragmanos.directory.DirectoryReader;
+import com.fragmanos.properties.PropertiesLoader;
 import com.fragmanos.util.BankTransactionUtil;
 import org.joda.time.YearMonth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
+import javax.inject.Named;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class BankService implements BankInterface {
+@Named
+pu
+    blic class BankService implements BankInterface {
 
   private static final Logger log = LoggerFactory.getLogger(BankService.class);
 
-  @Value("${transactions.directory}")
-  public String inputDirectory;
+  @Autowired
+  private PropertiesLoader propertiesLoader;
 
   private MonthStatDao monthStatDao;
   private BankTransactionDao bankTransactionDao;
@@ -84,10 +85,24 @@ public class BankService implements BankInterface {
     return bankTransactionUtil.getTableObjectList(bankTransactionList);
   }
 
+  @Override
+  public void populateDatabase(List<BankTransaction> bankTransactionList) {
+    
+  }
+
+  @Override
+  public List<BankTransaction> getDbBankTransactions() {
+    return bankTransactionDao.findAllByOrderByTransactiondateDesc();
+  }
+
+  private String getInputDirectory() {
+    return propertiesLoader.getInputDirectory() + File.separator;
+  }
+
   private List<BankTransaction> getBankTransactionsFromDirectory(BankTransactionUtil bankTransactionUtil) {
     List<BankTransaction> bankTransactionsFromDirectory = new ArrayList<BankTransaction>();
     try {
-      bankTransactionsFromDirectory = bankTransactionUtil.getBankTransactionsFromDirectory(inputDirectory);
+      bankTransactionsFromDirectory = bankTransactionUtil.getBankTransactionsFromDirectory(getInputDirectory());
     } catch(ParseException e) {
       log.error("ParseException while parsing directory", e);
     } catch(IOException e) {
