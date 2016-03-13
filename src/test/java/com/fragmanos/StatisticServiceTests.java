@@ -38,6 +38,7 @@ public class StatisticServiceTests {
 
     when(bankTransactionDaoMock.findAllByOrderByTransactiondateDesc()).thenReturn(bankTransactionList);
     when(monthStatDaoMock.findAllByOrderByYearMonthDesc()).thenReturn(monthStaList);
+    when(monthStatDaoMock.findAll()).thenReturn(monthStaList);
   }
 
   /* Total calculations */
@@ -108,5 +109,23 @@ public class StatisticServiceTests {
     monthStaList.add(new MonthStat(new YearMonth(),2000.0,1000.0,1000.0));
     monthStaList.add(new MonthStat(new YearMonth(),3000.0,2000.0,1000.0));
     assertEquals(2, bankStatisticsService.getMonthlyStatistics().size());
+  }
+
+  @Test
+  public void testMedianMonthlyExpenseMatchesExpected() throws Exception {
+    setValuesForMedianTests();
+    assertEquals(1000, bankStatisticsService.getMedianMonthlyExpense(), DOUBLE_DELTA);
+  }
+
+  @Test
+  public void testMedianMonthlyIncomeMatchesExpected() throws Exception {
+    setValuesForMedianTests();
+    assertEquals(3000, bankStatisticsService.getMedianMonthlyIncome(), DOUBLE_DELTA);
+  }
+
+  private void setValuesForMedianTests() {
+    monthStaList.add(new MonthStat(new YearMonth(2015, 10), 4000.0, 1000.0, 2000.0));
+    monthStaList.add(new MonthStat(new YearMonth(2015, 11), 3000.0, 500.0, 2500.0));
+    monthStaList.add(new MonthStat(new YearMonth(2015, 12), 2000.0, 1500.0, 1500.0));
   }
 }

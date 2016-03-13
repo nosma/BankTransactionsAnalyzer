@@ -1,12 +1,97 @@
 'use strict';
 
-app.controller('statistics', function ($scope, $http, $resource) {
+app.controller('statistics', ['$scope','$http','$resource', function ($scope, $http, $resource) {
+
+  $scope.showMonthTransactions = false;
+  $scope.sortType = 'date';
+  $scope.sortReverse = false;
+
+  $http({method: 'GET', url: "/api/statistics/initialBalance"
+  }).then(function successCallback(response) {
+    $scope.initialBalance = response.data;
+  }, function errorCallback(response) {
+    $scope.initialBalance = response.data;
+  });
+
+  $http({method: 'GET', url: "/api/statistics/medianMonthlyExpense"
+  }).then(function successCallback(response) {
+    $scope.averageMonthlyExpense = roundNumber(response.data);
+  }, function errorCallback(response) {
+    $scope.averageMonthlyExpense = response.data;
+  });
+
+  $http({method: 'GET', url: "/api/statistics/medianMonthlyIncome"
+  }).then(function successCallback(response) {
+    $scope.averageMonthlyIncome = roundNumber(response.data);
+  }, function errorCallback(response) {
+    $scope.averageMonthlyIncome = response.data;
+  });
+
+  var roundNumber = function(num){
+    return Math.round(num * 100) / 100
+  };
+
+  var getTotalProfit = function(data){
+    var total = 0;
+    for(var i = 0; i < data.length; i++){
+      total += data[i].expense;
+      total += data[i].income;
+    }
+    return roundNumber(total - $scope.initialBalance);
+  };
+
+  var getTotalExpense = function(data){
+    var total = 0;
+    for(var i = 0; i < data.length; i++){
+        total += data[i].expense;
+    }
+    return roundNumber(total);
+  };
+
+  var getTotalIncome = function(data){
+    var total = 0;
+    for(var i = 0; i < data.length; i++){
+        total += data[i].income;
+    }
+    return roundNumber(total);
+  };
 
   $resource("/api/statistics/monthly").query(function(result) {
     $scope.gridOptions.data = result;
     $scope.transactionsStats = result;
+
+    $scope.expenseTotal = getTotalExpense(result);
+    $scope.incomeTotal = getTotalIncome(result);
+    $scope.profitTotal = getTotalProfit(result);
+
     $scope.displayedTransactionsStats = [].concat($scope.transactionsStats);
   });
+
+  $scope.callMonthlyIncome = function (year,month) {
+    $http({
+      method: 'GET',
+      url: '/api/bank/monthlyIncomeList/'+year+'/'+month
+    }).then(function successCallback(response) {
+      $scope.monthList = response.data;
+      $scope.displayedMonthList = [].concat(response.data);
+    }, function errorCallback(response) {
+      $scope.monthList = response.data;
+    });
+    $scope.showMonthTransactions = true;
+  };
+
+  $scope.callMonthlyExpenses = function (year,month) {
+    $http({
+      method: 'GET',
+      url: '/api/bank/monthlyExpensesList/'+year+'/'+month
+    }).then(function successCallback(response) {
+      $scope.monthList = response.data;
+      $scope.displayedMonthList = [].concat(response.data);
+    }, function errorCallback(response) {
+      $scope.monthList = response.data;
+    });
+  $scope.showMonthTransactions = true;
+  };
 
   $scope.gridOptions = {
     showGridFooter: true,
@@ -45,4 +130,4 @@ app.controller('statistics', function ($scope, $http, $resource) {
     ]
   };
 
-});
+}]);

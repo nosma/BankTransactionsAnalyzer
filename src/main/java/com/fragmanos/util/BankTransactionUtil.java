@@ -3,6 +3,9 @@ package com.fragmanos.util;
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.directory.DirectoryReader;
 import com.fragmanos.file.CSVParser;
+import com.fragmanos.web.controller.TableObject;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import javax.inject.Named;
 import java.io.File;
@@ -47,6 +50,19 @@ public class BankTransactionUtil {
       listA.removeAll(listB);
       return listA;
     }
-
   }
+
+   public List<TableObject> getTableObjectList(List<BankTransaction> bankTransactionList) {
+        List<TableObject> tableObjectList = new ArrayList<TableObject>();
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("dd/MM/yyyy");
+        for (BankTransaction bankTransaction : bankTransactionList) {
+            tableObjectList.add(new TableObject(
+                    dtf.print(bankTransaction.getTransactiondate()),
+                    bankTransaction.getDescription(),
+                    bankTransaction.getCost()
+            ));
+        }
+        return tableObjectList;
+    }
+
 }

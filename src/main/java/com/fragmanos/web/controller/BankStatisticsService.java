@@ -4,7 +4,9 @@ import com.fragmanos.database.dao.BankTransactionDao;
 import com.fragmanos.database.dao.MonthStatDao;
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.database.model.MonthStat;
+import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +14,10 @@ import java.util.List;
 @Service
 public class BankStatisticsService implements BankStatisticsInterface {
 
-    private final MonthStatDao monthStatDao;
+    @Value("${initial.balance}")
+    public double initialBalance;
 
+    private final MonthStatDao monthStatDao;
     private final BankTransactionDao bankTransactionDao;
 
     @Autowired
@@ -22,6 +26,11 @@ public class BankStatisticsService implements BankStatisticsInterface {
         this.bankTransactionDao = bankTransactionDao;
     }
 
+    public double getInitialBalance() {
+        return this.initialBalance;
+    }
+
+    @Override
     public double getTotalIncome() {
         double totalIncome = 0;
         for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
@@ -30,6 +39,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
         return totalIncome;
     }
 
+    @Override
     public double getTotalExpenses() {
         double totalExpenses = 0;
         for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
@@ -38,7 +48,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
         return totalExpenses;
     }
 
-
+    @Override
     public double getMonthlyIncome(int monthNumber, int yearNumber) {
         double monthlyIncome = 0;
         for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
@@ -50,6 +60,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
         return monthlyIncome;
     }
 
+    @Override
     public double getMonthlyExpenses(int monthNumber, int yearNumber) {
         double monthlyExpenses = 0;
         for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
@@ -61,6 +72,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
         return monthlyExpenses;
     }
 
+    @Override
     public double getYearlyExpenses(int yearNumber) {
         double yearlyExpenses = 0;
         for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
@@ -71,6 +83,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
         return yearlyExpenses;
     }
 
+    @Override
     public double getYearlyIncome(int yearNumber) {
         double yearlyIncome = 0;
         for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
@@ -81,7 +94,38 @@ public class BankStatisticsService implements BankStatisticsInterface {
         return yearlyIncome;
     }
 
+    @Override
     public List<MonthStat> getMonthlyStatistics() {
             return monthStatDao.findAllByOrderByYearMonthDesc();
+    }
+
+    @Override
+    public double getMedianMonthlyExpense() {
+        List<MonthStat> monthStats = monthStatDao.findAll();
+        double medianList[] = new double[monthStats.size()];
+        int counter = 0;
+
+        for (MonthStat monthStat : monthStats) {
+            medianList[counter] = monthStat.getExpense();
+            counter++;
+        }
+
+        Median median = new Median();
+        return median.evaluate(medianList);
+    }
+
+    @Override
+    public double getMedianMonthlyIncome() {
+        List<MonthStat> monthStats = monthStatDao.findAll();
+        double medianList[] = new double[monthStats.size()];
+        int counter = 0;
+
+        for (MonthStat monthStat : monthStats) {
+            medianList[counter] = monthStat.getIncome();
+            counter++;
+        }
+
+        Median median = new Median();
+        return median.evaluate(medianList);
     }
 }

@@ -20,4 +20,9 @@ public interface BankStatisticsInterface {
 
   List<MonthStat> getMonthlyStatistics();
 
+  double getInitialBalance();
+
+  double getMedianMonthlyExpense();
+
+  double getMedianMonthlyIncome();
 }

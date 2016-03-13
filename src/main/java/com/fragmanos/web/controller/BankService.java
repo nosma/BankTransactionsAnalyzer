@@ -4,11 +4,10 @@ import com.fragmanos.database.dao.BankTransactionDao;
 import com.fragmanos.database.dao.MonthStatDao;
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.database.model.MonthStat;
+import com.fragmanos.directory.DirectoryReader;
 import com.fragmanos.properties.PropertiesLoader;
 import com.fragmanos.util.BankTransactionUtil;
 import org.joda.time.YearMonth;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,36 +28,66 @@ public class BankService implements BankInterface {
   @Autowired
   private PropertiesLoader propertiesLoader;
 
-  MonthStatDao monthStatDao;
-  BankTransactionDao bankTransactionDao;
+  private MonthStatDao monthStatDao;
+  private BankTransactionDao bankTransactionDao;
+  private BankTransactionUtil bankTransactionUtil;
 
   @Autowired
   public BankService(MonthStatDao monthStatDao, BankTransactionDao bankTransactionDao) {
     this.monthStatDao = monthStatDao;
     this.bankTransactionDao = bankTransactionDao;
+    bankTransactionUtil = new BankTransactionUtil();
   }
 
   @Override
   public List<TableObject> getTableObjects() {
-    List<TableObject> dataForTable = new ArrayList<TableObject>();
     List<BankTransaction> allBankTransactions = bankTransactionDao.findAllByOrderByTransactiondateDesc();
-    DateTimeFormatter dtf = DateTimeFormat.forPattern("dd/MM/yyyy");
-    for(BankTransaction bankTransaction : allBankTransactions) {
-      dataForTable.add(new TableObject(
-                                        dtf.print(bankTransaction.getTransactiondate()),
-                                        bankTransaction.getDescription(),
-                                        bankTransaction.getCost()
-      ));
+    return bankTransactionUtil.getTableObjectList(allBankTransactions);
+  }
+
+  @Override
+  public void populateDatabase() {
+    DirectoryReader directoryReader = new DirectoryReader();
+    BankTransactionUtil bankTransactionUtil = new BankTransactionUtil();
+
+    if(!directoryReader.isDirectoryEmpty(getInputDirectory())) {
+      List<BankTransaction> bankTransactionsFromDirectory = getBankTransactionsFromDirectory(bankTransactionUtil);
+      for(BankTransaction bankTransaction : bankTransactionsFromDirectory) {
+        bankTransactionDao.save(bankTransaction);
+        setMonthStat(bankTransaction);
+      }
     }
-    return dataForTable;
+  }
+
+  @Override
+  public List<TableObject> getMonthlyExpensesList(int monthNumber, int yearNumber) {
+    List<BankTransaction> bankTransactionList = new ArrayList<BankTransaction>();
+    for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
+      if ((bankTransaction.getTransactiondate().getMonthOfYear() == monthNumber) &&
+            (bankTransaction.getTransactiondate().getYear() == yearNumber) &&
+              (bankTransaction.getCost() < 0)) {
+        bankTransactionList.add(bankTransaction);
+      }
+    }
+    return bankTransactionUtil.getTableObjectList(bankTransactionList);
+  }
+
+  @Override
+  public List<TableObject> getMonthlyIncomeList(int monthNumber, int yearNumber) {
+    List<BankTransaction> bankTransactionList = new ArrayList<BankTransaction>();
+    for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
+      if ((bankTransaction.getTransactiondate().getMonthOfYear() == monthNumber) &&
+              (bankTransaction.getTransactiondate().getYear() == yearNumber) &&
+              (bankTransaction.getCost() > 0)) {
+        bankTransactionList.add(bankTransaction);
+      }
+    }
+    return bankTransactionUtil.getTableObjectList(bankTransactionList);
   }
 
   @Override
   public void populateDatabase(List<BankTransaction> bankTransactionList) {
-      for(BankTransaction bankTransaction : bankTransactionList) {
-        bankTransactionDao.save(bankTransaction);
-        setMonthStat(bankTransaction);
-      }
+    
   }
 
   @Override

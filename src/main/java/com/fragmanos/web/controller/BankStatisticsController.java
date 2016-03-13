@@ -4,9 +4,7 @@ import java.util.List;
 
 import com.fragmanos.database.model.MonthStat;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/statistics/")
@@ -48,6 +46,21 @@ public class BankStatisticsController {
   @RequestMapping(value = "yearlyIncome/{yearNumber}")
   public double getYearlyIncome(@PathVariable int yearNumber) {
     return bankStatisticsInterface.getYearlyIncome(yearNumber);
+  }
+
+  @RequestMapping(value = "initialBalance")
+  public double getInitialBalance(){
+    return bankStatisticsInterface.getInitialBalance();
+  }
+
+  @RequestMapping(value = "medianMonthlyExpense")
+  public double getMedianMonthlyExpense(){
+    return bankStatisticsInterface.getMedianMonthlyExpense();
+  }
+
+  @RequestMapping(value = "medianMonthlyIncome")
+  public double getMedianMonthlyIncome(){
+    return bankStatisticsInterface.getMedianMonthlyIncome();
   }
 
 }
