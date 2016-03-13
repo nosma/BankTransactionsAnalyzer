@@ -1,6 +1,5 @@
 package com.fragmanos.util;
 
-import com.fragmanos.database.dao.BankTransactionDao;
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.directory.DirectoryReader;
 import com.fragmanos.file.CSVParser;
@@ -9,7 +8,10 @@ import javax.inject.Named;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Named
 public class BankTransactionUtil {
@@ -35,5 +37,16 @@ public class BankTransactionUtil {
     set.addAll(totalBankTransactionList);
     set.addAll(fileBankTransactionList);
     return new ArrayList<>(set);
+  }
+
+  public List<BankTransaction> differenceOfBankTransactions(List<BankTransaction> listA, List<BankTransaction> listB){
+    if(listB.size()>listA.size()){
+      listB.removeAll(listA);
+      return listB;
+    } else{
+      listA.removeAll(listB);
+      return listA;
+    }
+
   }
 }

@@ -34,6 +34,7 @@ public class UploadController {
     this.propertiesLoader = propertiesLoader;
     this.bankService = bankService;
     csvParser = new CSVParser();
+    btutil = new BankTransactionUtil();
   }
 
   @RequestMapping(value = "transactions", method = RequestMethod.POST)
@@ -60,10 +61,15 @@ public class UploadController {
   }
 
   private void saveFileDataToDatabase(@RequestParam("file") MultipartFile file) throws ParseException, IOException {
+    List<BankTransaction> databaseTransactions = bankService.getDbBankTransactions();
+    List<BankTransaction> bankTransactionDifferenceList;
+
     if (file.getOriginalFilename().contains(MIDATA_FILE_KEYWORD)) {
-      bankService.populateDatabase(csvParser.getMidata(getFilePath(file)));
+      bankTransactionDifferenceList = btutil.differenceOfBankTransactions(databaseTransactions, csvParser.getMidata(getFilePath(file)));
+      bankService.populateDatabase(bankTransactionDifferenceList);
     } else if (file.getOriginalFilename().contains(STATEMENT_FILE_KEYWORD)) {
-      bankService.populateDatabase(csvParser.getTransactions(getFilePath(file)));
+      bankTransactionDifferenceList = btutil.differenceOfBankTransactions(databaseTransactions,csvParser.getTransactions(getFilePath(file)));
+      bankService.populateDatabase(bankTransactionDifferenceList);
     } else {
       log.error("Specified file type has not saved " + file.getOriginalFilename() + " ...");
     }

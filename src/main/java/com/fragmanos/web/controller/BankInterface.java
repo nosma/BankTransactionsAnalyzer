@@ -8,4 +8,6 @@ public interface BankInterface {
   List<TableObject> getTableObjects();
 
   void populateDatabase(List<BankTransaction> bankTransactionList);
+
+  List<BankTransaction> getDbBankTransactions();
 }

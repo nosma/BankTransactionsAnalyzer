@@ -61,6 +61,11 @@ public class BankService implements BankInterface {
       }
   }
 
+  @Override
+  public List<BankTransaction> getDbBankTransactions() {
+    return bankTransactionDao.findAllByOrderByTransactiondateDesc();
+  }
+
   private String getInputDirectory() {
     return propertiesLoader.getInputDirectory() + File.separator;
   }
