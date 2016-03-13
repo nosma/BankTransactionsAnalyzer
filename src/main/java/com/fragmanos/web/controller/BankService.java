@@ -1,17 +1,9 @@
 package com.fragmanos.web.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fragmanos.database.dao.BankTransactionDao;
 import com.fragmanos.database.dao.MonthStatDao;
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.database.model.MonthStat;
-import com.fragmanos.directory.DirectoryReader;
 import com.fragmanos.properties.PropertiesLoader;
 import com.fragmanos.util.BankTransactionUtil;
 import org.joda.time.YearMonth;
@@ -20,9 +12,16 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
+import javax.inject.Named;
+import java.io.File;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+
+@Named
 public class BankService implements BankInterface {
 
   private static final Logger log = LoggerFactory.getLogger(BankService.class);
@@ -55,17 +54,16 @@ public class BankService implements BankInterface {
   }
 
   @Override
-  public void populateDatabase() {
-    DirectoryReader directoryReader = new DirectoryReader();
-    BankTransactionUtil bankTransactionUtil = new BankTransactionUtil();
-
-    if(!directoryReader.isDirectoryEmpty(getInputDirectory())) {
-      List<BankTransaction> bankTransactionsFromDirectory = getBankTransactionsFromDirectory(bankTransactionUtil);
-      for(BankTransaction bankTransaction : bankTransactionsFromDirectory) {
+  public void populateDatabase(List<BankTransaction> bankTransactionList) {
+      for(BankTransaction bankTransaction : bankTransactionList) {
         bankTransactionDao.save(bankTransaction);
         setMonthStat(bankTransaction);
       }
-    }
+  }
+
+  @Override
+  public List<BankTransaction> getDbBankTransactions() {
+    return bankTransactionDao.findAllByOrderByTransactiondateDesc();
   }
 
   private String getInputDirectory() {
