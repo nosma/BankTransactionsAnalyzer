@@ -1,6 +1,6 @@
 package com.fragmanos.web.controller;
 
-com.fragmanos.database.dao.BankTransactionDao;
+import com.fragmanos.database.dao.BankTransactionDao;
 import com.fragmanos.database.dao.MonthStatDao;
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.database.model.MonthStat;
@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.inject.Named;
+import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -20,8 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Named
-pu
-    blic class BankService implements BankInterface {
+public class BankService implements BankInterface {
 
   private static final Logger log = LoggerFactory.getLogger(BankService.class);
 
@@ -50,7 +50,7 @@ pu
     DirectoryReader directoryReader = new DirectoryReader();
     BankTransactionUtil bankTransactionUtil = new BankTransactionUtil();
 
-    if(!directoryReader.isDirectoryEmpty(inputDirectory)) {
+    if(!directoryReader.isDirectoryEmpty(getInputDirectory())) {
       List<BankTransaction> bankTransactionsFromDirectory = getBankTransactionsFromDirectory(bankTransactionUtil);
       for(BankTransaction bankTransaction : bankTransactionsFromDirectory) {
         bankTransactionDao.save(bankTransaction);

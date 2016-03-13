@@ -2,14 +2,10 @@ package com.fragmanos.util;
 
 import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.directory.DirectoryReader;
-import com.fragmanos.file.CSVReader;
+import com.fragmanos.file.CSVParser;
 import com.fragmanos.web.controller.TableObject;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-import com.fragmanos.file.CSVParser;
 
 import javax.inject.Named;
 import java.io.File;
