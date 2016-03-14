@@ -87,7 +87,10 @@ public class BankService implements BankInterface {
 
   @Override
   public void populateDatabase(List<BankTransaction> bankTransactionList) {
-    
+    for(BankTransaction bankTransaction : bankTransactionList) {
+      bankTransactionDao.save(bankTransaction);
+      setMonthStat(bankTransaction);
+    }
   }
 
   @Override
