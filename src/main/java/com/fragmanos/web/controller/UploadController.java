@@ -65,10 +65,11 @@ public class UploadController {
     List<BankTransaction> bankTransactionDifferenceList;
 
     if (file.getOriginalFilename().contains(MIDATA_FILE_KEYWORD)) {
-      bankTransactionDifferenceList = btutil.differenceOfBankTransactions(databaseTransactions, csvParser.getMidata(getFilePath(file)));
+      bankTransactionDifferenceList = btutil.differenceOfBankTransactions(csvParser.getMidata(getFilePath(file)), databaseTransactions);
       bankService.populateDatabase(bankTransactionDifferenceList);
+      bankService.populateDatabase(csvParser.getMidata(getFilePath(file)));
     } else if (file.getOriginalFilename().contains(STATEMENT_FILE_KEYWORD)) {
-      bankTransactionDifferenceList = btutil.differenceOfBankTransactions(databaseTransactions,csvParser.getTransactions(getFilePath(file)));
+      bankTransactionDifferenceList = btutil.differenceOfBankTransactions(csvParser.getTransactions(getFilePath(file)), databaseTransactions);
       bankService.populateDatabase(bankTransactionDifferenceList);
     } else {
       log.error("Specified file type has not saved " + file.getOriginalFilename() + " ...");

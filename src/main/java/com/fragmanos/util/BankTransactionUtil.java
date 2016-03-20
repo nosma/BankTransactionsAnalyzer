@@ -4,6 +4,7 @@ import com.fragmanos.database.model.BankTransaction;
 import com.fragmanos.directory.DirectoryReader;
 import com.fragmanos.file.CSVParser;
 import com.fragmanos.web.controller.TableObject;
+import org.apache.commons.collections.ListUtils;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -43,17 +44,11 @@ public class BankTransactionUtil {
   }
 
   public List<BankTransaction> differenceOfBankTransactions(List<BankTransaction> listA, List<BankTransaction> listB){
-    if(listB.size()>listA.size()){
-      listB.removeAll(listA);
-      return listB;
-    } else{
-      listA.removeAll(listB);
-      return listA;
-    }
+    return ListUtils.removeAll(listA, listB);
   }
 
    public List<TableObject> getTableObjectList(List<BankTransaction> bankTransactionList) {
-        List<TableObject> tableObjectList = new ArrayList<TableObject>();
+        List<TableObject> tableObjectList = new ArrayList<>();
         DateTimeFormatter dtf = DateTimeFormat.forPattern("dd/MM/yyyy");
         for (BankTransaction bankTransaction : bankTransactionList) {
             tableObjectList.add(new TableObject(

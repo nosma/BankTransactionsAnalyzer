@@ -36,7 +36,10 @@ public class BankTransactionUtilTest {
 
   @Test
   public void testListDifference() throws Exception {
-    assertEquals(1, bankTransactionUtil.differenceOfBankTransactions(bankTransactionList,databaseTransactionList).size());
+    BankTransaction bankTransaction = new BankTransaction(new LocalDate(2015, 4, 10), "Transaction #1000", 1000.0);
+    List<BankTransaction> bankTransactionList = bankTransactionUtil.differenceOfBankTransactions(this.bankTransactionList, databaseTransactionList);
+    assertEquals(1, bankTransactionList.size());
+    assertEquals(bankTransaction, bankTransactionList.get(0));
   }
 
   private void setDatabaseTransactionsList() {
