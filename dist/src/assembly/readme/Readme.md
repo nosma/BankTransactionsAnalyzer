@@ -11,4 +11,4 @@
     
 2. Create the folder as you described on the *transactions directory* step
 
-3. Execute the *[start.sh](../bin/start.sh)* script to start the application.
+3. Execute the *[start.sh](../bin/start.sh)* script on your terminal to start the application.
