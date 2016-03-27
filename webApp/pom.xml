@@ -183,7 +183,7 @@
                             <obfuscate>true</obfuscate>
                             <includeDependency>true</includeDependency>
                             <injar>webApp-${project.version}.jar</injar>
-                            <outjar>${project.parent.artifactId}-webApp-obfuscated-${project.version}.jar</outjar>
+                            <outjar>${project.parent.artifactId}-webApp-${project.version}.jar</outjar>
                             <outputDirectory>${project.build.directory}</outputDirectory>
                             <maxMemory>256m</maxMemory>
                             <libs>
