@@ -198,11 +198,10 @@
                                 <option>-dontshrink</option>
                                 <option>-dontoptimize</option>
                                 <option>-keepdirectories</option>
-                                <option>-allowaccessmodification</option>
                                 <option>-verbose</option>
                                 <option>-renamesourcefileattribute SourceFile</option>
                                 <option>-keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod</option>
-                                <option>-keep class net.formicary.dmp.murex.trade.feed.Main {*;} </option>
+                                <option>-keep class life.AppConfig {*;} </option>
                                 <option>-dontnote</option>
                                 <option>-dontwarn</option>
                             </options>
