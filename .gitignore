@@ -5,6 +5,7 @@
 *.iml
 *.xml
 #*.db
+!bin.xml
 !pom.xml
 !Suite.xml
 ## Directory-based project format:
