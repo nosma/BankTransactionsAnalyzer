@@ -4,7 +4,7 @@
 
 *.iml
 *.xml
-#*.db
+*.db
 !bin.xml
 !pom.xml
 !Suite.xml
