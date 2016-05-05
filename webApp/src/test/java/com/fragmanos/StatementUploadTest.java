@@ -22,6 +22,7 @@ import static org.testng.Assert.assertTrue;
 
 public class StatementUploadTest {
 
+    public String USER_DIR = System.getProperty("user.dir");
     private static final String UPLOAD_TEST_DIR_NAME = "uploadTestDir";
     private static final String STATEMENT_FILE = "statementFile.csv";
     private MockMultipartFile multipartStatementFile;
@@ -40,7 +41,7 @@ public class StatementUploadTest {
         bankTransactionDao = mock(BankTransactionDao.class);
         bankService = new BankService(monthStatDao,bankTransactionDao);
         csvParser = new CSVParser();
-        statementPath = UPLOAD_TEST_DIR_NAME + File.separator + STATEMENT_FILE;
+        statementPath = USER_DIR + File.separator + UPLOAD_TEST_DIR_NAME + File.separator + STATEMENT_FILE;
         statementFile = new File(statementPath);
         dir = new File(UPLOAD_TEST_DIR_NAME);
         createStatementCsvFile();
@@ -63,7 +64,7 @@ public class StatementUploadTest {
 
     @Test(dependsOnMethods = "testUploadStatementFile")
     public void testStatementFileParser() throws Exception {
-        assertEquals(2, csvParser.getTransactions(System.getProperty("user.dir") + File.separator + statementPath).size());
+        assertEquals(2, csvParser.getTransactions(statementPath).size());
     }
 
     private void createStatementCsvFile() throws IOException {
