@@ -13,14 +13,18 @@ import org.slf4j.LoggerFactory;
 
 public class StatementGenerator {
 
-  private static final String FILENAME = "BigStatementFile.csv";
+  private static final String FILENAME = "SmallStatementFile.csv";
   private static File transactionsFile = new File(Paths.get(FILENAME).toString());
 
   private static final Logger log = LoggerFactory.getLogger(StatementGenerator.class);
   private static long MINIMUM_FILE_SIZE = 157286400L; // 150 MB
-//  private static long MINIMUM_FILE_SIZE = 1000000L;
+  //  private static long MINIMUM_FILE_SIZE = 15728640; // 15 MB
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
+    generateFile();
+  }
+
+  private static void generateFile() {
     try {
       if(!transactionsFile.exists()) {
         if(transactionsFile.createNewFile()) {
@@ -30,7 +34,7 @@ public class StatementGenerator {
           }
           writer.flush();
           writer.close();
-          System.out.println("Big Statement File file created!");
+          log.info("Big Statement File file created!");
         } else {
           log.error("File " + transactionsFile.getName() + " did not created.");
         }
