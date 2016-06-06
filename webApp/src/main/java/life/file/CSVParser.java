@@ -1,10 +1,5 @@
 package life.file;
 
-
-import life.database.model.BankTransaction;
-import org.apache.commons.lang3.StringUtils;
-import org.joda.time.LocalDate;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,12 +7,19 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import life.database.model.BankTransaction;
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CSVParser {
 
-    DateUtilsImpl dateUtils = new DateUtilsImpl();
+    private static final Logger log = LoggerFactory.getLogger(CSVParser.class);
+    private DateUtilsImpl dateUtils = new DateUtilsImpl();
 
     public List<BankTransaction> getTransactions(String csvFile) throws ParseException, IOException {
-        List<BankTransaction> bankTransactionList = new ArrayList<BankTransaction>();
+        List<BankTransaction> bankTransactionList = new ArrayList<>();
         BufferedReader bufferedReader = null;
         String csvLine;
         String splitByCharacter = ",";
@@ -25,19 +27,19 @@ public class CSVParser {
         try {
             bufferedReader = new BufferedReader(new FileReader(csvFile));
             while ((csvLine = bufferedReader.readLine()) != null) {
-                BankTransaction bankTransaction = bankCsvDataConvertion(getDateFromLine(csvLine, splitByCharacter),
-                        getDescriptionFromLine(csvLine, splitByCharacter),
-                        getCostFromLine(csvLine, splitByCharacter));
-                bankTransactionList.add(bankTransaction);
+                bankTransactionList.add(bankCsvDataConvertion(
+                  getDateFromLine(csvLine, splitByCharacter),
+                  getDescriptionFromLine(csvLine, splitByCharacter),
+                  getCostFromLine(csvLine, splitByCharacter)));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error while reading line from file: " + e);
         } finally {
             if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.error("Error while trying to close the Buffer reader of teh file: " + e);
                 }
             }
         }
@@ -56,14 +58,14 @@ public class CSVParser {
         return csvLine.substring(0, csvLine.indexOf(splitByCharacter));
     }
 
-    private BankTransaction bankCsvDataConvertion(String date, String cause, String cost) throws ParseException {
+    private BankTransaction bankCsvDataConvertion(String date, String description, String cost) throws ParseException {
         LocalDate transactionDate = dateUtils.convertTextToDate(date);
         double value = Double.parseDouble(cost);
-        return new BankTransaction(transactionDate, cause, value);
+        return new BankTransaction(transactionDate, description, value);
     }
 
     public List<BankTransaction> getMidata(String midataFilePath) {
-        List<BankTransaction> bankTransactionList = new ArrayList<BankTransaction>();
+        List<BankTransaction> bankTransactionList = new ArrayList<>();
         BufferedReader bufferedReader = null;
         String csvLine;
         String splitByCharacter = ",";
@@ -72,23 +74,22 @@ public class CSVParser {
             bufferedReader = new BufferedReader(new FileReader(midataFilePath));
             bufferedReader.readLine(); // skip the headings
             while ((csvLine = bufferedReader.readLine()) != null) {
-                BankTransaction bankTransaction = new BankTransaction(getDateFromMidata(csvLine, splitByCharacter),
-                        getDescriptionFromMidata(csvLine, splitByCharacter),
-                        getCostFromMidata(csvLine, splitByCharacter));
-                bankTransactionList.add(bankTransaction);
+                bankTransactionList.add(new BankTransaction(
+                    getDateFromMidata(csvLine, splitByCharacter),
+                    getDescriptionFromMidata(csvLine, splitByCharacter),
+                    getCostFromMidata(csvLine, splitByCharacter)));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            log.error("Error while reading line from file: " + e);
         } finally {
             if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.error("Error while trying to close the Buffer reader of teh file: " + e);
                 }
             }
         }
-
         return bankTransactionList;
     }
 
@@ -110,7 +111,7 @@ public class CSVParser {
         try{
             localDate = dateUtils.convertMidataTextToDate(csvLine.substring(0, csvLine.indexOf(splitByCharacter)));
         } catch (Exception e) {
-            throw new RuntimeException("getDateFromMidata Exception "+e);
+            throw new RuntimeException("getDateFromMidata Exception " + e);
         }
 
         return localDate;
