@@ -8,6 +8,7 @@
 !bin.xml
 !pom.xml
 !Suite.xml
+!web.xml
 ## Directory-based project format:
 .idea/
 # if you remove the above rule, at least ignore the following:
