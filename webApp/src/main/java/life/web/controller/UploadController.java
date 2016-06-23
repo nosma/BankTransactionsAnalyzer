@@ -1,5 +1,9 @@
 package life.web.controller;
 
+import java.io.*;
+import java.text.ParseException;
+import java.util.List;
+
 import life.database.model.BankTransaction;
 import life.file.CSVParser;
 import life.properties.PropertiesLoader;
@@ -9,13 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/upload/")
@@ -47,20 +44,23 @@ public class UploadController {
 
     boolean fileUploaded = false;
     if (!file.isEmpty() && file.getOriginalFilename().contains(".csv")) {
-      byte[] bytes = file.getBytes();
-      if (propertiesLoader.getInputDirectory() != null && file.getOriginalFilename() != null) {
-        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(saveFileToDir(file)));
-        stream.write(bytes);
-        stream.close();
-      }
-      file.getInputStream();
+      fileUploaded = saveFileOnServer(file);
       saveFileDataToDatabase(file);
-      fileUploaded = true;
       log.info("You successfully uploaded " + file.getOriginalFilename() + "!");
     } else {
       log.error("File for upload not in CSV format.");
     }
     return fileUploaded;
+  }
+
+  private boolean saveFileOnServer(@RequestParam("file") MultipartFile file) throws IOException {
+    byte[] bytes = file.getBytes();
+    if (propertiesLoader.getInputDirectory() != null && file.getOriginalFilename() != null) {
+      BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(saveFileToDir(file)));
+      stream.write(bytes);
+      stream.close();
+    }
+    return (file.getInputStream() != null);
   }
 
   private void saveFileDataToDatabase(@RequestParam("file") MultipartFile file) throws ParseException, IOException {
