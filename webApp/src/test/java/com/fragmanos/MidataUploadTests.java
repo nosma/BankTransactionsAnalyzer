@@ -7,9 +7,7 @@ import life.properties.PropertiesLoader;
 import life.web.controller.BankService;
 import life.web.controller.UploadController;
 import org.springframework.mock.web.MockMultipartFile;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,8 +20,9 @@ import static org.testng.Assert.assertTrue;
 
 public class MidataUploadTests {
 
+    public String USER_DIR = System.getProperty("user.dir");
     private static final String UPLOAD_TEST_DIR_NAME = "uploadTestDir";
-    private static final String MIDATA_FILE = "testmidataFile.csv";
+    private static final String MIDATA_FILE = "midataFile.csv";
     private MockMultipartFile multipartMidataFile;
     private String midataPath;
     private File midataFile;
@@ -41,7 +40,7 @@ public class MidataUploadTests {
         bankService = new BankService(monthStatDao,bankTransactionDao);
 
         csvParser = new CSVParser();
-        midataPath = UPLOAD_TEST_DIR_NAME + File.separator + MIDATA_FILE;
+        midataPath = USER_DIR + File.separator + UPLOAD_TEST_DIR_NAME + File.separator + MIDATA_FILE;
         midataFile = new File(midataPath);
         dir = new File(UPLOAD_TEST_DIR_NAME);
         createMidataCsvFile();
@@ -66,7 +65,7 @@ public class MidataUploadTests {
 
     @Test(dependsOnMethods = "testUploadMidataFile")
     public void testMidataFileParser() throws Exception {
-        assertEquals(2, csvParser.getMidata(System.getProperty("user.dir") + File.separator + midataPath).size());
+        assertEquals(2, csvParser.getMidata(midataPath).size());
     }
 
     private void createMidataCsvFile() throws IOException {
