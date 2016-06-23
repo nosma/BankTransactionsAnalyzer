@@ -1,5 +1,12 @@
 package life.web.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Named;
 
 import life.database.dao.BankTransactionDao;
 import life.database.dao.MonthStatDao;
@@ -12,14 +19,6 @@ import org.joda.time.YearMonth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.inject.Named;
-import java.io.File;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Named
 public class BankService implements BankInterface {
@@ -92,7 +91,15 @@ public class BankService implements BankInterface {
   @Override
   public void populateDatabase(List<BankTransaction> bankTransactionList) {
     for(BankTransaction bankTransaction : bankTransactionList) {
-      bankTransactionDao.save(bankTransaction);
+      if(!bankTransactionDao.findByTransactiondateAndDescriptionAndCost(
+        bankTransaction.getTransactiondate(),
+        bankTransaction.getDescription(),
+        bankTransaction.getCost()
+      ).equals(bankTransaction)) {
+        bankTransactionDao.save(bankTransaction);
+      } else {
+        log.info("Bank transaction existed in database: " + bankTransaction.toString());
+      }
       setMonthStat(bankTransaction);
     }
   }
