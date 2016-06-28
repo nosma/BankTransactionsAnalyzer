@@ -1,15 +1,16 @@
 package com.fragmanos;
 
-import java.util.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import life.database.model.BankTransaction;
 import life.util.BankTransactionUtil;
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 public class BankTransactionUtilTest {
 
@@ -35,23 +36,23 @@ public class BankTransactionUtilTest {
 
   @Test
   public void testListDifference() throws Exception {
-    BankTransaction bankTransaction = new BankTransaction(new LocalDate(2015, 4, 10), "Transaction #1000", 1000.0);
+    BankTransaction bankTransaction = new BankTransaction(LocalDate.of(2015, 4, 10), "Transaction #1000", 1000.0);
     List<BankTransaction> bankTransactionList = bankTransactionUtil.differenceOfBankTransactions(this.bankTransactionList, databaseTransactionList);
     assertEquals(1, bankTransactionList.size());
     assertEquals(bankTransaction, bankTransactionList.get(0));
   }
 
   private void setDatabaseTransactionsList() {
-    databaseTransactionList.add(new BankTransaction(new LocalDate(2016, 3, 11), "Transaction #1", 100.0));
-    databaseTransactionList.add(new BankTransaction(new LocalDate(2016, 3, 12), "Transaction #2", 200.0));
-    databaseTransactionList.add(new BankTransaction(new LocalDate(2015, 5, 5), "Transaction #3", 555.5));
+    databaseTransactionList.add(new BankTransaction(LocalDate.of(2016, 3, 11), "Transaction #1", 100.0));
+    databaseTransactionList.add(new BankTransaction(LocalDate.of(2016, 3, 12), "Transaction #2", 200.0));
+    databaseTransactionList.add(new BankTransaction(LocalDate.of(2015, 5, 5), "Transaction #3", 555.5));
   }
 
   private void setBankTransactionsList() {
-    bankTransactionList.add(new BankTransaction(new LocalDate(2016, 3, 11), "Transaction #1", 100.0));
-    bankTransactionList.add(new BankTransaction(new LocalDate(2016, 3, 11), "Transaction #1", 100.0));
-    bankTransactionList.add(new BankTransaction(new LocalDate(2016, 3, 12), "Transaction #2", 200.0));
-    bankTransactionList.add(new BankTransaction(new LocalDate(2015, 4, 10), "Transaction #1000", 1000.0));
+    bankTransactionList.add(new BankTransaction(LocalDate.of(2016, 3, 11), "Transaction #1", 100.0));
+    bankTransactionList.add(new BankTransaction(LocalDate.of(2016, 3, 11), "Transaction #1", 100.0));
+    bankTransactionList.add(new BankTransaction(LocalDate.of(2016, 3, 12), "Transaction #2", 200.0));
+    bankTransactionList.add(new BankTransaction(LocalDate.of(2015, 4, 10), "Transaction #1000", 1000.0));
   }
 
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Named;
@@ -15,7 +16,6 @@ import life.database.model.MonthStat;
 import life.directory.DirectoryReader;
 import life.properties.PropertiesLoader;
 import life.util.BankTransactionUtil;
-import org.joda.time.YearMonth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,7 @@ public class BankService implements BankInterface {
   public List<TableObject> getMonthlyExpensesList(int monthNumber, int yearNumber) {
     List<BankTransaction> bankTransactionList = new ArrayList<BankTransaction>();
     for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
-      if ((bankTransaction.getTransactiondate().getMonthOfYear() == monthNumber) &&
+      if ((bankTransaction.getTransactiondate().getMonthValue() == monthNumber) &&
             (bankTransaction.getTransactiondate().getYear() == yearNumber) &&
               (bankTransaction.getCost() < 0)) {
         bankTransactionList.add(bankTransaction);
@@ -79,7 +79,7 @@ public class BankService implements BankInterface {
   public List<TableObject> getMonthlyIncomeList(int monthNumber, int yearNumber) {
     List<BankTransaction> bankTransactionList = new ArrayList<BankTransaction>();
     for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
-      if ((bankTransaction.getTransactiondate().getMonthOfYear() == monthNumber) &&
+      if ((bankTransaction.getTransactiondate().getMonthValue() == monthNumber) &&
               (bankTransaction.getTransactiondate().getYear() == yearNumber) &&
               (bankTransaction.getCost() > 0)) {
         bankTransactionList.add(bankTransaction);
@@ -130,8 +130,8 @@ public class BankService implements BankInterface {
     double income = 0;
     double expense = 0;
     double profit;
-    YearMonth yearMonth = new YearMonth(bankTransaction.getTransactiondate().getYear(),
-                                         bankTransaction.getTransactiondate().getMonthOfYear());
+    YearMonth yearMonth = YearMonth.of(bankTransaction.getTransactiondate().getYear(),
+                                         bankTransaction.getTransactiondate().getMonthValue());
     if(bankTransaction.getCost() > 0) {
       income = bankTransaction.getCost();
     } else {

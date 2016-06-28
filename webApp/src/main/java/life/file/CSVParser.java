@@ -4,12 +4,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import life.database.model.BankTransaction;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,7 +109,7 @@ public class CSVParser {
     private LocalDate getDateFromMidata(String csvLine, String splitByCharacter)  {
         LocalDate localDate;
         try{
-            localDate = dateUtils.convertMidataTextToDate(csvLine.substring(0, csvLine.indexOf(splitByCharacter)));
+            localDate = dateUtils.convertTextToDate(csvLine.substring(0, csvLine.indexOf(splitByCharacter)));
         } catch (Exception e) {
             throw new RuntimeException("getDateFromMidata Exception " + e);
         }

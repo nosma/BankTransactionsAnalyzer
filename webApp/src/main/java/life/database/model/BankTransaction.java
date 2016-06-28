@@ -1,9 +1,8 @@
 package life.database.model;
 
-import org.joda.time.LocalDate;
-
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * @author fragkakise on 11/09/2015.

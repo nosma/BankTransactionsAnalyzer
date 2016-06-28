@@ -1,7 +1,8 @@
 package life.database.model;
 
+import java.time.YearMonth;
+
 import org.hibernate.annotations.Type;
-import org.joda.time.YearMonth;
 
 import javax.persistence.*;
 
@@ -18,7 +19,7 @@ public class MonthStat {
   private Long id;
 
   @Column(name = "YEARMONTH", nullable = false)
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentYearMonthAsString")
+//  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentYearMonthAsString")
   private YearMonth yearMonth;
 
   @Column(name = "INCOME", nullable = false)

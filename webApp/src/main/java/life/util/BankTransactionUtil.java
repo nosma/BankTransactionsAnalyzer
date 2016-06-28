@@ -5,13 +5,13 @@ import life.directory.DirectoryReader;
 import life.file.CSVParser;
 import life.web.controller.TableObject;
 import org.apache.commons.collections.ListUtils;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.inject.Named;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -49,10 +49,10 @@ public class BankTransactionUtil {
 
    public List<TableObject> getTableObjectList(List<BankTransaction> bankTransactionList) {
         List<TableObject> tableObjectList = new ArrayList<>();
-        DateTimeFormatter dtf = DateTimeFormat.forPattern("dd/MM/yyyy");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         for (BankTransaction bankTransaction : bankTransactionList) {
             tableObjectList.add(new TableObject(
-                    dtf.print(bankTransaction.getTransactiondate()),
+                    bankTransaction.getTransactiondate().toString(),
                     bankTransaction.getDescription(),
                     bankTransaction.getCost()
             ));

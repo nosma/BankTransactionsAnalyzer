@@ -1,9 +1,9 @@
 package life.database.dao;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import life.database.model.BankTransaction;
-import org.joda.time.LocalDate;
 import org.springframework.data.repository.CrudRepository;
 
 /**

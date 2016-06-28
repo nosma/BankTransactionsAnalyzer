@@ -1,36 +1,21 @@
 package life.file;
 
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class DateUtilsImpl {
+    private final String[] patterns = new String[]{"yyyy-MM-dd", "M/dd/yy", "M/d/yy", "MM/dd/yy", "MM/dd/yyyy", "dd/MM/yyyy"};
+
     public LocalDate convertTextToDate(String date) throws ParseException {
-        LocalDate returnedDate;
-        if (date.contains("-")) {
-            returnedDate = getDateFromStringWithDashes(date);
-        } else if (date.contains("/")) {
-            returnedDate = getDateFromStringWithSlashes(date);
-        } else {
-            throw new RuntimeException("Unexpected Date seperation character");
+        for (int i = 0; i < patterns.length; i++) {
+            try {
+                return LocalDate.parse(date, DateTimeFormatter.ofPattern(patterns[i]));
+            } catch (DateTimeParseException exception) {
+
+            }
         }
-        return returnedDate;
-    }
-
-    private LocalDate getDateFromStringWithDashes(String date) throws ParseException {
-        DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd");
-        return dtf.parseLocalDate(date);
-    }
-
-    private LocalDate getDateFromStringWithSlashes(String date) throws ParseException {
-        DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd/yy");
-        return dtf.parseLocalDate(date);
-    }
-
-    public LocalDate convertMidataTextToDate(String midataDate) {
-        DateTimeFormatter dtf = DateTimeFormat.forPattern("dd/MM/yyyy");
-        return dtf.parseLocalDate(midataDate);
+        throw new IllegalArgumentException("Not able to parse the date for all patterns given: " + date);
     }
 }

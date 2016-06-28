@@ -1,9 +1,9 @@
 package life.database.dao;
 
 import life.database.model.MonthStat;
-import org.joda.time.YearMonth;
 import org.springframework.data.repository.CrudRepository;
 
+import java.time.YearMonth;
 import java.util.List;
 
 /**

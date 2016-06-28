@@ -52,7 +52,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
     public double getMonthlyIncome(int monthNumber, int yearNumber) {
         double monthlyIncome = 0;
         for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
-            if ((bankTransaction.getTransactiondate().getMonthOfYear() == monthNumber) &&
+            if ((bankTransaction.getTransactiondate().getMonthValue() == monthNumber) &&
                     (bankTransaction.getTransactiondate().getYear() == yearNumber)) {
                 monthlyIncome += (bankTransaction.getCost() > 0 ? bankTransaction.getCost() : 0);
             }
@@ -64,7 +64,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
     public double getMonthlyExpenses(int monthNumber, int yearNumber) {
         double monthlyExpenses = 0;
         for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
-            if ((bankTransaction.getTransactiondate().getMonthOfYear() == monthNumber) &&
+            if ((bankTransaction.getTransactiondate().getMonthValue() == monthNumber) &&
                     (bankTransaction.getTransactiondate().getYear() == yearNumber)) {
                 monthlyExpenses += (bankTransaction.getCost() < 0 ? bankTransaction.getCost() : 0);
             }
