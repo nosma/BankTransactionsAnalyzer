@@ -27,7 +27,7 @@ public class CSVParser {
         try {
             bufferedReader = new BufferedReader(new FileReader(csvFile));
             while ((csvLine = bufferedReader.readLine()) != null) {
-                bankTransactionList.add(bankCsvDataConvertion(
+                bankTransactionList.add(bankCsvDataConversion(
                   getDateFromLine(csvLine, splitByCharacter),
                   getDescriptionFromLine(csvLine, splitByCharacter),
                   getCostFromLine(csvLine, splitByCharacter)));
@@ -58,7 +58,7 @@ public class CSVParser {
         return csvLine.substring(0, csvLine.indexOf(splitByCharacter));
     }
 
-    private BankTransaction bankCsvDataConvertion(String date, String description, String cost) throws ParseException {
+    private BankTransaction bankCsvDataConversion(String date, String description, String cost) throws ParseException {
         LocalDate transactionDate = dateUtils.convertTextToDate(date);
         double value = Double.parseDouble(cost);
         return new BankTransaction(transactionDate, description, value);

@@ -1,22 +1,28 @@
 package life.web.controller;
 
+import java.util.Collections;
+import java.util.List;
+
 import life.database.dao.BankTransactionDao;
 import life.database.dao.MonthStatDao;
 import life.database.model.BankTransaction;
 import life.database.model.MonthStat;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class BankStatisticsService implements BankStatisticsInterface {
 
+    private static final Logger log = LoggerFactory.getLogger(BankStatisticsService.class);
+
+
     @Value("${initial.balance}")
     public double initialBalance;
-
     private final MonthStatDao monthStatDao;
     private final BankTransactionDao bankTransactionDao;
 
@@ -33,7 +39,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
     @Override
     public double getTotalIncome() {
         double totalIncome = 0;
-        for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
+        for (BankTransaction bankTransaction : getOrderedByDateTrasanctions()) {
             totalIncome += (bankTransaction.getCost() > 0 ? bankTransaction.getCost() : 0);
         }
         return totalIncome;
@@ -42,7 +48,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
     @Override
     public double getTotalExpenses() {
         double totalExpenses = 0;
-        for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
+        for (BankTransaction bankTransaction : getOrderedByDateTrasanctions()) {
             totalExpenses += (bankTransaction.getCost() < 0 ? bankTransaction.getCost() : 0);
         }
         return totalExpenses;
@@ -51,7 +57,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
     @Override
     public double getMonthlyIncome(int monthNumber, int yearNumber) {
         double monthlyIncome = 0;
-        for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
+        for (BankTransaction bankTransaction : getOrderedByDateTrasanctions()) {
             if ((bankTransaction.getTransactiondate().getMonthValue() == monthNumber) &&
                     (bankTransaction.getTransactiondate().getYear() == yearNumber)) {
                 monthlyIncome += (bankTransaction.getCost() > 0 ? bankTransaction.getCost() : 0);
@@ -63,7 +69,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
     @Override
     public double getMonthlyExpenses(int monthNumber, int yearNumber) {
         double monthlyExpenses = 0;
-        for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
+        for (BankTransaction bankTransaction : getOrderedByDateTrasanctions()) {
             if ((bankTransaction.getTransactiondate().getMonthValue() == monthNumber) &&
                     (bankTransaction.getTransactiondate().getYear() == yearNumber)) {
                 monthlyExpenses += (bankTransaction.getCost() < 0 ? bankTransaction.getCost() : 0);
@@ -75,7 +81,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
     @Override
     public double getYearlyExpenses(int yearNumber) {
         double yearlyExpenses = 0;
-        for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
+        for (BankTransaction bankTransaction : getOrderedByDateTrasanctions()) {
             if (bankTransaction.getTransactiondate().getYear() == yearNumber) {
                 yearlyExpenses += (bankTransaction.getCost() < 0 ? bankTransaction.getCost() : 0);
             }
@@ -86,7 +92,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
     @Override
     public double getYearlyIncome(int yearNumber) {
         double yearlyIncome = 0;
-        for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
+        for (BankTransaction bankTransaction : getOrderedByDateTrasanctions()) {
             if (bankTransaction.getTransactiondate().getYear() == yearNumber) {
                 yearlyIncome += (bankTransaction.getCost() > 0 ? bankTransaction.getCost() : 0);
             }
@@ -96,12 +102,12 @@ public class BankStatisticsService implements BankStatisticsInterface {
 
     @Override
     public List<MonthStat> getMonthlyStatistics() {
-            return monthStatDao.findAllByOrderByYearMonthDesc();
+        return getMonthStatsOrderByYearMonthDesc();
     }
 
     @Override
     public double getMedianMonthlyExpense() {
-        List<MonthStat> monthStats = monthStatDao.findAll();
+        List<MonthStat> monthStats = getMonthStatsOrderByYearMonthDesc();
         double medianList[] = new double[monthStats.size()];
         int counter = 0;
 
@@ -116,7 +122,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
 
     @Override
     public double getMedianMonthlyIncome() {
-        List<MonthStat> monthStats = monthStatDao.findAll();
+        List<MonthStat> monthStats = getMonthStatsOrderByYearMonthDesc();
         double medianList[] = new double[monthStats.size()];
         int counter = 0;
 
@@ -127,5 +133,25 @@ public class BankStatisticsService implements BankStatisticsInterface {
 
         Median median = new Median();
         return median.evaluate(medianList);
+    }
+
+    private List<BankTransaction> getOrderedByDateTrasanctions() {
+        List<BankTransaction> transactions = Collections.emptyList();
+        try {
+         transactions = bankTransactionDao.findAllByOrderByTransactiondateDesc();
+        } catch(DataIntegrityViolationException exception) {
+            log.warn("BankTransactions database table is empty. ", exception);
+        }
+        return transactions;
+    }
+
+    private List<MonthStat> getMonthStatsOrderByYearMonthDesc() {
+        List<MonthStat> monthStats = Collections.emptyList();
+        try {
+            monthStats = monthStatDao.findAllByOrderByYearMonthDesc();
+        } catch(DataIntegrityViolationException exception) {
+            log.warn("MonthStats database table is empty. ", exception);
+        }
+        return monthStats;
     }
 }

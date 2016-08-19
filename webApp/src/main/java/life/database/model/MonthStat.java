@@ -1,17 +1,12 @@
 package life.database.model;
 
+import java.io.Serializable;
 import java.time.YearMonth;
-
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
 
-/**
- * @author fragkakise on 30/11/2015.
- */
 @Entity
 @Table(name = "MONTH_STAT")
-public class MonthStat {
+public class MonthStat implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,7 +14,6 @@ public class MonthStat {
   private Long id;
 
   @Column(name = "YEARMONTH", nullable = false)
-//  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentYearMonthAsString")
   private YearMonth yearMonth;
 
   @Column(name = "INCOME", nullable = false)

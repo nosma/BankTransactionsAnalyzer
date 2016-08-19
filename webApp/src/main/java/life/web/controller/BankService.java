@@ -1,9 +1,6 @@
 package life.web.controller;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,20 +10,19 @@ import life.database.dao.BankTransactionDao;
 import life.database.dao.MonthStatDao;
 import life.database.model.BankTransaction;
 import life.database.model.MonthStat;
-import life.directory.DirectoryReader;
-import life.properties.PropertiesLoader;
 import life.util.BankTransactionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 @Named
 public class BankService implements BankInterface {
 
   private static final Logger log = LoggerFactory.getLogger(BankService.class);
 
-  @Autowired
-  private PropertiesLoader propertiesLoader;
+  @Value("${transactions.directory}")
+  public String inputDirectory;
 
   private MonthStatDao monthStatDao;
   private BankTransactionDao bankTransactionDao;
@@ -46,20 +42,6 @@ public class BankService implements BankInterface {
   public List<TableObject> getTableObjects() {
     List<BankTransaction> allBankTransactions = bankTransactionDao.findAllByOrderByTransactiondateDesc();
     return bankTransactionUtil.getTableObjectList(allBankTransactions);
-  }
-
-  @Override
-  public void populateDatabase() {
-    DirectoryReader directoryReader = new DirectoryReader();
-    BankTransactionUtil bankTransactionUtil = new BankTransactionUtil();
-
-    if(!directoryReader.isDirectoryEmpty(getInputDirectory())) {
-      List<BankTransaction> bankTransactionsFromDirectory = getBankTransactionsFromDirectory(bankTransactionUtil);
-      for(BankTransaction bankTransaction : bankTransactionsFromDirectory) {
-        bankTransactionDao.save(bankTransaction);
-        setMonthStat(bankTransaction);
-      }
-    }
   }
 
   @Override
@@ -88,43 +70,6 @@ public class BankService implements BankInterface {
     return bankTransactionUtil.getTableObjectList(bankTransactionList);
   }
 
-  @Override
-  public void populateDatabase(List<BankTransaction> bankTransactionList) {
-    for(BankTransaction bankTransaction : bankTransactionList) {
-      if(!bankTransactionDao.findByTransactiondateAndDescriptionAndCost(
-        bankTransaction.getTransactiondate(),
-        bankTransaction.getDescription(),
-        bankTransaction.getCost()
-      ).equals(bankTransaction)) {
-        bankTransactionDao.save(bankTransaction);
-      } else {
-        log.info("Bank transaction existed in database: " + bankTransaction.toString());
-      }
-      setMonthStat(bankTransaction);
-    }
-  }
-
-  @Override
-  public List<BankTransaction> getDbBankTransactions() {
-    return bankTransactionDao.findAllByOrderByTransactiondateDesc();
-  }
-
-  private String getInputDirectory() {
-    return propertiesLoader.getInputDirectory() + File.separator;
-  }
-
-  private List<BankTransaction> getBankTransactionsFromDirectory(BankTransactionUtil bankTransactionUtil) {
-    List<BankTransaction> bankTransactionsFromDirectory = new ArrayList<BankTransaction>();
-    try {
-      bankTransactionsFromDirectory = bankTransactionUtil.getBankTransactionsFromDirectory(getInputDirectory());
-    } catch(ParseException e) {
-      log.error("ParseException while parsing directory", e);
-    } catch(IOException e) {
-      log.error("IO exception while parsing directory", e);
-    }
-    return bankTransactionsFromDirectory;
-  }
-
   public void setMonthStat(BankTransaction bankTransaction) {
     DecimalFormat decimalFormat = new DecimalFormat("#.00");
     double income = 0;
@@ -139,7 +84,7 @@ public class BankService implements BankInterface {
     }
     profit = income + expense;
 
-    if(monthStatDao.findAll().isEmpty()) {
+    if(monthStatDao.findAllByOrderByYearMonthDesc().isEmpty()) {
       monthStatDao.save(new MonthStat(yearMonth, income, expense, profit));
     } else {
       MonthStat monthStatForUpdate = monthStatDao.findByYearMonth(yearMonth);

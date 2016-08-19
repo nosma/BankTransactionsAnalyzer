@@ -34,12 +34,11 @@ public class StatisticServiceTests {
     bankTransactionDaoMock = mock(BankTransactionDao.class);
     bankStatisticsService = new BankStatisticsService(monthStatDaoMock, bankTransactionDaoMock);
 
-    bankTransactionList = new ArrayList<BankTransaction>();
-    monthStaList = new ArrayList<MonthStat>();
+    bankTransactionList = new ArrayList<>();
+    monthStaList = new ArrayList<>();
 
     when(bankTransactionDaoMock.findAllByOrderByTransactiondateDesc()).thenReturn(bankTransactionList);
     when(monthStatDaoMock.findAllByOrderByYearMonthDesc()).thenReturn(monthStaList);
-    when(monthStatDaoMock.findAll()).thenReturn(monthStaList);
   }
 
   /* Total calculations */
