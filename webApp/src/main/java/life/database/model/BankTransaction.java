@@ -1,12 +1,9 @@
 package life.database.model;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import javax.persistence.*;
 
-/**
- * @author fragkakise on 11/09/2015.
- */
 @Entity
 @Table(name = "BANKTRANSACTION")
 public class BankTransaction implements Serializable {
