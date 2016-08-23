@@ -1,5 +1,7 @@
 package life.database.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.*;
@@ -14,6 +16,7 @@ public class BankTransaction implements Serializable {
   private Long id;
 
   @Column(name = "TRANSACTIONDATE", nullable = false)
+  @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
   private LocalDate transactiondate;
 
   @Column(name = "DESCRIPTION", nullable = false)

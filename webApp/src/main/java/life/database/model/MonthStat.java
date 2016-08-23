@@ -1,5 +1,7 @@
 package life.database.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.time.YearMonth;
 import javax.persistence.*;
@@ -14,6 +16,7 @@ public class MonthStat implements Serializable {
   private Long id;
 
   @Column(name = "YEARMONTH", nullable = false)
+  @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="ΜΜ-yyyy")
   private YearMonth yearMonth;
 
   @Column(name = "INCOME", nullable = false)
