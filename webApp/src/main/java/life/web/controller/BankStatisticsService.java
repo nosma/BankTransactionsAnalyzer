@@ -139,7 +139,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
         List<BankTransaction> transactions = Collections.emptyList();
         try {
          transactions = bankTransactionDao.findAllByOrderByTransactiondateDesc();
-        } catch(DataIntegrityViolationException exception) {
+        } catch(Exception exception) {
             log.warn("BankTransactions database table is empty. ", exception);
         }
         return transactions;
@@ -149,7 +149,7 @@ public class BankStatisticsService implements BankStatisticsInterface {
         List<MonthStat> monthStats = Collections.emptyList();
         try {
             monthStats = monthStatDao.findAllByOrderByYearMonthDesc();
-        } catch(DataIntegrityViolationException exception) {
+        } catch(Exception exception) {
             log.warn("MonthStats database table is empty. ", exception);
         }
         return monthStats;

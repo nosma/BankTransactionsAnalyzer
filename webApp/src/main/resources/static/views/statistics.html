@@ -70,14 +70,14 @@
       <thead>
         <tr>
           <td st-sort="yearMonth.year">Year</td>
-          <td st-sort="yearMonth.monthOfYear">Month</td>
+          <td st-sort="yearMonth.monthValue">Month</td>
           <td st-sort="income">Income</td>
           <td st-sort="expense">Expense</td>
           <td st-sort="profit">Profit</td>
         </tr>
       <tr>
         <th><input st-search="yearMonth.year" placeholder="search for Year" class="input-sm form-control" type="search"/></th>
-        <th><input st-search="yearMonth.monthOfYear" placeholder="search for Month" class="input-sm form-control" type="search"/></th>
+        <th><input st-search="yearMonth.monthValue" placeholder="search for Month" class="input-sm form-control" type="search"/></th>
         <th><input st-search="income" placeholder="search for Income" class="input-sm form-control" type="search"/></th>
         <th><input st-search="expense" placeholder="search for Expense" class="input-sm form-control" type="search"/></th>
         <th><input st-search="profit" placeholder="search for Profit" class="input-sm form-control" type="search"/></th>
@@ -86,9 +86,9 @@
       <tbody>
         <tr data-ng-repeat="stats in gridOptions.data">
           <td>{{stats.yearMonth.year}}</td>
-          <td>{{stats.yearMonth.monthOfYear}}</td>
-          <td ng-click="callMonthlyIncome(stats.yearMonth.year,stats.yearMonth.monthOfYear)">{{stats.income}}</td>
-          <td ng-click="callMonthlyExpenses(stats.yearMonth.year,stats.yearMonth.monthOfYear)">{{stats.expense}}</td>
+          <td>{{stats.yearMonth.monthValue}}</td>
+          <td ng-click="callMonthlyIncome(stats.yearMonth.year,stats.yearMonth.monthValue)">{{stats.income}}</td>
+          <td ng-click="callMonthlyExpenses(stats.yearMonth.year,stats.yearMonth.monthValue)">{{stats.expense}}</td>
           <td>{{stats.profit}}</td>
         </tr>
       <tr>

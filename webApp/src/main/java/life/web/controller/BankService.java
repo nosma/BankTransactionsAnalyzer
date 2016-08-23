@@ -49,8 +49,8 @@ public class BankService implements BankInterface {
     List<BankTransaction> bankTransactionList = new ArrayList<BankTransaction>();
     for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
       if ((bankTransaction.getTransactiondate().getMonthValue() == monthNumber) &&
-            (bankTransaction.getTransactiondate().getYear() == yearNumber) &&
-              (bankTransaction.getCost() < 0)) {
+          (bankTransaction.getTransactiondate().getYear() == yearNumber) &&
+          (bankTransaction.getCost() < 0)) {
         bankTransactionList.add(bankTransaction);
       }
     }
@@ -62,12 +62,25 @@ public class BankService implements BankInterface {
     List<BankTransaction> bankTransactionList = new ArrayList<BankTransaction>();
     for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
       if ((bankTransaction.getTransactiondate().getMonthValue() == monthNumber) &&
-              (bankTransaction.getTransactiondate().getYear() == yearNumber) &&
-              (bankTransaction.getCost() > 0)) {
+          (bankTransaction.getTransactiondate().getYear() == yearNumber) &&
+          (bankTransaction.getCost() > 0)) {
         bankTransactionList.add(bankTransaction);
       }
     }
     return bankTransactionUtil.getTableObjectList(bankTransactionList);
+  }
+
+  @Override
+  public void saveBankTransactions(List<BankTransaction> bankTransactions) {
+    for (BankTransaction bankTransaction : bankTransactions) {
+      List<BankTransaction> transactions = bankTransactionDao.findByTransactiondateAndDescriptionAndCost(
+          bankTransaction.getTransactiondate(),
+          bankTransaction.getDescription(),
+          bankTransaction.getCost());
+      if (transactions.size() == 0) {
+        bankTransactionDao.save(bankTransaction);
+      }
+    }
   }
 
   public void setMonthStat(BankTransaction bankTransaction) {
@@ -75,29 +88,33 @@ public class BankService implements BankInterface {
     double income = 0;
     double expense = 0;
     double profit;
-    YearMonth yearMonth = YearMonth.of(bankTransaction.getTransactiondate().getYear(),
-                                         bankTransaction.getTransactiondate().getMonthValue());
-    if(bankTransaction.getCost() > 0) {
+
+    YearMonth yearMonth = YearMonth.of(bankTransaction.getTransactiondate().getYear(), bankTransaction.getTransactiondate().getMonthValue());
+    if (bankTransaction.getCost() > 0) {
       income = bankTransaction.getCost();
     } else {
       expense = bankTransaction.getCost();
     }
     profit = income + expense;
 
-    if(monthStatDao.findAllByOrderByYearMonthDesc().isEmpty()) {
+    if (monthStatDao.findAllByOrderByYearMonthDesc().isEmpty()) {
       monthStatDao.save(new MonthStat(yearMonth, income, expense, profit));
     } else {
       MonthStat monthStatForUpdate = monthStatDao.findByYearMonth(yearMonth);
-      if(monthStatForUpdate == null){
+      if (monthStatForUpdate == null) {
         monthStatDao.save(new MonthStat(yearMonth, income, expense, profit));
       } else {
-        // TODO increase the accuracy of the below calculations, avoid double -> string -> double
-        monthStatForUpdate.setIncome(Double.parseDouble(decimalFormat.format(income + monthStatForUpdate.getIncome())));
-        monthStatForUpdate.setExpense(Double.parseDouble(decimalFormat.format(expense + monthStatForUpdate.getExpense())));
-        monthStatForUpdate.setProfit(Double.parseDouble(decimalFormat.format(profit + monthStatForUpdate.getProfit())));
+        double calculatedIncome = Double.parseDouble(decimalFormat.format(income + monthStatForUpdate.getIncome()));
+        double calculatedExpenses = Double.parseDouble(decimalFormat.format(expense + monthStatForUpdate.getExpense()));
+        double calculatedProfits = Double.parseDouble(decimalFormat.format(profit + monthStatForUpdate.getProfit()));
+        monthStatForUpdate.setIncome(calculatedIncome);
+        monthStatForUpdate.setExpense(calculatedExpenses);
+        monthStatForUpdate.setProfit(calculatedProfits);
         monthStatDao.save(monthStatForUpdate);
       }
     }
   }
 
-}
+  }
+
+

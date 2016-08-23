@@ -2,6 +2,8 @@ package life.web.controller;
 
 
 
+import life.database.model.BankTransaction;
+
 import java.util.List;
 
 interface BankInterface {
@@ -10,4 +12,6 @@ interface BankInterface {
   List<TableObject> getMonthlyExpensesList(int monthNumber, int yearNumber);
 
   List<TableObject> getMonthlyIncomeList(int monthNumber, int yearNumber);
+
+  void saveBankTransactions(List<BankTransaction> bankTransactions);
 }

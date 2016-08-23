@@ -20,7 +20,7 @@ class BankingFacade {
   }
 
   void save(List<BankTransaction> bankTransactions) {
-    bankTransactionDao.save(bankTransactions);
+    bankService.saveBankTransactions(bankTransactions);
     for(BankTransaction bankTransaction : bankTransactions) {
       bankService.setMonthStat(bankTransaction);
     }
