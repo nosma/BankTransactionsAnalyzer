@@ -9,5 +9,6 @@ var app = angular.module('app', [
   'ui.grid',
   'ui.grid.exporter',
   'smart-table',
-  'angularFileUpload'
+  'angularFileUpload',
+  'ngTagsInput'
 ]);
