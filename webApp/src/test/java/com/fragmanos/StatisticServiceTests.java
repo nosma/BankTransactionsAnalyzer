@@ -1,7 +1,6 @@
 package com.fragmanos;
 
 import java.time.LocalDate;
-import java.time.Year;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,24 +13,22 @@ import life.web.controller.BankStatisticsService;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.testng.Assert.assertEquals;
 
 public class StatisticServiceTests {
 
   private static final double DOUBLE_DELTA = 1e-15;
 
-  BankStatisticsService bankStatisticsService;
+  private BankStatisticsService bankStatisticsService;
 
-  private MonthStatDao monthStatDaoMock;
-  private BankTransactionDao bankTransactionDaoMock;
   private List<BankTransaction> bankTransactionList;
   private List<MonthStat> monthStaList;
 
   @BeforeMethod
   public void setUp() throws Exception {
-    monthStatDaoMock = mock(MonthStatDao.class);
-    bankTransactionDaoMock = mock(BankTransactionDao.class);
+    MonthStatDao monthStatDaoMock = mock(MonthStatDao.class);
+    BankTransactionDao bankTransactionDaoMock = mock(BankTransactionDao.class);
     bankStatisticsService = new BankStatisticsService(monthStatDaoMock, bankTransactionDaoMock);
 
     bankTransactionList = new ArrayList<>();
