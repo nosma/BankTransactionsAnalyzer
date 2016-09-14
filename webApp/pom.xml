@@ -10,9 +10,21 @@
         <version>1.0</version>
     </parent>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <version>1.0</version>
     <artifactId>webApp</artifactId>
-    <!--<packaging>jar</packaging>-->
+    <packaging>jar</packaging>
     <name>Life In Order</name>
 
     <properties>
@@ -161,57 +173,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <!--<plugin>-->
-                        <!--<groupId>com.github.wvengen</groupId>-->
-                        <!--<artifactId>proguard-maven-plugin</artifactId>-->
-                        <!--<version>2.0.11</version>-->
-                        <!--<executions>-->
-                            <!--<execution>-->
-                                <!--<id>jar_obfuscation</id>-->
-                                <!--<phase>package</phase>-->
-                                <!--<goals>-->
-                                    <!--<goal>proguard</goal>-->
-                                <!--</goals>-->
-                            <!--</execution>-->
-                        <!--</executions>-->
-                        <!--<configuration>-->
-                            <!--<proguardVersion>5.2</proguardVersion>-->
-                            <!--<obfuscate>true</obfuscate>-->
-                            <!--<includeDependency>true</includeDependency>-->
-                            <!--<injar>webApp-${project.version}.jar</injar>-->
-                            <!--<outjar>${project.parent.artifactId}-webApp-${project.version}.jar</outjar>-->
-                            <!--<outputDirectory>${project.build.directory}</outputDirectory>-->
-                            <!--<maxMemory>256m</maxMemory>-->
-                            <!--<libs>-->
-                                <!--<lib>${java.home}/lib/rt.jar</lib>-->
-                                <!--<lib>${java.home}/lib/jsse.jar</lib>-->
-                                <!--<lib>${java.home}/lib/jce.jar</lib>-->
-                            <!--</libs>-->
-                            <!--<options>-->
-                                <!--<option>-allowaccessmodification</option>-->
-                                <!--<option>-dontskipnonpubliclibraryclasses</option>-->
-                                <!--<option>-dontskipnonpubliclibraryclassmembers</option>-->
-                                <!--<option>-dontshrink</option>-->
-                                <!--<option>-dontoptimize</option>-->
-                                <!--<option>-keepdirectories</option>-->
-                                <!--<option>-verbose</option>-->
-                                <!--<option>-renamesourcefileattribute SourceFile</option>-->
-                                <!--<option>-keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod</option>-->
-                                <!--<option>-keep class life.AppConfig {*;} </option>-->
-                                <!--<option>-dontnote</option>-->
-                                <!--<option>-dontwarn</option>-->
-                            <!--</options>-->
-                        <!--</configuration>-->
-                    <!--</plugin>-->
-                    <!--<plugin>-->
-                        <!--<groupId>org.apache.maven.plugins</groupId>-->
-                        <!--<artifactId>maven-war-plugin</artifactId>-->
-                        <!--<version>2.6</version>-->
-                        <!--<configuration>-->
-                            <!--<warSourceDirectory>src/main/webapp</warSourceDirectory>-->
-                            <!--<failOnMissingWebXml>false</failOnMissingWebXml>-->
-                        <!--</configuration>-->
-                    <!--</plugin>-->
                 </plugins>
             </build>
 
