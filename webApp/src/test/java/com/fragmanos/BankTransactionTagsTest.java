@@ -2,13 +2,18 @@ package com.fragmanos;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
+import life.database.dao.TagRuleDao;
 import life.database.model.BankTransaction;
+import life.database.model.TagRule;
+import org.mockito.Mock;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.collections.Lists;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 
 public class BankTransactionTagsTest {
@@ -16,24 +21,35 @@ public class BankTransactionTagsTest {
   private static final String EXPENSE = "Expenses";
   private static final String COMMUTE = "Commute";
   private ArrayList<BankTransaction> bankTransactionList;
+  @Mock
+  private TagRuleDao tagRuleDao;
 
-  @BeforeMethod
+  @BeforeClass
   public void setUp() throws Exception {
+    tagRuleDao = mock(TagRuleDao.class);
+
     bankTransactionList = new ArrayList<>();
     ArrayList<String> tags = new ArrayList<>();
     tags.add("Rent");
     tags.add("Home");
     tags.add("Expenses");
-    bankTransactionList.add(new BankTransaction(LocalDate.now(),"Payroll",1500.0).setTag("Payroll"));
-    bankTransactionList.add(new BankTransaction(LocalDate.now(),"Underground",3.0).setTag(COMMUTE).setTag(EXPENSE));
-    bankTransactionList.add(new BankTransaction(LocalDate.now(),"Overground",2.0).setTag(COMMUTE).setTag(EXPENSE));
-    bankTransactionList.add(new BankTransaction(LocalDate.now(),"Supermarket",20.0));
-    bankTransactionList.add(new BankTransaction(LocalDate.now(),"Rent",1000.0).setTags(tags));
+    bankTransactionList.add(new BankTransaction(LocalDate.now(), "Payroll", 1500.0).setTagRule(new TagRule("Payroll", Lists.newArrayList("Income", "Payroll"))));
+    bankTransactionList.add(new BankTransaction(LocalDate.now(), "Underground", 3.0).setTagRule(new TagRule("Commute", Lists.newArrayList("Expenses", "Commute"))));
+    bankTransactionList.add(new BankTransaction(LocalDate.now(), "Overground", 2.0).setTagRule(new TagRule("Commute", Lists.newArrayList("Expenses", "Commute"))));
+    bankTransactionList.add(new BankTransaction(LocalDate.now(), "Supermarket", 20.0).setTagRule(new TagRule("", Lists.newArrayList())));
+    bankTransactionList.add(new BankTransaction(LocalDate.now(), "Rent", 1000.0).setTagRule(new TagRule("Expenses", tags)));
+
+    when(tagRuleDao.findAll()).thenReturn(Lists.newArrayList(
+        new TagRule("Payroll", Lists.newArrayList("Income","Payroll")),
+        new TagRule("Commute", Lists.newArrayList("Expenses","Commute")),
+        new TagRule("Commute", Lists.newArrayList("Expenses","Commute")),
+        new TagRule("Expenses", Lists.newArrayList("Rent","Home","Expenses"))
+        ));
   }
 
   @Test
   public void testNumberOfTransactionsThatHaveTags() throws Exception {
-    assertEquals(4, bankTransactionList.stream().filter(a ->a.containTags()).count());
+    assertEquals(4, bankTransactionList.stream().filter(a -> a.containTags()).count());
   }
 
   @Test

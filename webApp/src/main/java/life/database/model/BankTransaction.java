@@ -1,13 +1,13 @@
 package life.database.model;
 
-import com.beust.jcommander.internal.Lists;
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
+
+import com.beust.jcommander.internal.Lists;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "BANKTRANSACTION")
@@ -28,9 +28,14 @@ public class BankTransaction implements Serializable {
   @Column(name = "COST", nullable = false)
   private Double cost;
 
-  @Column(name = "TAGS", nullable = false)
-  @ElementCollection
-  private List<String> tags;
+//  @Column(name = "TAGS", nullable = false)
+//  @ElementCollection
+//  private List<String> tags;
+
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "TAG_RULE_ID")
+  @JsonFormat(shape=JsonFormat.Shape.OBJECT)
+  private TagRule tagRule;
 
   public LocalDate getTransactiondate() {
     return transactiondate;
@@ -56,6 +61,15 @@ public class BankTransaction implements Serializable {
     this.cost = cost;
   }
 
+  public TagRule getTagRule() {
+    return tagRule;
+  }
+
+  public BankTransaction setTagRule(TagRule tagRule) {
+    this.tagRule = tagRule;
+    return this;
+  }
+
   public BankTransaction() {
   }
 
@@ -63,7 +77,6 @@ public class BankTransaction implements Serializable {
     this.transactiondate = transactiondate;
     this.description = description;
     this.cost = cost;
-    tags = Lists.newArrayList();
   }
 
   @Override
@@ -102,30 +115,25 @@ public class BankTransaction implements Serializable {
              '}';
   }
 
-  public BankTransaction setTag(String tag) {
-    this.tags.add(tag);
-    return this;
-  }
-
   public BankTransaction setTags(ArrayList<String> tags) {
-    this.tags.addAll(tags);
+    this.tagRule.getTags().addAll(tags);
     return this;
   }
 
   public List<String> getTags() {
-    return tags;
+    return (this.tagRule != null) ? this.tagRule.getTags() : Lists.newArrayList();
   }
 
   public boolean containTags() {
-    return tags.size() > 0;
+    return this.tagRule.getTags().size() > 0;
   }
 
   public boolean containTag(String tag) {
-    return this.tags.contains(tag);
+    return this.tagRule.getTags().contains(tag);
   }
 
   public boolean containTags(ArrayList tags) {
-    return this.tags.containsAll(tags);
+    return this.tagRule.getTags().containsAll(tags);
   }
 
 }
