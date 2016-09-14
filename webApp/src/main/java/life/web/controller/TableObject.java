@@ -1,15 +1,19 @@
 package life.web.controller;
 
+import java.util.List;
+
 public class TableObject {
 
-  String date;
-  String description;
-  Double cost;
+  private String date;
+  private String description;
+  private Double cost;
+  private List<String> tags;
 
-  public TableObject(String date, String description, Double cost) {
+  public TableObject(String date, String description, Double cost, List<String> tags) {
     this.date = date;
     this.description = description;
     this.cost = cost;
+    this.tags = tags;
   }
 
   public String getDate() {
@@ -36,4 +40,11 @@ public class TableObject {
     this.cost = cost;
   }
 
+  public List<String> getTags() {
+    return tags;
+  }
+
+  public void setTags(List<String> tags) {
+    this.tags = tags;
+  }
 }

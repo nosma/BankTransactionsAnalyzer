@@ -2,6 +2,7 @@ package life.web.controller;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
@@ -14,9 +15,9 @@ public class BankController {
     @Inject
     private BankInterface bankInterface;
 
-    @RequestMapping("allTransactions")
-    //todo the name of this method must change and along the implementation of it, probably a transformer of type should be added
-    public List<TableObject> getTableObjects() {
+    @RequestMapping("getAllTransactions")
+    public @ResponseBody
+    List<TableObject> getTableObjects() {
         return bankInterface.getTableObjects();
     }
 

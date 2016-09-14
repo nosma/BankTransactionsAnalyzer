@@ -1,9 +1,12 @@
 package life.database.model;
 
+import com.beust.jcommander.internal.Lists;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
 
 @Entity
@@ -24,6 +27,10 @@ public class BankTransaction implements Serializable {
 
   @Column(name = "COST", nullable = false)
   private Double cost;
+
+  @Column(name = "TAGS", nullable = false)
+  @ElementCollection
+  private List<String> tags;
 
   public LocalDate getTransactiondate() {
     return transactiondate;
@@ -56,6 +63,7 @@ public class BankTransaction implements Serializable {
     this.transactiondate = transactiondate;
     this.description = description;
     this.cost = cost;
+    tags = Lists.newArrayList();
   }
 
   @Override
@@ -93,4 +101,31 @@ public class BankTransaction implements Serializable {
              ", cost= " + cost +
              '}';
   }
+
+  public BankTransaction setTag(String tag) {
+    this.tags.add(tag);
+    return this;
+  }
+
+  public BankTransaction setTags(ArrayList<String> tags) {
+    this.tags.addAll(tags);
+    return this;
+  }
+
+  public List<String> getTags() {
+    return tags;
+  }
+
+  public boolean containTags() {
+    return tags.size() > 0;
+  }
+
+  public boolean containTag(String tag) {
+    return this.tags.contains(tag);
+  }
+
+  public boolean containTags(ArrayList tags) {
+    return this.tags.containsAll(tags);
+  }
+
 }

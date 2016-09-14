@@ -29,7 +29,8 @@ public class BankTransactionUtil {
             tableObjectList.add(new TableObject(
                     bankTransaction.getTransactiondate().toString(),
                     bankTransaction.getDescription(),
-                    bankTransaction.getCost()
+                    bankTransaction.getCost(),
+                    bankTransaction.getTags()
             ));
         }
         return tableObjectList;
