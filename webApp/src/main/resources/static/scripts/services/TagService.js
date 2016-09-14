@@ -7,7 +7,8 @@ app.factory('TagService', function ($http) {
     getTags: function () {
       return $http({
         method: 'POST',
-        url: TAGS_API + 'getPredefinedTags'
+        url: TAGS_API + 'getPredefinedTags',
+        cache: true
       });
     },
 

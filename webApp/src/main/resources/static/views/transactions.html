@@ -1,4 +1,4 @@
-<div class="container" role="main" class="main">
+<div role="main" class="container main">
 
   <div class="row">
     <table st-table="gridOptions.data" st-safe-src="transactions" class="table table-striped">
@@ -61,15 +61,21 @@
         <tags-input
                 class="bootstrap"
                 ng-model="transactionTags"
-                placeholder="Choose tag"
                 display-property="text"
-                replace-spaces-with-dashes="false"
-                add-on-paste="true"></tags-input>
+                placeholder="Choose tag"
+                replace-spaces-with-dashes="false">
+          <auto-complete source="loadTags($query)"
+                         min-length="0"
+                         load-on-focus="true"
+                         load-on-empty="true"
+                         max-results-to-show="32">
+          </auto-complete>
+        </tags-input>
       </div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-info" ng-click="resetTags()">Reset Tags</button>
+        <button type="button" class="btn btn-info" ng-click="allTags()">All Tags</button>
         <button type="button" class="btn btn-primary" ng-click="saveTagsForDescription(tagDescription, transactionTags)">Save changes</button>
       </div>
     </div>

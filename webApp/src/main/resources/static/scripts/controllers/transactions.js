@@ -3,6 +3,7 @@
 app.controller('transactions', function ($scope, $resource, $http, $route, uiGridConstants, TagService, BankService) {
 
   $scope.itemsByPage = 50;
+  $scope.transactionTags = [];
 
   function getTransactionTags(){
     TagService.getTags()
@@ -12,7 +13,6 @@ app.controller('transactions', function ($scope, $resource, $http, $route, uiGri
         console.log("Error while receiving tags: " + response.data);
       });
   }
-  getTransactionTags();
 
   function getAllTransactions(){
     BankService.getAllTransactions().then(function successCallback(response) {
@@ -25,7 +25,7 @@ app.controller('transactions', function ($scope, $resource, $http, $route, uiGri
   }
   getAllTransactions();
 
-  $scope.resetTags = function () {
+  $scope.allTags = function () {
     getTransactionTags();
   };
 
@@ -54,6 +54,15 @@ app.controller('transactions', function ($scope, $resource, $http, $route, uiGri
     return tags;
   }
 
+  $scope.loadTags = function ($query) {
+    return TagService.getTags()
+      .then(function (response) {
+      var tags = response.data;
+      return tags.filter(function (tag) {
+        return tag.toLowerCase().indexOf($query.toLowerCase()) != -1;
+      });
+    });
+  };
 
   $scope.gridOptions = {
     showGridFooter: true,
