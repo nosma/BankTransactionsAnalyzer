@@ -4,6 +4,50 @@ app.controller('transactions', function ($scope, $resource, $http, $route, uiGri
 
   $scope.itemsByPage = 50;
   $scope.transactionTags = [];
+  $scope.numOfTagged = -1;
+  $scope.tagged = -1;
+  $scope.numOfUntagged = -1;
+  $scope.untagged = -1;
+
+  function getTaggedTransactionsCount(){
+    TagService.getTaggedTransactionsCount()
+      .then(function successCallback(response) {
+        $scope.numOfTagged = response.data;
+      }, function errorCallback(response) {
+        console.log("Error while receiving Tagged Transactions Count: " + response.data);
+      });
+  }
+
+  function getUnTaggedTransactionsCount(){
+    TagService.getUnTaggedTransactionsCount()
+      .then(function successCallback(response) {
+        $scope.numOfUntagged = response.data;
+      }, function errorCallback(response) {
+        console.log("Error while receiving UnTagged Transactions Count: " + response.data);
+      });
+  }
+
+  $scope.getTagged = function(){
+    TagService.getTaggedTransactions()
+      .then(function successCallback(response) {
+        populateTransactionsTable(response.data);
+      }, function errorCallback(response) {
+        console.log("Error while receiving Tagged Transactions : " + response.data);
+      });
+  };
+
+  $scope.getUnTagged = function(){
+    TagService.getUnTaggedTransactions()
+      .then(function successCallback(response) {
+        populateTransactionsTable(response.data);
+      }, function errorCallback(response) {
+        console.log("Error while receiving UnTagged Transactions : " + response.data);
+      });
+  };
+
+  $scope.tableInit = function(){
+    getAllTransactions();
+  };
 
   function getTransactionTags(){
     TagService.getTags()
@@ -16,14 +60,17 @@ app.controller('transactions', function ($scope, $resource, $http, $route, uiGri
 
   function getAllTransactions(){
     BankService.getAllTransactions().then(function successCallback(response) {
-      $scope.gridOptions.data = response.data;
-      $scope.transactions = response.data;
-      $scope.displayedTransactions = [].concat(response.data);
+      populateTransactionsTable(response.data);
     }, function errorCallback(response) {
       console.log("Error while retrieving transactions: " + response.data);
     });
   }
-  getAllTransactions();
+
+  function populateTransactionsTable(data) {
+    $scope.gridOptions.data = data;
+    $scope.transactions = data;
+    $route.refresh;
+  }
 
   $scope.allTags = function () {
     getTransactionTags();
@@ -39,7 +86,7 @@ app.controller('transactions', function ($scope, $resource, $http, $route, uiGri
       tags: getTagsFromObjectArray(transactionTags)
     }).then(function successCallback(response) {
         $scope.gridOptions.data = response.data;
-        $route.reload();
+        $route.refresh;
       $('#TransactionActions').modal('hide');
       }, function errorCallback(response) {
         console.log("Error while retrieving results: " + response.data);
@@ -98,5 +145,12 @@ app.controller('transactions', function ($scope, $resource, $http, $route, uiGri
     ]
 
   };
+
+  function init(){
+    getTaggedTransactionsCount();
+    getUnTaggedTransactionsCount();
+    getAllTransactions();
+  }
+  init();
 
 });

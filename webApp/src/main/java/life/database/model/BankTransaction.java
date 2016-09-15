@@ -125,7 +125,11 @@ public class BankTransaction implements Serializable {
   }
 
   public boolean containTags() {
-    return this.tagRule.getTags().size() > 0;
+    boolean containTags = false;
+    if(tagRule != null) {
+      containTags = (this.tagRule.getTags().size() > 0);
+    }
+    return containTags;
   }
 
   public boolean containTag(String tag) {

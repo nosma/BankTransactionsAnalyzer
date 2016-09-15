@@ -18,6 +18,34 @@ app.factory('TagService', function ($http) {
         url: TAGS_API + 'setTagsForTransaction',
         data: tagDescription
       });
+    },
+
+    getTaggedTransactionsCount: function () {
+      return $http({
+        method: 'GET',
+        url: TAGS_API + 'getTaggedTransactionsCount'
+      });
+    },
+
+    getUnTaggedTransactionsCount: function () {
+      return $http({
+        method: 'GET',
+        url: TAGS_API + 'getUnTaggedTransactionsCount'
+      });
+    },
+
+    getTaggedTransactions: function () {
+      return $http({
+        method: 'GET',
+        url: TAGS_API + 'getTaggedTransactions'
+      });
+    },
+
+    getUnTaggedTransactions: function () {
+      return $http({
+        method: 'GET',
+        url: TAGS_API + 'getUnTaggedTransactions'
+      });
     }
 
   };

@@ -1,6 +1,18 @@
 <div role="main" class="container main">
 
   <div class="row">
+    <button class="btn btn-default" type="button" ng-click="tableInit()">
+      Init Table
+    </button>
+    <button class="btn btn-default" type="button" ng-click="getTagged()">
+      Tagged <span class="badge">{{numOfTagged}}</span>
+    </button>
+    <button class="btn btn-default" type="button" ng-click="getUnTagged()">
+      UnTagged <span class="badge">{{numOfUntagged}}</span>
+    </button>
+  </div>
+
+  <div class="row">
     <table st-table="gridOptions.data" st-safe-src="transactions" class="table table-striped">
       <thead>
       <tr>

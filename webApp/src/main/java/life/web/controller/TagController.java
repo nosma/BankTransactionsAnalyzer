@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/tags/")
@@ -45,6 +46,32 @@ public class TagController {
       bankTransactionDao.save(bankTransaction.setTagRule(tagRule));
     });
     return util.getTableObjectList(transactions);
+  }
+
+  @RequestMapping(value = "getTaggedTransactionsCount")
+  public long getTaggedTransactionsCount(){
+    List<BankTransaction> all = bankTransactionDao.findAllByOrderByTransactiondateDesc();
+    return all.stream().filter(a -> a.containTags()).count();
+  }
+
+  @RequestMapping(value = "getUnTaggedTransactionsCount")
+  public long getUnTaggedTransactionsCount(){
+    List<BankTransaction> all = bankTransactionDao.findAllByOrderByTransactiondateDesc();
+    return all.stream().filter(a -> !a.containTags()).count();
+  }
+
+  @RequestMapping(value = "getTaggedTransactions")
+  public List<TableObject> getTaggedTransactions(){
+    List<BankTransaction> all = bankTransactionDao.findAllByOrderByTransactiondateDesc();
+    List<BankTransaction> bankTransactions = all.stream().filter(a -> a.containTags()).collect(Collectors.toList());
+    return util.getTableObjectList(bankTransactions);
+  }
+
+  @RequestMapping(value = "getUnTaggedTransactions")
+  public List<TableObject> getUnTaggedTransactions(){
+    List<BankTransaction> all = bankTransactionDao.findAllByOrderByTransactiondateDesc();
+    List<BankTransaction> bankTransactions = all.stream().filter(a -> !a.containTags()).collect(Collectors.toList());
+    return util.getTableObjectList(bankTransactions);
   }
 
 }
