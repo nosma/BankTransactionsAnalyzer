@@ -1,8 +1,7 @@
 'use strict';
 
-app.controller('transactions', function ($scope, $resource, $http, $route, uiGridConstants, TagService, BankService) {
+app.controller('transactions', function ($scope, $resource, $http, $route, TagService, BankService) {
 
-  $scope.itemsByPage = 50;
   $scope.transactionTags = [];
   $scope.numOfTagged = -1;
   $scope.tagged = -1;
@@ -67,7 +66,6 @@ app.controller('transactions', function ($scope, $resource, $http, $route, uiGri
   }
 
   function populateTransactionsTable(data) {
-    $scope.gridOptions.data = data;
     $scope.transactions = data;
     $route.refresh;
   }
@@ -109,41 +107,6 @@ app.controller('transactions', function ($scope, $resource, $http, $route, uiGri
         return tag.toLowerCase().indexOf($query.toLowerCase()) != -1;
       });
     });
-  };
-
-  $scope.gridOptions = {
-    showGridFooter: true,
-    showColumnFooter: true,
-    enableFiltering: true,
-    enableGridMenu: true,
-    enableSelectAll: true,
-    exporterCsvFilename: 'myFile.csv',
-    exporterPdfDefaultStyle: {fontSize: 9},
-    exporterPdfTableStyle: {margin: [30, 30, 30, 30]},
-    exporterPdfTableHeaderStyle: {fontSize: 10, bold: true, italics: true, color: 'red'},
-    exporterPdfHeader: {text: "My Header", style: 'headerStyle'},
-    exporterPdfFooter: function (currentPage, pageCount) {
-      return {text: currentPage.toString() + ' of ' + pageCount.toString(), style: 'footerStyle'};
-    },
-    exporterPdfCustomFormatter: function (docDefinition) {
-      docDefinition.styles.headerStyle = {fontSize: 22, bold: true};
-      docDefinition.styles.footerStyle = {fontSize: 10, bold: true};
-      return docDefinition;
-    },
-    exporterPdfOrientation: 'portrait',
-    exporterPdfPageSize: 'LETTER',
-    exporterPdfMaxGridWidth: 500,
-    exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
-    onRegisterApi: function (gridApi) {
-      $scope.gridApi = gridApi;
-    },
-
-    columnDefs: [
-      {field: 'date'},
-      {field: 'description'},
-      {field: 'cost', aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true}
-    ]
-
   };
 
   function init(){

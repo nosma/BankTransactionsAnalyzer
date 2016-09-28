@@ -6,9 +6,8 @@ var app = angular.module('app', [
   'ui.bootstrap',
   'ngAnimate',
   'ngTouch',
-  'ui.grid',
-  'ui.grid.exporter',
   'smart-table',
   'angularFileUpload',
-  'ngTagsInput'
+  'ngTagsInput',
+  'angularUtils.directives.dirPagination'
 ]);

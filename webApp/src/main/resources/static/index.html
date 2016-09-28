@@ -10,7 +10,6 @@
 
     <link href="webjars/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="webjars/bootstrap/3.3.1/css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="webjars/angular-ui-grid/3.1.1/ui-grid.min.css" rel="stylesheet"/>
     <link href="styles/starter.css" rel="stylesheet">
     <link href="webjars/ng-tags-input/2.3.0/ng-tags-input.min.css" rel="stylesheet">
     <link href="styles/tags.css" rel="stylesheet">
@@ -18,11 +17,16 @@
 
     <link rel="shortcut icon" type="image/ico" href="icons/favicon.ico"/>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,800,700' rel='stylesheet' type='text/css'>
-
+    <link rel="stylesheet" href="webjars/font-awesome/4.6.3/css/font-awesome.min.css">
     <style>
         html, body {
             height: 100%;
             padding: 40px; }
+        .sort-icon {
+            font-size: 9px;
+            margin-left: 5px;
+        }
+        th { cursor:pointer; }
     </style>
 </head>
 
@@ -69,11 +73,11 @@
 <script src="webjars/angularjs/1.4.9/angular-route.js" rel="script"></script>
 <script src="webjars/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 <script src="webjars/angular-ui-bootstrap/1.3.3/ui-bootstrap-tpls.min.js"></script>
-<script src="webjars/angular-ui-grid/3.1.1/ui-grid.min.js" rel="script"></script>
 <script src="webjars/smart-table/2.1.3-1/smart-table.js"></script>
 <script src="webjars/nervgh-angular-file-upload/2.1.1/angular-file-upload.min.js"></script>
 <script src="webjars/ng-tags-input/2.3.0/ng-tags-input.min.js"></script>
 
+<script src="scripts/dirPagination.js"></script>
 <script src="scripts/annyang.min.js"></script>
 
 <script src="scripts/app.js" rel="2script"></script>
