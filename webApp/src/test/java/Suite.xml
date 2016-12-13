@@ -5,6 +5,8 @@
   <test name="Regression1">
     <packages>
       <package name="com.fragmanos" />
+      <package name="life.file.parser" />
+      <package name="life.web.controller" />
     </packages>
   </test>
 
