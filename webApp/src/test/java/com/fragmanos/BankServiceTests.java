@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import life.database.dao.BankTransactionDao;
+import life.database.dao.MidataTransactionDao;
 import life.database.dao.MonthStatDao;
 import life.database.model.BankTransaction;
 import life.web.controller.BankService;
@@ -17,20 +18,19 @@ import static org.testng.Assert.assertEquals;
 public class BankServiceTests {
 
   private BankService bankService;
-  private MonthStatDao monthStatDaoMock;
-  private BankTransactionDao bankTransactionDaoMock;
   private int month;
   private int year;
   private List<BankTransaction> bankTransactionList;
 
   @BeforeMethod
   public void setUp() throws Exception {
-    monthStatDaoMock = mock(MonthStatDao.class);
-    bankTransactionDaoMock = mock(BankTransactionDao.class);
-    bankService = new BankService(monthStatDaoMock, bankTransactionDaoMock);
+    MonthStatDao monthStatDaoMock = mock(MonthStatDao.class);
+    BankTransactionDao bankTransactionDaoMock = mock(BankTransactionDao.class);
+    MidataTransactionDao midataTransactionDaoMock = mock(MidataTransactionDao.class);
+    bankService = new BankService(monthStatDaoMock, bankTransactionDaoMock, midataTransactionDaoMock);
     month = 10;
     year = 2015;
-    bankTransactionList = new ArrayList<BankTransaction>();
+    bankTransactionList = new ArrayList<>();
     when(bankTransactionDaoMock.findAllByOrderByTransactiondateDesc()).thenReturn(bankTransactionList);
   }
 

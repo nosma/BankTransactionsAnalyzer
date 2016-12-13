@@ -1,40 +1,36 @@
 package life.web.controller;
 
+import life.database.dao.BankTransactionDao;
+import life.database.dao.MidataTransactionDao;
+import life.database.dao.MonthStatDao;
+import life.database.model.BankTransaction;
+import life.database.model.MidataTransaction;
+import life.database.model.MonthStat;
+import life.util.BankTransactionUtil;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.text.DecimalFormat;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
-import javax.inject.Named;
-
-import life.database.dao.BankTransactionDao;
-import life.database.dao.MonthStatDao;
-import life.database.model.BankTransaction;
-import life.database.model.MonthStat;
-import life.util.BankTransactionUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 @Named
 public class BankService implements BankInterface {
 
-  private static final Logger log = LoggerFactory.getLogger(BankService.class);
-
-  @Value("${transactions.directory}")
-  public String inputDirectory;
-
   private MonthStatDao monthStatDao;
   private BankTransactionDao bankTransactionDao;
+  private MidataTransactionDao midataTransactionDao;
   private BankTransactionUtil bankTransactionUtil;
 
   public BankService() {
   }
 
-  @Autowired
-  public BankService(MonthStatDao monthStatDao, BankTransactionDao bankTransactionDao) {
+  @Inject
+  public BankService(MonthStatDao monthStatDao, BankTransactionDao bankTransactionDao, MidataTransactionDao midataTransactionDao) {
     this.monthStatDao = monthStatDao;
     this.bankTransactionDao = bankTransactionDao;
+    this.midataTransactionDao = midataTransactionDao;
     bankTransactionUtil = new BankTransactionUtil();
   }
 
@@ -46,7 +42,7 @@ public class BankService implements BankInterface {
 
   @Override
   public List<TableObject> getMonthlyExpensesList(int monthNumber, int yearNumber) {
-    List<BankTransaction> bankTransactionList = new ArrayList<BankTransaction>();
+    List<BankTransaction> bankTransactionList = new ArrayList<>();
     for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
       if ((bankTransaction.getTransactiondate().getMonthValue() == monthNumber) &&
           (bankTransaction.getTransactiondate().getYear() == yearNumber) &&
@@ -59,7 +55,7 @@ public class BankService implements BankInterface {
 
   @Override
   public List<TableObject> getMonthlyIncomeList(int monthNumber, int yearNumber) {
-    List<BankTransaction> bankTransactionList = new ArrayList<BankTransaction>();
+    List<BankTransaction> bankTransactionList = new ArrayList<>();
     for (BankTransaction bankTransaction : bankTransactionDao.findAllByOrderByTransactiondateDesc()) {
       if ((bankTransaction.getTransactiondate().getMonthValue() == monthNumber) &&
           (bankTransaction.getTransactiondate().getYear() == yearNumber) &&
@@ -83,7 +79,7 @@ public class BankService implements BankInterface {
     }
   }
 
-  public void setMonthStat(BankTransaction bankTransaction) {
+  void setMonthStat(BankTransaction bankTransaction) {
     DecimalFormat decimalFormat = new DecimalFormat("#.00");
     double income = 0;
     double expense = 0;
@@ -115,6 +111,11 @@ public class BankService implements BankInterface {
     }
   }
 
+  void saveMidata(List<MidataTransaction> transactions) {
+    for (MidataTransaction transaction : transactions) {
+      midataTransactionDao.save(transaction);
+    }
   }
+}
 
 

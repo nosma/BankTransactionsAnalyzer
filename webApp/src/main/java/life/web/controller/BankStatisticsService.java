@@ -1,8 +1,5 @@
 package life.web.controller;
 
-import java.util.Collections;
-import java.util.List;
-
 import life.database.dao.BankTransactionDao;
 import life.database.dao.MonthStatDao;
 import life.database.model.BankTransaction;
@@ -12,17 +9,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class BankStatisticsService implements BankStatisticsInterface {
 
     private static final Logger log = LoggerFactory.getLogger(BankStatisticsService.class);
 
-
     @Value("${initial.balance}")
-    public double initialBalance;
+    private double initialBalance;
+
     private final MonthStatDao monthStatDao;
     private final BankTransactionDao bankTransactionDao;
 
