@@ -5,11 +5,11 @@
       <div class="col-md-3">
         <h3>Select files</h3>
         <div ng-show="uploader.isHTML5">
-          <form method="POST" enctype="multipart/form-data" action="/api/upload/transactions">
-            Multiple
-            <input type="file" nv-file-select="" uploader="uploader" multiple/><br/>
-            Single
-            <input type="file" nv-file-select="" uploader="uploader"/>
+          <form method="POST" enctype="multipart/form-data">
+            Transaction Files
+            <input type="file" nv-file-select uploader="uploader" multiple/>
+            Midata Files
+            <input type="file" nv-file-select uploader="uploader" multiple/>
           </form>
         </div>
       </div>
