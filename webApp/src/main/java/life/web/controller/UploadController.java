@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.List;
 
@@ -69,16 +71,35 @@ public class UploadController {
   }
 
   public File getFileFromMultipart(MultipartFile multipartFile) {
-    String pathname = multipartFile.getOriginalFilename();
+    String path = inputDirectory + File.separator;
+    String pathToFile = path + multipartFile.getOriginalFilename();
+    if (Files.notExists(Paths.get(pathToFile))) {
+      createPathAndFile(path, pathToFile);
+      writeFile(multipartFile, pathToFile);
+    } else {
+      writeFile(multipartFile, pathToFile);
+    }
+    return new File(pathToFile);
+  }
+
+  private void createPathAndFile(String path, String pathToFile) {
+    try {
+      Files.createDirectories(Paths.get(path));
+      Files.createFile(Paths.get(pathToFile));
+    } catch (IOException e) {
+      log.error("Error while creating path and file: " + e);
+    }
+  }
+
+  private void writeFile(MultipartFile multipartFile, String pathToFile) {
     FileOutputStream outputStream;
     try {
-      outputStream = new FileOutputStream(pathname);
+      outputStream = new FileOutputStream(pathToFile);
       outputStream.write(multipartFile.getBytes());
       outputStream.close();
     } catch (IOException e) {
-      log.error("", e);
+      log.error("Error while writing to file: " + e);
     }
-    return new File(pathname);
   }
 
 }

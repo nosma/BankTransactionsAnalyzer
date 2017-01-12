@@ -32,6 +32,7 @@ public class MidataCsvParserTest {
                         "Arranged overdraft limit,06/09/2016,£0.00";
 
     MockMultipartFile mockMidataFile = new MockMultipartFile(fileName, fileName, "text/plain", midataData.getBytes());
+    uploadController.inputDirectory = "input_files";
     mFile = uploadController.getFileFromMultipart(mockMidataFile);
   }
 
