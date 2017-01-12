@@ -2,13 +2,13 @@ package life.file.parser;
 
 import life.database.model.BankTransaction;
 import life.file.DateUtilsImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,16 +29,39 @@ public class StatementCsvParser extends CsvParser {
    */
   @Override
   public List<BankTransaction> parse(File file) throws IOException, ParseException, java.text.ParseException {
-    List<BankTransaction> bankTransactions = new ArrayList<>();
+    List<BankTransaction> transactionList = new ArrayList<>();
+    FileInputStream fileInputStream = new FileInputStream(file);
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(fileInputStream))) {
+      String line;
+      while((line = br.readLine()) != null){
+        if (isStatementLine(line)){
+          transactionList.add(new BankTransaction(
+              getTransactionDate(line),
+              getDescription(line),
+              getCost(line)
+          ));
+        }
+      }
+    }
+    return transactionList;
+  }
 
-    read(new FileInputStream(file), (rowNumber, cells) ->
-      bankTransactions.add(
-          new BankTransaction(
-            dateUtils.convertTextToDate(cells[0]),
-            cells[1],
-            Double.parseDouble(cells[2])))
-    );
-    return bankTransactions;
+  private Double getCost(String line) {
+    return Double.valueOf(line.substring(StringUtils.ordinalIndexOf(line, ",", 2)+1,
+        line.length()));
+  }
+
+  private String getDescription(String line) {
+    return line.substring(StringUtils.ordinalIndexOf(line, ",", 1) + 1,
+        StringUtils.ordinalIndexOf(line, ",", 2));
+  }
+
+  private LocalDate getTransactionDate(String line) {
+    return dateUtils.convertTextToDate(line.substring(0, line.indexOf(",")));
+  }
+
+  private boolean isStatementLine(String line) {
+    return StringUtils.countMatches(line, ",") == 2;
   }
 
 }
