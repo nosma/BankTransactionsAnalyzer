@@ -82,10 +82,10 @@ app.controller('transactions', function ($scope, $resource, $http, $route, TagSe
     TagService.setTransactionTags({
       description: tagDescription,
       tags: getTagsFromObjectArray(transactionTags)
-    }).then(function successCallback(response) {
-        $scope.gridOptions.data = response.data;
-        $route.refresh;
-      $('#TransactionActions').modal('hide');
+    }).then(function successCallback() {
+        $scope.tableInit();
+        $scope.transactionTags = [];
+        $('#TransactionActions').modal('hide');
       }, function errorCallback(response) {
         console.log("Error while retrieving results: " + response.data);
       });
