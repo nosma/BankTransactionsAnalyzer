@@ -26,6 +26,13 @@ public class BankingFacade {
 
   void saveMidata(List<MidataTransaction> transactions) {
     bankService.saveMidata(transactions);
+    for (MidataTransaction midataTransaction : transactions) {
+      bankService.setMonthStat(new BankTransaction(
+          midataTransaction.getDate(),
+          midataTransaction.getDescription(),
+          midataTransaction.getCost()
+      ));
+    }
   }
 
 }

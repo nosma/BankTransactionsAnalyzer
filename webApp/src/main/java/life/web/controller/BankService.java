@@ -1,5 +1,12 @@
 package life.web.controller;
 
+import java.text.DecimalFormat;
+import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import life.database.dao.BankTransactionDao;
 import life.database.dao.MidataTransactionDao;
 import life.database.dao.MonthStatDao;
@@ -7,13 +14,6 @@ import life.database.model.BankTransaction;
 import life.database.model.MidataTransaction;
 import life.database.model.MonthStat;
 import life.util.BankTransactionUtil;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.text.DecimalFormat;
-import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.List;
 
 @Named
 public class BankService implements BankInterface {
@@ -112,8 +112,15 @@ public class BankService implements BankInterface {
   }
 
   void saveMidata(List<MidataTransaction> transactions) {
-    for (MidataTransaction transaction : transactions) {
+    for(MidataTransaction transaction : transactions) {
       midataTransactionDao.save(transaction);
+      if(bankTransactionDao.findByTransactiondateAndDescriptionAndCost(
+          transaction.getDate(),
+          transaction.getDescription(),
+          transaction.getCost()
+      ).size() == 0) {
+        bankTransactionDao.save(new BankTransaction(transaction.getDate(), transaction.getDescription(), transaction.getCost()));
+      }
     }
   }
 }
