@@ -28,10 +28,6 @@ public class BankTransaction implements Serializable {
   @Column(name = "COST", nullable = false)
   private Double cost;
 
-//  @Column(name = "TAGS", nullable = false)
-//  @ElementCollection
-//  private List<String> tags;
-
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "TAG_RULE_ID")
   @JsonFormat(shape=JsonFormat.Shape.OBJECT)
