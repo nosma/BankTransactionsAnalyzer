@@ -2,12 +2,12 @@ package life.web.controller;
 
 import life.database.model.BankTransaction;
 import life.database.model.MidataTransaction;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.List;
 
-@Named
+@Component
 public class BankingFacade {
 
   private BankService bankService;
