@@ -66,9 +66,9 @@ public class BankService implements BankInterface {
     return bankTransactionUtil.getTableObjectList(bankTransactionList);
   }
 
-  @Override
-  public void saveBankTransactions(List<BankTransaction> bankTransactions) {
+  private void saveBankTransactions(List<BankTransaction> bankTransactions) {
     for (BankTransaction bankTransaction : bankTransactions) {
+      // todo improve the efficiency of the below
       List<BankTransaction> transactions = bankTransactionDao.findByTransactiondateAndDescriptionAndCost(
           bankTransaction.getTransactiondate(),
           bankTransaction.getDescription(),
@@ -79,7 +79,34 @@ public class BankService implements BankInterface {
     }
   }
 
-  void setMonthStat(BankTransaction bankTransaction) {
+  @Override
+  public void saveTransactions(List<BankTransaction> bankTransactions) {
+    saveBankTransactions(bankTransactions);
+    deleteMonthStat();
+    for (BankTransaction bankTransaction : bankTransactions) {
+      setMonthStat(bankTransaction);
+    }
+  }
+
+  @Override
+  public void saveMidata(List<MidataTransaction> transactions) {
+    for(MidataTransaction transaction : transactions) {
+      midataTransactionDao.save(transaction);
+      if(bankTransactionDao.findByTransactiondateAndDescriptionAndCost(
+          transaction.getDate(),
+          transaction.getDescription(),
+          transaction.getCost()
+      ).size() == 0) {
+        bankTransactionDao.save(new BankTransaction(transaction.getDate(), transaction.getDescription(), transaction.getCost()));
+      }
+    }
+  }
+
+  private void deleteMonthStat(){
+    monthStatDao.deleteAll();;
+  }
+
+  private void setMonthStat(BankTransaction bankTransaction) {
     DecimalFormat decimalFormat = new DecimalFormat("#.00");
     double income = 0;
     double expense = 0;
@@ -111,18 +138,6 @@ public class BankService implements BankInterface {
     }
   }
 
-  void saveMidata(List<MidataTransaction> transactions) {
-    for(MidataTransaction transaction : transactions) {
-      midataTransactionDao.save(transaction);
-      if(bankTransactionDao.findByTransactiondateAndDescriptionAndCost(
-          transaction.getDate(),
-          transaction.getDescription(),
-          transaction.getCost()
-      ).size() == 0) {
-        bankTransactionDao.save(new BankTransaction(transaction.getDate(), transaction.getDescription(), transaction.getCost()));
-      }
-    }
-  }
 }
 
 

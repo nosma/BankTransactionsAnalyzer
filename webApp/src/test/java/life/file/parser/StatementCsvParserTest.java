@@ -1,6 +1,6 @@
 package life.file.parser;
 
-import life.web.controller.BankingFacade;
+import life.web.controller.BankService;
 import life.web.controller.UploadController;
 import org.springframework.mock.web.MockMultipartFile;
 import org.testng.annotations.AfterMethod;
@@ -22,7 +22,7 @@ public class StatementCsvParserTest {
   public void setUp() throws Exception {
     UploadController uploadController = new UploadController(
         mock(FileParser.class),
-        mock(BankingFacade.class));
+        mock(BankService.class));
     csvParser = new StatementCsvParser();
     String sFile = "Statement.csv";
     String statementData = "2015-12-03,TFL.GOV.UK/CP TFL TRAVEL CH,-4.40\n" +

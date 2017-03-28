@@ -20,7 +20,7 @@ public class UploadControllerTest {
   public void setUp() throws Exception {
     uploadController = new UploadController(
         mock(MidataCsvParser.class),
-        mock(BankingFacade.class));
+        mock(BankService.class));
 
     String midataData = "Date,Type,Merchant/Description,Debit/Credit,Balance\n" +
         "02/08/2016,DD,AAA BBBBB,-£50.00,+£50.00\n" +
