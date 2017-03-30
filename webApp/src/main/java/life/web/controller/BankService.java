@@ -82,14 +82,24 @@ public class BankService implements BankInterface {
   @Override
   public void saveTransactions(List<BankTransaction> bankTransactions) {
     saveBankTransactions(bankTransactions);
+    updateMonthStats();
+  }
+
+
+  @Override
+  public void saveMidata(List<MidataTransaction> transactions) {
+    saveMidataTransactions(transactions);
+    updateMonthStats();
+  }
+
+  private void updateMonthStats() {
     deleteMonthStat();
-    for (BankTransaction bankTransaction : bankTransactions) {
+    for(BankTransaction bankTransaction : bankTransactionDao.findAll()) {
       setMonthStat(bankTransaction);
     }
   }
 
-  @Override
-  public void saveMidata(List<MidataTransaction> transactions) {
+  private void saveMidataTransactions(List<MidataTransaction> transactions) {
     for(MidataTransaction transaction : transactions) {
       midataTransactionDao.save(transaction);
       if(bankTransactionDao.findByTransactiondateAndDescriptionAndCost(
@@ -103,7 +113,7 @@ public class BankService implements BankInterface {
   }
 
   private void deleteMonthStat(){
-    monthStatDao.deleteAll();;
+    monthStatDao.deleteAll();
   }
 
   private void setMonthStat(BankTransaction bankTransaction) {
