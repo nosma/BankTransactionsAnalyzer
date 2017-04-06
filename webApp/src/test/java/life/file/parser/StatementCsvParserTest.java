@@ -1,13 +1,13 @@
 package life.file.parser;
 
-import life.web.controller.BankService;
+import java.io.File;
+
+import life.web.controller.StorageWriter;
 import life.web.controller.UploadController;
 import org.springframework.mock.web.MockMultipartFile;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import java.io.File;
 
 import static org.mockito.Mockito.mock;
 import static org.testng.Assert.assertEquals;
@@ -22,7 +22,7 @@ public class StatementCsvParserTest {
   public void setUp() throws Exception {
     UploadController uploadController = new UploadController(
         mock(FileParser.class),
-        mock(BankService.class));
+        mock(StorageWriter.class));
     csvParser = new StatementCsvParser();
     String sFile = "Statement.csv";
     String statementData = "2015-12-03,TFL.GOV.UK/CP TFL TRAVEL CH,-4.40\n" +

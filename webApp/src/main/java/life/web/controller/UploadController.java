@@ -29,12 +29,12 @@ public class UploadController {
   private static final String STATEMENT = "statement";
   private static final String MIDATA = "midata";
   private FileParser fileParser;
-  private BankService bankService;
+  private StorageWriter storageWriter;
 
   @Inject
-  public UploadController(FileParser fileParser, BankService bankService) {
+  public UploadController(FileParser fileParser, StorageWriter storageWriter) {
     this.fileParser = fileParser;
-    this.bankService = bankService;
+    this.storageWriter = storageWriter;
   }
 
   @RequestMapping(value = "/transactions", method = RequestMethod.POST)
@@ -60,13 +60,13 @@ public class UploadController {
 
   private boolean saveMidata(File file) throws IOException, ParseException {
     List<MidataTransaction> midataTransactions = new MidataCsvParser().parse(file);
-    bankService.saveMidata(midataTransactions);
+    storageWriter.saveMidata(midataTransactions);
     return midataTransactions.size() > 0;
   }
 
   private boolean saveStatements(File file) throws IOException, ParseException {
     List<BankTransaction> bankTransactions = new StatementCsvParser().parse(file);
-    bankService.saveTransactions(bankTransactions);
+    storageWriter.saveTransactions(bankTransactions);
     return bankTransactions.size() > 0;
   }
 
