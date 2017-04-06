@@ -7,7 +7,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "MIDATATRANSACTION")
+@Table(name = "MIDATATRANSACTION"
+,uniqueConstraints = @UniqueConstraint(columnNames = {"date", "type", "description", "cost", "balance"})
+)
 public class MidataTransaction implements Serializable {
 
   @Id
