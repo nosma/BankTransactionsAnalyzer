@@ -10,7 +10,9 @@ import com.beust.jcommander.internal.Lists;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-@Table(name = "BANKTRANSACTION")
+@Table(name = "BANKTRANSACTION"
+,uniqueConstraints = @UniqueConstraint(columnNames = {"transactiondate","description","cost"})
+)
 public class BankTransaction implements Serializable {
 
   @Id
