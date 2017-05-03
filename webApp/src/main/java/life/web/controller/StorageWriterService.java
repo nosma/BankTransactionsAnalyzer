@@ -55,7 +55,7 @@ public class StorageWriterService implements StorageWriter {
       try {
         bankTransactionDao.save(transaction);
       } catch(Exception e) {
-        log.error("Duplicate transaction: " + transaction.toString() + e.getMessage());
+        log.error("Duplicate statement transaction: " + transaction.toString());
       }
     }
   }
@@ -69,7 +69,7 @@ public class StorageWriterService implements StorageWriter {
             midataTransaction.getCost()
         ));
       } catch(Exception e) {
-        log.error("Duplicate transaction: " + midataTransaction.toString() + e.getMessage());
+        log.error("Duplicate Midata statement transaction: " + midataTransaction.toString());
       }
     }
   }
@@ -79,7 +79,7 @@ public class StorageWriterService implements StorageWriter {
       try {
         midataTransactionDao.save(midataTransaction);
       } catch(Exception e) {
-        log.error("Duplicate transaction: " + midataTransaction.toString() + e.getMessage());
+        log.error("Duplicate Midata transaction: " + midataTransaction.toString());
       }
     }
   }
