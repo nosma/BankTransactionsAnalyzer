@@ -1,19 +1,15 @@
 package life.web.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
+
 import life.database.dao.BankTransactionDao;
 import life.database.dao.MidataTransactionDao;
 import life.database.dao.MonthStatDao;
 import life.database.model.BankTransaction;
-import life.database.model.MidataTransaction;
-import life.database.model.MonthStat;
 import life.util.BankTransactionUtil;
 import org.springframework.stereotype.Component;
-
-import javax.inject.Inject;
-import java.text.DecimalFormat;
-import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class BankService implements BankInterface {
