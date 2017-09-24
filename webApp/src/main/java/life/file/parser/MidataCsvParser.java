@@ -1,18 +1,23 @@
 package life.file.parser;
 
-import life.database.model.MidataTransaction;
-import life.file.DateUtilsImpl;
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.*;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import life.database.model.MidataTransaction;
+import life.file.DateUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+
+import static life.file.parser.DatePattern.MIDATA_DATE_PATTERN;
+
 public class MidataCsvParser extends CsvParser {
 
-  private DateUtilsImpl dateUtils = new DateUtilsImpl();
+  private static final Logger logger = Logger.getLogger(MidataCsvParser.class);
+  private DateUtils dateUtils = new DateUtils();
+  private final String datePattern = MIDATA_DATE_PATTERN.getDatePattern();
 
   /**
    * Midata parser expects to have 5 headers
@@ -76,7 +81,13 @@ public class MidataCsvParser extends CsvParser {
   }
 
   private LocalDate getDate(String line) {
-    return dateUtils.midataTextToDate(line.substring(0, line.indexOf(",")), "dd/MM/yyyy");
+    LocalDate midataDate = null;
+    try {
+      midataDate = dateUtils.getLocalDate(line.substring(0, line.indexOf(",")), datePattern);
+    } catch(Exception e) {
+      logger.error("Midata Date Format Exception for date '" + line + "' and pattern " + datePattern);
+    }
+    return midataDate;
   }
 
 }

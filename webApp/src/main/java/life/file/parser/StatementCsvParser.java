@@ -1,22 +1,27 @@
 package life.file.parser;
 
-import life.database.model.BankTransaction;
-import life.file.DateUtilsImpl;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.expression.ParseException;
-import org.springframework.stereotype.Component;
-
-import javax.transaction.Transactional;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import javax.transaction.Transactional;
+
+import life.database.model.BankTransaction;
+import life.file.DateUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.expression.ParseException;
+import org.springframework.stereotype.Component;
+
+import static life.file.parser.DatePattern.STATEMENT_DATE_PATTERN;
 
 @Component
 @Transactional
 public class StatementCsvParser extends CsvParser {
 
-  private DateUtilsImpl dateUtils = new DateUtilsImpl();
+  private static final Logger logger = Logger.getLogger(StatementCsvParser.class);
+  private DateUtils dateUtils = new DateUtils();
+  private final String statementDatePattern = STATEMENT_DATE_PATTERN.getDatePattern();
 
   /**
    * Statement parser expect to have 3 headers
@@ -57,7 +62,13 @@ public class StatementCsvParser extends CsvParser {
   }
 
   private LocalDate getTransactionDate(String line) {
-    return dateUtils.convertTextToDate(line.substring(0, line.indexOf(",")));
+    LocalDate statementDate = null;
+    try {
+      statementDate = dateUtils.getLocalDate(line.substring(0, line.indexOf(",")), statementDatePattern);
+    } catch(Exception e) {
+      logger.error("Statement Date Format Exception for date '" + line + "' and pattern " + statementDatePattern);
+    }
+    return statementDate;
   }
 
   private boolean isStatementLine(String line) {
