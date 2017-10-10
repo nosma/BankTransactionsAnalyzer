@@ -2,7 +2,11 @@ package life.file.parser;
 
 import java.io.File;
 
-import life.web.controller.StorageWriter;
+import life.database.dao.BankTransactionDao;
+import life.database.dao.MidataTransactionDao;
+import life.database.dao.MonthStatDao;
+import life.web.controller.MidataWriterService;
+import life.web.controller.StatementWriterService;
 import life.web.controller.UploadController;
 import org.springframework.mock.web.MockMultipartFile;
 import org.testng.annotations.AfterMethod;
@@ -17,12 +21,20 @@ public class StatementCsvParserTest {
 
   private StatementCsvParser csvParser;
   private File file;
+  private StatementWriterService statementWriter;
+  private MidataWriterService midataWriter;
+  private BankTransactionDao bankTransactionDao;
+  private MidataTransactionDao midataTransactionDao;
+  private MonthStatDao monthStatDao;
 
   @BeforeMethod
   public void setUp() throws Exception {
-    UploadController uploadController = new UploadController(
-        mock(FileParser.class),
-        mock(StorageWriter.class));
+    bankTransactionDao = mock(BankTransactionDao.class);
+    midataTransactionDao = mock(MidataTransactionDao.class);
+    monthStatDao = mock(MonthStatDao.class);
+    statementWriter = new StatementWriterService(bankTransactionDao, monthStatDao);
+    midataWriter = new MidataWriterService(bankTransactionDao, midataTransactionDao, monthStatDao);
+    UploadController uploadController = new UploadController(mock(FileParser.class), statementWriter, midataWriter);
     csvParser = new StatementCsvParser();
     String sFile = "Statement.csv";
     String statementData = "2015-12-03,TFL.GOV.UK/CP TFL TRAVEL CH,-4.40\n" +
