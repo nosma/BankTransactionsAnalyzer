@@ -1,5 +1,14 @@
 package life.web.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.ParseException;
+import java.util.List;
+import javax.inject.Inject;
+
 import life.database.model.BankTransaction;
 import life.database.model.MidataTransaction;
 import life.file.parser.FileParser;
@@ -10,49 +19,43 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.inject.Inject;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.text.ParseException;
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/upload")
 public class UploadController {
 
-  private Logger log = Logger.getLogger(UploadController.class.getName());
-
-  @Value("${transactions.directory}")
-  public String inputDirectory;
-
   private static final String STATEMENT = "statement";
   private static final String MIDATA = "midata";
+  @Value("${transactions.directory}")
+  public String inputDirectory;
+  private Logger log = Logger.getLogger(UploadController.class.getName());
   private FileParser fileParser;
-  private BankingFacade bankingFacade;
+  private StatementWriter statementWriter;
+  private MidataWriter midataWriter;
 
   @Inject
-  public UploadController(FileParser fileParser, BankingFacade bankingFacade) {
+  public UploadController(FileParser fileParser, StatementWriter statementWriter, MidataWriter midataWriter) {
     this.fileParser = fileParser;
-    this.bankingFacade = bankingFacade;
+    this.statementWriter = statementWriter;
+    this.midataWriter = midataWriter;
   }
 
   @RequestMapping(value = "/transactions", method = RequestMethod.POST)
   @ResponseBody
-  public boolean uploadTransactions(@RequestParam("file") MultipartFile multipartFile) throws IOException, ParseException {
+  public void uploadTransactions(@RequestParam("file") MultipartFile multipartFile) throws IOException, ParseException {
     File file = getFileFromMultipart(multipartFile);
-    if (fileParser.canParse(file)) {
-      return fileUploadRouter(file);
+    if(fileParser.canParse(file)) {
+      fileUploadRouter(file);
+    } else {
+      throw new UnsupportedOperationException("File type not supported: " + multipartFile.getOriginalFilename());
     }
-    throw new UnsupportedOperationException("File type not support: " + multipartFile.getOriginalFilename());
   }
 
   private boolean fileUploadRouter(File uploadedFile) throws IOException, ParseException {
     String fileInLowerCase = uploadedFile.getName().toLowerCase();
     boolean uploaded = false;
-    if (fileInLowerCase.contains(STATEMENT)) {
+    if(fileInLowerCase.contains(STATEMENT)) {
       uploaded = saveStatements(uploadedFile);
-    } else if (fileInLowerCase.contains(MIDATA)) {
+    } else if(fileInLowerCase.contains(MIDATA)) {
       uploaded = saveMidata(uploadedFile);
     }
     return uploaded;
@@ -60,20 +63,20 @@ public class UploadController {
 
   private boolean saveMidata(File file) throws IOException, ParseException {
     List<MidataTransaction> midataTransactions = new MidataCsvParser().parse(file);
-    bankingFacade.saveMidata(midataTransactions);
+    midataWriter.processTransactions(midataTransactions);
     return midataTransactions.size() > 0;
   }
 
   private boolean saveStatements(File file) throws IOException, ParseException {
-    List<BankTransaction> bankTransactions = new StatementCsvParser().parse(file);
-    bankingFacade.saveTransactions(bankTransactions);
-    return bankTransactions.size() > 0;
+    List<BankTransaction> statements = new StatementCsvParser().parse(file);
+    statementWriter.processTransactions(statements);
+    return statements.size() > 0;
   }
 
   public File getFileFromMultipart(MultipartFile multipartFile) {
     String path = inputDirectory + File.separator;
     String pathToFile = path + multipartFile.getOriginalFilename();
-    if (Files.notExists(Paths.get(pathToFile))) {
+    if(Files.notExists(Paths.get(pathToFile))) {
       createPathAndFile(path, pathToFile);
       writeFile(multipartFile, pathToFile);
     } else {
@@ -86,7 +89,7 @@ public class UploadController {
     try {
       Files.createDirectories(Paths.get(path));
       Files.createFile(Paths.get(pathToFile));
-    } catch (IOException e) {
+    } catch(IOException e) {
       log.error("Error while creating path and file: " + e);
     }
   }
@@ -97,7 +100,7 @@ public class UploadController {
       outputStream = new FileOutputStream(pathToFile);
       outputStream.write(multipartFile.getBytes());
       outputStream.close();
-    } catch (IOException e) {
+    } catch(IOException e) {
       log.error("Error while writing to file: " + e);
     }
   }

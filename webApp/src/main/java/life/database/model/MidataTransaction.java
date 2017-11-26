@@ -7,13 +7,15 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "MIDATATRANSACTION")
+@Table(name = "MIDATATRANSACTION"
+,uniqueConstraints = @UniqueConstraint(columnNames = {"date", "type", "description", "cost", "balance"})
+)
 public class MidataTransaction implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "ID")
-  private long id;
+  private Long id;
 
   @Column(name = "DATE", nullable = false)
   @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
@@ -89,23 +91,20 @@ public class MidataTransaction implements Serializable {
 
     MidataTransaction that = (MidataTransaction)o;
 
-    if(id != that.id) return false;
     if(Double.compare(that.cost, cost) != 0) return false;
     if(Double.compare(that.balance, balance) != 0) return false;
-    if(date != null ? !date.equals(that.date) : that.date != null) return false;
-    if(type != null ? !type.equals(that.type) : that.type != null) return false;
-    return description != null ? description.equals(that.description) : that.description == null;
-
+    if(!date.equals(that.date)) return false;
+    if(!type.equals(that.type)) return false;
+    return description.equals(that.description);
   }
 
   @Override
   public int hashCode() {
     int result;
     long temp;
-    result = (int)(id ^ (id >>> 32));
-    result = 31 * result + (date != null ? date.hashCode() : 0);
-    result = 31 * result + (type != null ? type.hashCode() : 0);
-    result = 31 * result + (description != null ? description.hashCode() : 0);
+    result = date.hashCode();
+    result = 31 * result + type.hashCode();
+    result = 31 * result + description.hashCode();
     temp = Double.doubleToLongBits(cost);
     result = 31 * result + (int)(temp ^ (temp >>> 32));
     temp = Double.doubleToLongBits(balance);
@@ -116,8 +115,7 @@ public class MidataTransaction implements Serializable {
   @Override
   public String toString() {
     return "MidataTransaction{" +
-               "id=" + id +
-               ", date=" + date +
+               "date=" + date +
                ", type='" + type + '\'' +
                ", description='" + description + '\'' +
                ", cost=" + cost +

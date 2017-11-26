@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 import static org.testng.Assert.assertEquals;
 
-public class DateUtilsImplTest {
+public class DateUtilsTest {
 
   private DateUtilsImpl dateUtils;
 
@@ -42,7 +42,6 @@ public class DateUtilsImplTest {
     LocalDate localDate = dateUtils.getMidataDate("2016-12-31");
     assertEquals(null, localDate);
   }
-
 
 }
 
