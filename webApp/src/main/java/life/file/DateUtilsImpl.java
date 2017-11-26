@@ -1,27 +1,39 @@
 package life.file;
 
+import org.apache.log4j.Logger;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class DateUtilsImpl {
 
-  private final String[] patterns = new String[]{"yyyy-MM-dd", "M/dd/yy", "M/d/yy", "MM/dd/yy", "MM/dd/yyyy", "dd/MM/yyyy"};
+public class DateUtilsImpl implements DateUtils {
 
-  public LocalDate convertTextToDate(String date) {
-    for(String pattern : patterns) {
-      try {
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern(pattern));
-      } catch(DateTimeParseException ignored) {}
-    }
-    throw new IllegalArgumentException("Not able to parse the date for all patterns given: " + date);
+  private static final String MIDATA_DATE_PATTERN = "dd/MM/yyyy";
+  private static final String STATEMENT_DATE_PATTERN = "yyyy-MM-dd";
+  private static final Logger logger = Logger.getLogger(DateUtilsImpl.class);
+
+  public DateUtilsImpl() {
   }
 
-  public LocalDate midataTextToDate(String date, String pattern) {
+  public LocalDate getStatementDate(String date) {
+    LocalDate statementDate = null;
     try {
-      return LocalDate.parse(date, DateTimeFormatter.ofPattern(pattern));
-    } catch(DateTimeParseException ignored) {
+      statementDate = LocalDate.parse(date, DateTimeFormatter.ofPattern(STATEMENT_DATE_PATTERN));
+    } catch (DateTimeParseException exception) {
+      logger.error("Not able to parse the statement date " + date + " for pattern given: " + STATEMENT_DATE_PATTERN + exception);
     }
-    throw new IllegalArgumentException("Not able to parse the date for all patterns given: " + date);
+    return statementDate;
   }
+
+  public LocalDate getMidataDate(String date) {
+    LocalDate midataDate = null;
+    try {
+      midataDate = LocalDate.parse(date, DateTimeFormatter.ofPattern(MIDATA_DATE_PATTERN));
+    } catch(DateTimeParseException exception) {
+      logger.error("Not able to parse the midata date " + date + " for pattern given: " + MIDATA_DATE_PATTERN + exception);
+    }
+    return midataDate;
+  }
+
 }

@@ -1,9 +1,5 @@
 package life.web.controller;
 
-import java.text.DecimalFormat;
-import java.time.YearMonth;
-import java.util.List;
-
 import life.database.dao.BankTransactionDao;
 import life.database.dao.MidataTransactionDao;
 import life.database.dao.MonthStatDao;
@@ -13,6 +9,10 @@ import life.database.model.MonthStat;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.text.DecimalFormat;
+import java.time.YearMonth;
+import java.util.List;
 
 @Service
 public class StorageWriterService implements StorageWriter {
@@ -63,11 +63,12 @@ public class StorageWriterService implements StorageWriter {
   private void saveMidataBankTransactions(List<MidataTransaction> midataTransactions) {
     for(MidataTransaction midataTransaction : midataTransactions) {
       try {
-        bankTransactionDao.save(new BankTransaction(
+        BankTransaction bankTransaction = new BankTransaction(
             midataTransaction.getDate(),
             midataTransaction.getDescription(),
             midataTransaction.getCost()
-        ));
+        );
+        bankTransactionDao.save(bankTransaction);
       } catch(Exception e) {
         log.error("Duplicate Midata statement transaction: " + midataTransaction.toString());
       }

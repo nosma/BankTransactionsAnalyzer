@@ -76,7 +76,7 @@ public class MidataCsvParser extends CsvParser {
   }
 
   private LocalDate getDate(String line) {
-    return dateUtils.midataTextToDate(line.substring(0, line.indexOf(",")), "dd/MM/yyyy");
+    return dateUtils.getMidataDate(line.substring(0, line.indexOf(",")));
   }
 
 }
