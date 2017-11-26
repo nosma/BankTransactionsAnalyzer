@@ -13,6 +13,9 @@
 .idea/
 # if you remove the above rule, at least ignore the following:
 
+.db/*.*
+.input_files/*.*
+
 # User-specific stuff:
 # .idea/workspace.xml
 # .idea/tasks.xml
@@ -75,3 +78,5 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 
+.DS_Store
+input_files/
