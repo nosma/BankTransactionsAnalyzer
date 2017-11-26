@@ -1,46 +1,46 @@
 package com.fragmanos;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
-
-import life.file.DateUtils;
+import life.file.DateUtilsImpl;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static life.file.parser.DatePattern.*;
+import java.time.LocalDate;
+
 import static org.testng.Assert.assertEquals;
 
 public class DateUtilsTest {
 
-  private final String statementDatePattern = STATEMENT_DATE_PATTERN.getDatePattern();
-  private final String midataDatePattern = MIDATA_DATE_PATTERN.getDatePattern();
-  private DateUtils dateUtils;
-  private LocalDate expected;
+  private DateUtilsImpl dateUtils;
 
   @BeforeMethod
   public void setUp() throws Exception {
-    dateUtils = new DateUtils();
-    expected = LocalDate.of(2016, 12, 31);
+    dateUtils = new DateUtilsImpl();
   }
 
   @Test
-  public void testCorrectStatementDateFormat() throws Exception {
-    assertEquals(expected, dateUtils.getLocalDate("2016-12-31", statementDatePattern));
+  public void testCorrectStatementDate() throws Exception {
+    LocalDate localDate = dateUtils.getStatementDate("2016-12-31");
+    LocalDate expected = LocalDate.of(2016, 12, 31);
+    assertEquals(expected, localDate);
   }
 
-  @Test(expectedExceptions = DateTimeParseException.class)
-  public void testIncorrectStatementDateFormat() throws Exception {
-    assertEquals(expected, dateUtils.getLocalDate("31/12/2016", statementDatePattern));
+  @Test(expectedExceptionsMessageRegExp = "Not able to parse the statement date 31/12/2016 for pattern given: yyyy-MM-dd")
+  public void testWrongStatementDate() throws Exception {
+    LocalDate localDate = dateUtils.getStatementDate("31/12/2016");
+    assertEquals(null, localDate);
   }
 
   @Test
-  public void testCorrectMidataDateFormat() throws Exception {
-    assertEquals(expected, dateUtils.getLocalDate("31/12/2016", midataDatePattern));
+  public void testCorrectMidataDate() throws Exception {
+    LocalDate localDate = dateUtils.getMidataDate("31/12/2016");
+    LocalDate expected = LocalDate.of(2016, 12, 31);
+    assertEquals(expected, localDate);
   }
 
-  @Test(expectedExceptions = DateTimeParseException.class)
-  public void testIncorrectMidataDateFormat() throws Exception {
-    assertEquals(expected, dateUtils.getLocalDate("2016-12-31", midataDatePattern));
+  @Test(expectedExceptionsMessageRegExp = "Not able to parse the midata date 31/12/2016 for pattern given: dd/MM/yyyy")
+  public void testWrongMidataDate() throws Exception {
+    LocalDate localDate = dateUtils.getMidataDate("2016-12-31");
+    assertEquals(null, localDate);
   }
 
 }

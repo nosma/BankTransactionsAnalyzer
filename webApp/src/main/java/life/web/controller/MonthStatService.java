@@ -1,88 +1,25 @@
 package life.web.controller;
 
 import life.database.dao.BankTransactionDao;
-import life.database.dao.MidataTransactionDao;
 import life.database.dao.MonthStatDao;
 import life.database.model.BankTransaction;
-import life.database.model.MidataTransaction;
 import life.database.model.MonthStat;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.time.YearMonth;
-import java.util.List;
 
 @Service
-public class StorageWriterService implements StorageWriter {
+public class MonthStatService {
 
-  private Logger log = Logger.getLogger(StorageWriterService.class.getName());
-
-  private BankTransactionDao bankTransactionDao;
-  private MidataTransactionDao midataTransactionDao;
   private MonthStatDao monthStatDao;
+  private BankTransactionDao bankTransactionDao;
 
   @Autowired
-  public StorageWriterService(BankTransactionDao bankTransactionDao, MidataTransactionDao midataTransactionDao, MonthStatDao monthStatDao) {
-    this.bankTransactionDao = bankTransactionDao;
-    this.midataTransactionDao = midataTransactionDao;
+  public MonthStatService(MonthStatDao monthStatDao, BankTransactionDao bankTransactionDao) {
     this.monthStatDao = monthStatDao;
-  }
-
-  @Override
-  public void saveTransactions(List<BankTransaction> bankTransactions) {
-    saveBankTransactions(bankTransactions);
-    updateMonthStats();
-  }
-
-  @Override
-  public void saveMidata(List<MidataTransaction> midataTransactions) {
-    saveMidataTransactions(midataTransactions);
-    saveMidataBankTransactions(midataTransactions);
-    updateMonthStats();
-  }
-
-  private void updateMonthStats() {
-    deleteMonthStat();
-    for(BankTransaction bankTransaction : bankTransactionDao.findAll()) {
-      setMonthStat(bankTransaction);
-    }
-  }
-
-  private void saveBankTransactions(List<BankTransaction> bankTransactions) {
-    for(BankTransaction transaction : bankTransactions) {
-      try {
-        bankTransactionDao.save(transaction);
-      } catch(Exception e) {
-        log.error("Duplicate statement transaction: " + transaction.toString());
-      }
-    }
-  }
-
-  private void saveMidataBankTransactions(List<MidataTransaction> midataTransactions) {
-    for(MidataTransaction midataTransaction : midataTransactions) {
-      try {
-        BankTransaction bankTransaction = new BankTransaction(
-            midataTransaction.getDate(),
-            midataTransaction.getDescription(),
-            midataTransaction.getCost()
-        );
-        bankTransactionDao.save(bankTransaction);
-      } catch(Exception e) {
-        log.error("Duplicate Midata statement transaction: " + midataTransaction.toString());
-      }
-    }
-  }
-
-  private void saveMidataTransactions(List<MidataTransaction> midataTransactions) {
-    for(MidataTransaction midataTransaction : midataTransactions) {
-      try {
-        midataTransactionDao.save(midataTransaction);
-      } catch(Exception e) {
-        log.error("Duplicate Midata transaction: " + midataTransaction.toString());
-      }
-    }
+    this.bankTransactionDao = bankTransactionDao;
   }
 
   private void deleteMonthStat() {
@@ -121,4 +58,10 @@ public class StorageWriterService implements StorageWriter {
     }
   }
 
+  void updateMonthStats() {
+    deleteMonthStat();
+    for(BankTransaction bankTransaction : bankTransactionDao.findAll()) {
+      setMonthStat(bankTransaction);
+    }
+  }
 }
