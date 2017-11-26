@@ -57,7 +57,7 @@ public class StatementCsvParser extends CsvParser {
   }
 
   private LocalDate getTransactionDate(String line) {
-    return dateUtils.getStatementDate(line.substring(0, line.indexOf(",")));
+    return dateUtils.convertTextToDate(line.substring(0, line.indexOf(",")));
   }
 
   private boolean isStatementLine(String line) {
