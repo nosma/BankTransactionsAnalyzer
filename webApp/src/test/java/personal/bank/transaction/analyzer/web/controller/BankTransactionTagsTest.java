@@ -1,15 +1,15 @@
-package com.fragmanos;
+package personal.bank.transaction.analyzer.web.controller;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-
-import personal.bank.transaction.analyzer.database.dao.TagRuleDao;
-import personal.bank.transaction.analyzer.database.model.BankTransaction;
-import personal.bank.transaction.analyzer.database.model.TagRule;
 import org.mockito.Mock;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.collections.Lists;
+import personal.bank.transaction.analyzer.database.dao.TagRuleDao;
+import personal.bank.transaction.analyzer.database.model.BankTransaction;
+import personal.bank.transaction.analyzer.database.model.TagRule;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -48,7 +48,7 @@ public class BankTransactionTagsTest {
 
   @Test
   public void testNumberOfTransactionsThatHaveTags() throws Exception {
-    assertEquals(4, bankTransactionList.stream().filter(a -> a.containTags()).count());
+    assertEquals(4, bankTransactionList.stream().filter(BankTransaction::containTags).count());
   }
 
   @Test

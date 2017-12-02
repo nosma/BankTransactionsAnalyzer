@@ -1,24 +1,23 @@
-package com.fragmanos;
+package personal.bank.transaction.analyzer.util;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import personal.bank.transaction.analyzer.database.model.BankTransaction;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import personal.bank.transaction.analyzer.database.model.BankTransaction;
-import personal.bank.transaction.analyzer.util.BankTransactionUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 
 public class BankTransactionUtilTest {
 
   @Autowired
-  BankTransactionUtil bankTransactionUtil;
+  private BankTransactionUtil bankTransactionUtil;
 
-  List<BankTransaction> bankTransactionList;
-  List<BankTransaction> databaseTransactionList;
+  private List<BankTransaction> bankTransactionList;
+  private List<BankTransaction> databaseTransactionList;
 
   @BeforeMethod
   public void setUp() throws Exception {

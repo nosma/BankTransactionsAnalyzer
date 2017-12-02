@@ -1,4 +1,4 @@
-package com.fragmanos;
+package personal.bank.transaction.analyzer.web.controller;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
