@@ -1,12 +1,17 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="TestAll">
+<suite name="BTA_TESTS">
 
-  <test name="Regression1">
+  <test name="unitTests">
     <packages>
-      <package name="com.fragmanos" />
-      <package name="personal.bank.transaction.analyzer.file.parser" />
-      <package name="personal.bank.transaction.analyzer.web.controller" />
+      <package name="personal.bank.transaction.analyzer.file.*" />
+      <package name="personal.bank.transaction.analyzer.util.*" />
+      <package name="personal.bank.transaction.analyzer.web.*" />
+    </packages>
+  </test>
+  <test name="itTests">
+    <packages>
+      <package name="personal.bank.transaction.analyzer.it.*"/>
     </packages>
   </test>
 
