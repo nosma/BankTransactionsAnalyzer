@@ -3,12 +3,11 @@ package com.fragmanos;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import life.database.dao.TagRuleDao;
-import life.database.model.BankTransaction;
-import life.database.model.TagRule;
+import personal.bank.transaction.analyzer.database.dao.TagRuleDao;
+import personal.bank.transaction.analyzer.database.model.BankTransaction;
+import personal.bank.transaction.analyzer.database.model.TagRule;
 import org.mockito.Mock;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.collections.Lists;
 

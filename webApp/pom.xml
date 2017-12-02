@@ -161,7 +161,7 @@
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
                             <layout>ZIP</layout>
-                            <mainClass>life.AppConfig</mainClass>
+                            <mainClass>personal.bank.transaction.analyzer.AppConfig</mainClass>
                         </configuration>
                         <version>1.2.5.RELEASE</version>
                         <executions>

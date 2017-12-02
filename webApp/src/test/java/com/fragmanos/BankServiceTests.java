@@ -1,18 +1,19 @@
 package com.fragmanos;
 
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
+import personal.bank.transaction.analyzer.database.dao.MidataTransactionDao;
+import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
+import personal.bank.transaction.analyzer.database.model.BankTransaction;
+import personal.bank.transaction.analyzer.web.controller.BankService;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import life.database.dao.BankTransactionDao;
-import life.database.dao.MidataTransactionDao;
-import life.database.dao.MonthStatDao;
-import life.database.model.BankTransaction;
-import life.web.controller.BankService;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 
 public class BankServiceTests {
