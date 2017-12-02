@@ -5,11 +5,11 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
-import life.database.dao.BankTransactionDao;
-import life.database.dao.MonthStatDao;
-import life.database.model.BankTransaction;
-import life.database.model.MonthStat;
-import life.web.controller.BankStatisticsService;
+import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
+import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
+import personal.bank.transaction.analyzer.database.model.BankTransaction;
+import personal.bank.transaction.analyzer.database.model.MonthStat;
+import personal.bank.transaction.analyzer.web.controller.BankStatisticsService;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 

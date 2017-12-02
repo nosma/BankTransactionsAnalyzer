@@ -5,8 +5,8 @@
   <test name="Regression1">
     <packages>
       <package name="com.fragmanos" />
-      <package name="life.file.parser" />
-      <package name="life.web.controller" />
+      <package name="personal.bank.transaction.analyzer.file.parser" />
+      <package name="personal.bank.transaction.analyzer.web.controller" />
     </packages>
   </test>
 

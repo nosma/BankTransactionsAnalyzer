@@ -1,6 +1,6 @@
 package com.fragmanos;
 
-import life.file.DateUtilsImpl;
+import personal.bank.transaction.analyzer.file.DateUtilsImpl;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
