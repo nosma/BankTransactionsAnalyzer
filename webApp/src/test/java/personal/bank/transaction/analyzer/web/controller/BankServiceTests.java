@@ -1,4 +1,4 @@
-package com.fragmanos;
+package personal.bank.transaction.analyzer.web.controller;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -6,7 +6,6 @@ import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MidataTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
 import personal.bank.transaction.analyzer.database.model.BankTransaction;
-import personal.bank.transaction.analyzer.web.controller.BankService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

@@ -1,6 +1,5 @@
-package com.fragmanos;
+package personal.bank.transaction.analyzer.file;
 
-import personal.bank.transaction.analyzer.file.DateUtilsImpl;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -8,7 +7,7 @@ import java.time.LocalDate;
 
 import static org.testng.Assert.assertEquals;
 
-public class DateUtilsImplTest {
+public class DateUtilsTest {
 
   private DateUtilsImpl dateUtils;
 
@@ -42,7 +41,6 @@ public class DateUtilsImplTest {
     LocalDate localDate = dateUtils.getMidataDate("2016-12-31");
     assertEquals(null, localDate);
   }
-
 
 }
 
