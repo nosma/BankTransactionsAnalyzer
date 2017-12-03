@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import personal.bank.transaction.analyzer.web.service.TagLoader;
 
 import javax.inject.Inject;
 import java.util.List;

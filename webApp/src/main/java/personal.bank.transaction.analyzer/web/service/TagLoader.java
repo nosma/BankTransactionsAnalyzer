@@ -1,11 +1,11 @@
-package personal.bank.transaction.analyzer.web.controller;
-
-import java.util.Arrays;
-import java.util.List;
-import javax.annotation.PostConstruct;
+package personal.bank.transaction.analyzer.web.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class TagLoader {
@@ -19,7 +19,7 @@ public class TagLoader {
     tags = Arrays.asList(transactionTags.split(","));
   }
 
-  List<String> getTags() {
+  public List<String> getTags() {
     return tags;
   }
 }
