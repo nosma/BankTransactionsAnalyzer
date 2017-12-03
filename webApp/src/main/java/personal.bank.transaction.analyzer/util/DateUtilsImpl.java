@@ -1,4 +1,4 @@
-package personal.bank.transaction.analyzer.file;
+package personal.bank.transaction.analyzer.util;
 
 import org.apache.log4j.Logger;
 
