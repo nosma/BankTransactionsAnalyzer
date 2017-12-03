@@ -1,7 +1,7 @@
 package personal.bank.transaction.analyzer.file.parser;
 
 import personal.bank.transaction.analyzer.database.model.BankTransaction;
-import personal.bank.transaction.analyzer.file.DateUtilsImpl;
+import personal.bank.transaction.analyzer.util.DateUtilsImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Component;
