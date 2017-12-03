@@ -1,15 +1,17 @@
-package personal.bank.transaction.analyzer.web.controller;
+package personal.bank.transaction.analyzer.web.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.inject.Inject;
-
+import org.springframework.stereotype.Component;
 import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MidataTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
 import personal.bank.transaction.analyzer.database.model.BankTransaction;
 import personal.bank.transaction.analyzer.util.BankTransactionUtil;
-import org.springframework.stereotype.Component;
+import personal.bank.transaction.analyzer.web.controller.BankInterface;
+import personal.bank.transaction.analyzer.web.controller.TableObject;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class BankService implements BankInterface {

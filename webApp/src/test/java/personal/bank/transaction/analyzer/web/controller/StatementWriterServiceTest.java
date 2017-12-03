@@ -7,6 +7,8 @@ import personal.bank.transaction.analyzer.file.parser.FileParser;
 import personal.bank.transaction.analyzer.file.parser.StatementCsvParser;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import personal.bank.transaction.analyzer.web.service.MidataWriterService;
+import personal.bank.transaction.analyzer.web.service.StatementWriterService;
 
 import static org.mockito.Mockito.mock;
 

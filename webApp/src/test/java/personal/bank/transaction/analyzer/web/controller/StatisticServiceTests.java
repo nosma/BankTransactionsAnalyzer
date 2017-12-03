@@ -9,7 +9,7 @@ import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
 import personal.bank.transaction.analyzer.database.model.BankTransaction;
 import personal.bank.transaction.analyzer.database.model.MonthStat;
-import personal.bank.transaction.analyzer.web.controller.BankStatisticsService;
+import personal.bank.transaction.analyzer.web.service.BankStatisticsService;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 

@@ -8,8 +8,8 @@ import personal.bank.transaction.analyzer.database.dao.MidataTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
 import personal.bank.transaction.analyzer.database.model.BankTransaction;
 import personal.bank.transaction.analyzer.file.parser.MidataCsvParser;
-import personal.bank.transaction.analyzer.web.controller.MidataWriterService;
-import personal.bank.transaction.analyzer.web.controller.StatementWriterService;
+import personal.bank.transaction.analyzer.web.service.MidataWriterService;
+import personal.bank.transaction.analyzer.web.service.StatementWriterService;
 import personal.bank.transaction.analyzer.web.controller.UploadController;
 
 import javax.inject.Inject;
