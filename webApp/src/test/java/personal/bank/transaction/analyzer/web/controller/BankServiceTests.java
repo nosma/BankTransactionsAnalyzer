@@ -6,6 +6,7 @@ import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MidataTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
 import personal.bank.transaction.analyzer.database.model.BankTransaction;
+import personal.bank.transaction.analyzer.web.service.BankService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

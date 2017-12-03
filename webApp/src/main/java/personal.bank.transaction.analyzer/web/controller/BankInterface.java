@@ -4,7 +4,7 @@ package personal.bank.transaction.analyzer.web.controller;
 
 import java.util.List;
 
-interface BankInterface {
+public interface BankInterface {
   List<TableObject> getTableObjects();
 
   List<TableObject> getMonthlyExpensesList(int monthNumber, int yearNumber);

@@ -1,14 +1,15 @@
-package personal.bank.transaction.analyzer.web.controller;
+package personal.bank.transaction.analyzer.web.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
-import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
-import personal.bank.transaction.analyzer.database.model.BankTransaction;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
+import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
+import personal.bank.transaction.analyzer.database.model.BankTransaction;
+import personal.bank.transaction.analyzer.web.controller.StatementWriter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class StatementWriterService implements StatementWriter {

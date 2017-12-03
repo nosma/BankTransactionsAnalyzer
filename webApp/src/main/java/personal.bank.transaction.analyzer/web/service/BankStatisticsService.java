@@ -1,4 +1,4 @@
-package personal.bank.transaction.analyzer.web.controller;
+package personal.bank.transaction.analyzer.web.service;
 
 import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import personal.bank.transaction.analyzer.web.controller.BankStatisticsInterface;
 
 import java.util.Collections;
 import java.util.List;

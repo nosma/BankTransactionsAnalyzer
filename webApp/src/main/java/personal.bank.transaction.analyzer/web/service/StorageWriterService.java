@@ -1,4 +1,4 @@
-package personal.bank.transaction.analyzer.web.controller;
+package personal.bank.transaction.analyzer.web.service;
 
 import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MidataTransactionDao;
@@ -9,6 +9,7 @@ import personal.bank.transaction.analyzer.database.model.MonthStat;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import personal.bank.transaction.analyzer.web.controller.StorageWriter;
 
 import java.text.DecimalFormat;
 import java.time.YearMonth;

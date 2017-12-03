@@ -1,17 +1,17 @@
 package personal.bank.transaction.analyzer.file.parser;
 
-import java.io.File;
-
-import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
-import personal.bank.transaction.analyzer.database.dao.MidataTransactionDao;
-import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
-import personal.bank.transaction.analyzer.web.controller.MidataWriterService;
-import personal.bank.transaction.analyzer.web.controller.StatementWriterService;
-import personal.bank.transaction.analyzer.web.controller.UploadController;
 import org.springframework.mock.web.MockMultipartFile;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
+import personal.bank.transaction.analyzer.database.dao.MidataTransactionDao;
+import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
+import personal.bank.transaction.analyzer.web.controller.UploadController;
+import personal.bank.transaction.analyzer.web.service.MidataWriterService;
+import personal.bank.transaction.analyzer.web.service.StatementWriterService;
+
+import java.io.File;
 
 import static org.mockito.Mockito.mock;
 import static org.testng.Assert.assertEquals;

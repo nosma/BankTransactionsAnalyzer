@@ -1,4 +1,4 @@
-package personal.bank.transaction.analyzer.web.controller;
+package personal.bank.transaction.analyzer.web.service;
 
 import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
