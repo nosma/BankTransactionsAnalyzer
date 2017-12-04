@@ -3,5 +3,5 @@
         "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-    <display-name>Life In Order</display-name>
+    <display-name>Bank Transaction Analyzer</display-name>
 </web-app>

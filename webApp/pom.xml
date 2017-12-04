@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>LifeInOrder</artifactId>
-        <groupId>LifeInOrder</groupId>
+        <artifactId>BankTransactionAnalyzer</artifactId>
+        <groupId>BankTransactionAnalyzer</groupId>
         <version>1.0</version>
     </parent>
 
@@ -23,9 +23,8 @@
         </plugins>
     </build>
     <version>1.0</version>
-    <artifactId>webApp</artifactId>
+    <artifactId>BTA-WebApp</artifactId>
     <packaging>jar</packaging>
-    <name>Life In Order</name>
 
     <properties>
         <hibernate.version>4.3.10.Final</hibernate.version>
