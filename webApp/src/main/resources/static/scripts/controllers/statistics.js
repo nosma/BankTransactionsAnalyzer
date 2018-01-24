@@ -3,6 +3,7 @@
 app.controller('statistics', ['$scope','$http','$resource', function ($scope, $http, $resource) {
 
   $scope.showMonthTransactions = false;
+  $scope.showMonthTags = false;
   $scope.sortType = 'date';
   $scope.sortReverse = false;
 
@@ -91,6 +92,19 @@ app.controller('statistics', ['$scope','$http','$resource', function ($scope, $h
       $scope.monthList = response.data;
     });
   $scope.showMonthTransactions = true;
+  };
+
+  $scope.callMonthlyTags = function (year,month) {
+    $http({
+      method: 'GET',
+      url: '/api/bank/monthlyTags/' + year + '/' + month
+    }).then(function successCallback(response) {
+      $scope.monthlyTags = response.data;
+      $scope.displayedmonthlyTags = [].concat(response.data);
+    }, function errorCallback(response) {
+      $scope.monthlyTags = response.data;
+    });
+    $scope.showMonthTags = true;
   };
 
   $scope.gridOptions = {

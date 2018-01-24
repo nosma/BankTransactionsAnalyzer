@@ -1,114 +1,104 @@
 <div class="container" role="main" class="main">
-  <!--<div class="row">-->
-    <!--<div class="starter-template">-->
-      <!--<div ng-util="statistics">-->
-        <!--<div id="grid3" ui-grid="gridOptions" ui-grid-exporter class="grid"></div>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</div>-->
 
   <div class="page-header">
-
     <div class="row">
-
       <div class="col-md-3">
         <div class="panel panel-success">
           <div class="panel-heading"><h3 class="panel-title">ΑVG Yearly Income</h3></div>
           <div class="panel-body">0</div>
         </div>
       </div>
-
       <div class="col-md-3">
         <div class="panel panel-danger">
           <div class="panel-heading"><h3 class="panel-title">ΑVG Yearly Expense</h3></div>
           <div class="panel-body">0</div>
         </div>
       </div>
-
       <div class="col-md-3">
         <div class="panel panel-success">
           <div class="panel-heading"><h3 class="panel-title">Median Monthly Income</h3></div>
           <div class="panel-body">{{averageMonthlyIncome}}</div>
         </div>
       </div>
-
       <div class="col-md-3">
         <div class="panel panel-danger">
           <div class="panel-heading"><h3 class="panel-title">Median Monthly Expense</h3></div>
           <div class="panel-body">{{averageMonthlyExpense}}</div>
         </div>
       </div>
-
     </div>
-
-    <!--<div class="row">-->
-      <!--<div>-->
-        <!--<p>Income / Fixed Expenses / General Expenses / Profit</p>-->
-      <!--</div>-->
-      <!--<div>-->
-        <!--<div class="progress">-->
-          <!--<div class="progress-bar progress-bar-success progress-bar-striped" style="width: 35%">-->
-            <!--<span class="sr-only">35% Complete (success)</span>-->
-          <!--</div>-->
-          <!--<div class="progress-bar progress-bar-warning progress-bar-striped" style="width: 20%">-->
-            <!--<span class="sr-only">20% Complete (warning)</span>-->
-          <!--</div>-->
-          <!--<div class="progress-bar progress-bar-danger progress-bar-striped" style="width: 10%">-->
-            <!--<span class="sr-only">10% Complete (danger)</span>-->
-          <!--</div>-->
-          <!--<div class="progress-bar progress-bar-info progress-bar-striped" style="width: 10%">-->
-            <!--<span class="sr-only">10% Complete (danger)</span>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
-
   </div>
 
   <div class="row">
-    <table st-table="gridOptions.data" st-safe-src="transactionsStats" class="table table-striped">
-      <thead>
+    <div class="col-md-6">
+        <table st-table="gridOptions.data" st-safe-src="transactionsStats" class="table table-striped">
+          <thead>
+          <tr>
+            <td st-sort="yearMonth.year">Year</td>
+            <td st-sort="yearMonth.monthValue">Month</td>
+            <td st-sort="income">Income</td>
+            <td st-sort="expense">Expense</td>
+            <td st-sort="profit">Profit</td>
+          </tr>
+          <tr>
+            <th><input st-search="yearMonth.year" placeholder="YYYY" class="input-sm form-control" type="search"/></th>
+            <th><input st-search="yearMonth.monthValue" placeholder="MM" class="input-sm form-control" type="search"/></th>
+            <th><input st-search="income" placeholder="0000.00" class="input-sm form-control" type="search"/></th>
+            <th><input st-search="expense" placeholder="0000.00" class="input-sm form-control" type="search"/></th>
+            <th><input st-search="profit" placeholder="0000.00" class="input-sm form-control" type="search"/></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr data-ng-repeat="stats in gridOptions.data">
+            <td>{{stats.yearMonth.year}}</td>
+            <td>{{stats.yearMonth.monthValue}}</td>
+            <td ng-click="callMonthlyIncome(stats.yearMonth.year,stats.yearMonth.monthValue)">{{stats.income}}</td>
+            <td ng-click="callMonthlyExpenses(stats.yearMonth.year,stats.yearMonth.monthValue)">{{stats.expense}}</td>
+            <td>{{stats.profit}}</td>
+          </tr>
+          <tr>
+            <td colspan="2"><b>Total</b></td>
+            <td><b>{{incomeTotal}}</b></td>
+            <td><b>{{expenseTotal}}</b></td>
+            <td><b>{{profitTotal}}</b></td>
+          </tr>
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="7" class="text-center">
+              <div st-pagination="" st-items-by-page="12" st-displayed-pages="10"></div>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+    </div>
+
+    <div class="col-md-6" ng-show="showMonthTags">
+      <table  class="table table-striped" st-table="monthlyTags" st-safe-src="displayedmonthlyTags">
+        <thead>
         <tr>
-          <td st-sort="yearMonth.year">Year</td>
-          <td st-sort="yearMonth.monthValue">Month</td>
-          <td st-sort="income">Income</td>
-          <td st-sort="expense">Expense</td>
-          <td st-sort="profit">Profit</td>
+          <th>Tag Name</th>
+          <th>Amount</th>
         </tr>
-      <tr>
-        <th><input st-search="yearMonth.year" placeholder="search for Year" class="input-sm form-control" type="search"/></th>
-        <th><input st-search="yearMonth.monthValue" placeholder="search for Month" class="input-sm form-control" type="search"/></th>
-        <th><input st-search="income" placeholder="search for Income" class="input-sm form-control" type="search"/></th>
-        <th><input st-search="expense" placeholder="search for Expense" class="input-sm form-control" type="search"/></th>
-        <th><input st-search="profit" placeholder="search for Profit" class="input-sm form-control" type="search"/></th>
-      </tr>
-      </thead>
-      <tbody>
-        <tr data-ng-repeat="stats in gridOptions.data">
-          <td>{{stats.yearMonth.year}}</td>
-          <td>{{stats.yearMonth.monthValue}}</td>
-          <td ng-click="callMonthlyIncome(stats.yearMonth.year,stats.yearMonth.monthValue)">{{stats.income}}</td>
-          <td ng-click="callMonthlyExpenses(stats.yearMonth.year,stats.yearMonth.monthValue)">{{stats.expense}}</td>
-          <td>{{stats.profit}}</td>
+        </thead>
+        <tbody>
+        <tr>
+          <td>***</td>
+          <td>***</td>
         </tr>
-      <tr>
-        <td colspan="2"><b>Total</b></td>
-        <td><b>{{incomeTotal}}</b></td>
-        <td><b>{{expenseTotal}}</b></td>
-        <td><b>{{profitTotal}}</b></td>
-      </tr>
-      </tbody>
-      <tfoot>
-      <tr>
-        <td colspan="7" class="text-center">
-          <div st-pagination="" st-items-by-page="12" st-displayed-pages="10"></div>
-        </td>
-      </tr>
-      </tfoot>
-    </table>
+        </tbody>
+        <tfoot>
+        <tr>
+          <td>***</td>
+          <td>***</td>
+        </tr>
+        </tfoot>
+      </table>
+    </div>
+
   </div>
 
-  <div class="row" ng-show="showMonthTransactions">
+  <div class="row col-md-12" ng-show="showMonthTransactions">
     <table st-table="monthList" st-safe-src="displayedMonthList" class="table table-striped">
       <thead>
       <tr>
@@ -128,9 +118,9 @@
         <td style="width:60%;">{{monthTransaction.description}}</td>
         <td style="width:20%;">{{monthTransaction.cost}}</td>
       </tr>
-        <td style="width:20%;"></td>
-        <td style="width:60%;"></td>
-        <td style="width:20%;"></td>
+      <td style="width:20%;"></td>
+      <td style="width:60%;"></td>
+      <td style="width:20%;"></td>
       <tr>
       </tr>
       </tbody>
@@ -143,5 +133,4 @@
       </tfoot>
     </table>
   </div>
-
 </div>
