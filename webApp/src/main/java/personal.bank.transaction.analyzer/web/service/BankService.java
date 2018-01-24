@@ -8,10 +8,12 @@ import personal.bank.transaction.analyzer.database.model.BankTransaction;
 import personal.bank.transaction.analyzer.util.BankTransactionUtil;
 import personal.bank.transaction.analyzer.web.controller.BankInterface;
 import personal.bank.transaction.analyzer.web.controller.TableObject;
+import personal.bank.transaction.analyzer.web.controller.TagObject;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class BankService implements BankInterface {
@@ -64,6 +66,24 @@ public class BankService implements BankInterface {
     return bankTransactionUtil.getTableObjectList(bankTransactionList);
   }
 
+  @Override
+  public List<TagObject> getMonthlyTags(int month, int year) {
+    List<BankTransaction> transactions = bankTransactionDao.findAllByOrderByTransactiondateDesc().stream()
+        .filter(t -> t.getTransactiondate().getYear() == year)
+        .filter(t -> t.getTransactiondate().getMonthValue() == month)
+        .collect(Collectors.toList());
+    return bankTransactionUtil.getTagObjectsList(transactions);
+  }
+
+  @Override
+  public double getMonthlyCostPerTag(int month, int year, String tag) {
+    return bankTransactionDao.findAllByOrderByTransactiondateDesc().stream()
+        .filter(t -> t.getTagRule().getTags().contains(tag))
+        .filter(t -> t.getTransactiondate().getYear() == year)
+        .filter(t -> t.getTransactiondate().getMonthValue() == month)
+        .mapToDouble(BankTransaction::getCost)
+        .sum();
+  }
 
 
 }

@@ -4,12 +4,14 @@ import personal.bank.transaction.analyzer.database.model.BankTransaction;
 import personal.bank.transaction.analyzer.web.controller.TableObject;
 import org.apache.commons.collections.ListUtils;
 import org.springframework.stereotype.Component;
+import personal.bank.transaction.analyzer.web.controller.TagObject;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class BankTransactionUtil {
@@ -40,4 +42,9 @@ public class BankTransactionUtil {
     }
 
 
+  public List<TagObject> getTagObjectsList(List<BankTransaction> transactions) {
+    return transactions.stream()
+        .map(t -> new TagObject(t.getTagRule().getDescription(), t.getCost()))
+        .collect(Collectors.toList());
+  }
 }

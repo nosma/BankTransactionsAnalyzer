@@ -30,4 +30,9 @@ public class BankController {
     public List<TableObject> getMonthlyIncomeList(@PathVariable int monthNumber, @PathVariable int yearNumber){
         return bankInterface.getMonthlyIncomeList(monthNumber, yearNumber);
     }
+
+    @RequestMapping(value = "monthlyTags/{yearNumber}/{monthNumber}")
+    public  List<TagObject> getMonthlyTags(@PathVariable int monthNumber, @PathVariable int yearNumber){
+        return bankInterface.getMonthlyTags(monthNumber, yearNumber);
+    }
 }

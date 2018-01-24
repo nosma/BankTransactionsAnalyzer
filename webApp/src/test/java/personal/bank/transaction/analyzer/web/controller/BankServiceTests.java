@@ -6,10 +6,12 @@ import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MidataTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
 import personal.bank.transaction.analyzer.database.model.BankTransaction;
+import personal.bank.transaction.analyzer.database.model.TagRule;
 import personal.bank.transaction.analyzer.web.service.BankService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.mock;
@@ -63,6 +65,20 @@ public class BankServiceTests {
   public void testMonthlyIncomeListWithNegativeCostMatchesExpected() throws Exception {
     bankTransactionList.add(new BankTransaction(LocalDate.of(2015, 10, 1), "TEST1", -1000.0));
     assertEquals(0, bankService.getMonthlyIncomeList(month, year).size());
+  }
+
+  @Test
+  public void testMonthlyTagsMatchExpected() {
+    bankTransactionList.addAll(Arrays.asList(
+        new BankTransaction(LocalDate.now(), "TFL", 1.5)
+            .setTagRule(new TagRule("Bus", new ArrayList<>(Arrays.asList("Expenses", "Commute"))))
+        , new BankTransaction(LocalDate.now(), "SAINTS", 20.0)
+            .setTagRule(new TagRule("Foodmarket", new ArrayList<>(Arrays.asList("Expenses", "Food"))))
+        , new BankTransaction(LocalDate.now(), "TESCO", 30.0)
+            .setTagRule(new TagRule("Foodmarket", new ArrayList<>(Arrays.asList("Expenses", "Food"))))
+      ));
+    assertEquals(3, bankService.getMonthlyTags(1,2018).size());
+    assertEquals(50.0, bankService.getMonthlyCostPerTag(1,2018, "Food"));
   }
 
 }
