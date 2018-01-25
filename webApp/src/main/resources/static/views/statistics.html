@@ -52,8 +52,10 @@
           <tr data-ng-repeat="stats in gridOptions.data">
             <td>{{stats.yearMonth.year}}</td>
             <td>{{stats.yearMonth.monthValue}}</td>
-            <td ng-click="callMonthlyIncome(stats.yearMonth.year,stats.yearMonth.monthValue)">{{stats.income}}</td>
-            <td ng-click="callMonthlyExpenses(stats.yearMonth.year,stats.yearMonth.monthValue)">{{stats.expense}}</td>
+            <td ng-click="callMonthlyIncome(stats.yearMonth.year,stats.yearMonth.monthValue);
+                          callMonthlyTags(stats.yearMonth.year,stats.yearMonth.monthValue);">{{stats.income}}</td>
+            <td ng-click="callMonthlyExpenses(stats.yearMonth.year,stats.yearMonth.monthValue);
+                          callMonthlyTags(stats.yearMonth.year,stats.yearMonth.monthValue);">{{stats.expense}}</td>
             <td>{{stats.profit}}</td>
           </tr>
           <tr>
@@ -77,22 +79,20 @@
       <table  class="table table-striped" st-table="monthlyTags" st-safe-src="displayedmonthlyTags">
         <thead>
         <tr>
-          <th>Tag Name</th>
-          <th>Amount</th>
+          <th st-sort="tagName">Tag Name</th>
+          <th st-sort="amount">Amount</th>
+        </tr>
+        <tr>
+          <th style="width:80%;"><input st-search="tagName" class="input-sm form-control" type="search"/></th>
+          <th style="width:20%;"><input st-search="amount" class="input-sm form-control" type="search"/></th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <td>***</td>
-          <td>***</td>
+        <tr data-ng-repeat="mTag in monthlyTags">
+          <td style="width:80%;">{{mTag.tagName}}</td>
+          <td style="width:20%;">{{mTag.amount}}</td>
         </tr>
         </tbody>
-        <tfoot>
-        <tr>
-          <td>***</td>
-          <td>***</td>
-        </tr>
-        </tfoot>
       </table>
     </div>
 
