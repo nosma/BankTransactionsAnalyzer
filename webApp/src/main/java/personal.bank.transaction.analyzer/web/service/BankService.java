@@ -13,11 +13,13 @@ import personal.bank.transaction.analyzer.web.controller.TagObject;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
 public class BankService implements BankInterface {
 
+  private static final String UNTAGGED = "Untagged";
   private MonthStatDao monthStatDao;
   private BankTransactionDao bankTransactionDao;
   private MidataTransactionDao midataTransactionDao;
@@ -67,24 +69,23 @@ public class BankService implements BankInterface {
   }
 
   @Override
-  public List<TagObject> getMonthlyTags(int month, int year) {
-    List<BankTransaction> transactions = bankTransactionDao.findAllByOrderByTransactiondateDesc().stream()
-        .filter(t -> t.getTransactiondate().getYear() == year)
-        .filter(t -> t.getTransactiondate().getMonthValue() == month)
-        .collect(Collectors.toList());
-    return bankTransactionUtil.getTagObjectsList(transactions);
-  }
+  public List<TagObject> getMonthlyTagsGroupedByTag(int month, int year) {
+    final Map<String, Double> collect = bankTransactionDao.findAllByOrderByTransactiondateDesc().stream()
+    .filter(t -> t.getTransactiondate().getYear() == year)
+    .filter(t -> t.getTransactiondate().getMonthValue() == month)
+    .map(t -> t.getTagRule() != null ?
+        new TagObject(t.getTagRule().getDescription(), t.getCost()) :
+        new TagObject(UNTAGGED, t.getCost()))
+    .collect(Collectors.groupingBy(TagObject::getTagName, Collectors.summingDouble(TagObject::getAmount)));
+ // todo fix the below
+    List<TagObject> tagObjects = new ArrayList<>();
+    for(String key : collect.keySet()) {
+      tagObjects.add(new TagObject(key, collect.get(key)));
+    }
+    return tagObjects;
 
-  @Override
-  public double getMonthlyCostPerTag(int month, int year, String tag) {
-    return bankTransactionDao.findAllByOrderByTransactiondateDesc().stream()
-        .filter(t -> t.getTagRule().getTags().contains(tag))
-        .filter(t -> t.getTransactiondate().getYear() == year)
-        .filter(t -> t.getTransactiondate().getMonthValue() == month)
-        .mapToDouble(BankTransaction::getCost)
-        .sum();
-  }
 
+  }
 
 }
 

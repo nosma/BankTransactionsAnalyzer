@@ -10,9 +10,7 @@ import personal.bank.transaction.analyzer.database.model.TagRule;
 import personal.bank.transaction.analyzer.web.service.BankService;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -72,13 +70,16 @@ public class BankServiceTests {
     bankTransactionList.addAll(Arrays.asList(
         new BankTransaction(LocalDate.now(), "TFL", 1.5)
             .setTagRule(new TagRule("Bus", new ArrayList<>(Arrays.asList("Expenses", "Commute"))))
-        , new BankTransaction(LocalDate.now(), "SAINTS", 20.0)
+        ,new BankTransaction(LocalDate.now(), "TFL", 2.5)
+        ,new BankTransaction(LocalDate.now(), "SAINTS", 20.0)
             .setTagRule(new TagRule("Foodmarket", new ArrayList<>(Arrays.asList("Expenses", "Food"))))
-        , new BankTransaction(LocalDate.now(), "TESCO", 30.0)
+        ,new BankTransaction(LocalDate.now(), "TESCO", 30.0)
             .setTagRule(new TagRule("Foodmarket", new ArrayList<>(Arrays.asList("Expenses", "Food"))))
       ));
-    assertEquals(3, bankService.getMonthlyTags(1,2018).size());
-    assertEquals(50.0, bankService.getMonthlyCostPerTag(1,2018, "Food"));
+    final List<TagObject> monthlyTags = bankService.getMonthlyTagsGroupedByTag(1, 2018);
+    assertEquals(3, monthlyTags.size());
+    assertEquals(50.0, monthlyTags.stream().filter(t -> t.getTagName().equals("Foodmarket")).findFirst().get().getAmount());
+    assertEquals(2.5, monthlyTags.stream().filter(t -> t.getTagName().equals("Untagged")).findFirst().get().getAmount());
   }
 
 }
