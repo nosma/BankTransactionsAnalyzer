@@ -1,5 +1,6 @@
 package personal.bank.transaction.analyzer.web.service;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +80,7 @@ public class BankService implements BankInterface {
     .collect(Collectors.groupingBy(TagObject::getTagName, Collectors.summingDouble(TagObject::getAmount)));
 
     return collect.entrySet().stream()
-       .map(t -> new TagObject(t.getKey(), t.getValue()))
+       .map(t -> new TagObject(t.getKey(), Double.valueOf(new DecimalFormat("#.##").format(t.getValue()))))
        .collect(Collectors.toList());
   }
 
