@@ -1,5 +1,11 @@
 package personal.bank.transaction.analyzer.web.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Component;
 import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MidataTransactionDao;
@@ -9,12 +15,6 @@ import personal.bank.transaction.analyzer.util.BankTransactionUtil;
 import personal.bank.transaction.analyzer.web.controller.BankInterface;
 import personal.bank.transaction.analyzer.web.controller.TableObject;
 import personal.bank.transaction.analyzer.web.controller.TagObject;
-
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Component
 public class BankService implements BankInterface {
@@ -77,14 +77,10 @@ public class BankService implements BankInterface {
         new TagObject(t.getTagRule().getDescription(), t.getCost()) :
         new TagObject(UNTAGGED, t.getCost()))
     .collect(Collectors.groupingBy(TagObject::getTagName, Collectors.summingDouble(TagObject::getAmount)));
- // todo fix the below
-    List<TagObject> tagObjects = new ArrayList<>();
-    for(String key : collect.keySet()) {
-      tagObjects.add(new TagObject(key, collect.get(key)));
-    }
-    return tagObjects;
 
-
+    return collect.entrySet().stream()
+       .map(t -> new TagObject(t.getKey(), t.getValue()))
+       .collect(Collectors.toList());
   }
 
 }
