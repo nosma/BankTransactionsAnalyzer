@@ -7,7 +7,7 @@ app.config(function ($routeProvider) {
             controller: 'transactions'
         }).when('/Statistics', {
             templateUrl: 'views/statistics.html',
-            controller: 'statistics'
+            controller: 'StatisticsCtrl'
         }).when('/Upload', {
         templateUrl: 'views/upload.html',
         controller: 'UploadCtrl'

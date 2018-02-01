@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('statistics', ['$scope','$http','$resource', function ($scope, $http, $resource) {
+app.controller('StatisticsCtrl', ['$scope','$http','$resource', function ($scope, $http, $resource) {
 
   $scope.showMonthTransactions = false;
   $scope.showMonthTags = false;
@@ -97,7 +97,7 @@ app.controller('statistics', ['$scope','$http','$resource', function ($scope, $h
   $scope.callMonthlyTags = function (year,month) {
     $http({
       method: 'GET',
-      url: '/api/bank/monthlyTags/' + year + '/' + month
+      url: '/api/statistics/monthlyTags/' + year + '/' + month
     }).then(function successCallback(response) {
       $scope.monthlyTags = response.data;
       $scope.displayedmonthlyTags = [].concat(response.data);
