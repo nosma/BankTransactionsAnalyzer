@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/bank/")
-//@Produces("application/json")
 public class BankController {
 
     @Inject
@@ -30,10 +29,5 @@ public class BankController {
     @RequestMapping(value = "monthlyIncomeList/{yearNumber}/{monthNumber}")
     public List<TableObject> getMonthlyIncomeList(@PathVariable int monthNumber, @PathVariable int yearNumber){
         return bankInterface.getMonthlyIncomeList(monthNumber, yearNumber);
-    }
-
-    @RequestMapping(value = "monthlyTags/{year}/{month}")
-    public List<TagObject> getMonthlyTags(@PathVariable int month, @PathVariable int year){
-        return bankInterface.getMonthlyTagsGroupedByTag(month, year);
     }
 }

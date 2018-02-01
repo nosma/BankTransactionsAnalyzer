@@ -10,6 +10,4 @@ public interface BankInterface {
   List<TableObject> getMonthlyExpensesList(int monthNumber, int yearNumber);
 
   List<TableObject> getMonthlyIncomeList(int monthNumber, int yearNumber);
-
-  List<TagObject> getMonthlyTagsGroupedByTag(int month, int year);
 }

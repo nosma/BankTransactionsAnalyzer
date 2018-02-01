@@ -1,19 +1,22 @@
 package personal.bank.transaction.analyzer.web.controller;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.List;
-
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
 import personal.bank.transaction.analyzer.database.model.BankTransaction;
 import personal.bank.transaction.analyzer.database.model.MonthStat;
+import personal.bank.transaction.analyzer.database.model.TagRule;
 import personal.bank.transaction.analyzer.web.service.BankStatisticsService;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
-import static org.mockito.Mockito.*;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 
 public class StatisticServiceTests {
@@ -118,6 +121,23 @@ public class StatisticServiceTests {
   public void testMedianMonthlyIncomeMatchesExpected() throws Exception {
     setValuesForMedianTests();
     assertEquals(3000, bankStatisticsService.getMedianMonthlyIncome(), DOUBLE_DELTA);
+  }
+
+  @Test
+  public void testMonthlyTagsMatchExpected() {
+    bankTransactionList.addAll(Arrays.asList(
+        new BankTransaction(LocalDate.of(2018,1,1), "TFL", 1.5)
+            .setTagRule(new TagRule("Bus", new ArrayList<>(Arrays.asList("Expenses", "Commute"))))
+        ,new BankTransaction(LocalDate.of(2018,1,5), "TFL", 2.5)
+        ,new BankTransaction(LocalDate.of(2018,1,11), "SAINTS", 20.0)
+            .setTagRule(new TagRule("Foodmarket", new ArrayList<>(Arrays.asList("Expenses", "Food"))))
+        ,new BankTransaction(LocalDate.of(2018,1,21), "TESCO", 30.0)
+            .setTagRule(new TagRule("Foodmarket", new ArrayList<>(Arrays.asList("Expenses", "Food"))))
+    ));
+    final List<TagObject> monthlyTags = bankStatisticsService.getMonthlyTagsGroupedByTag(1, 2018);
+    assertEquals(3, monthlyTags.size());
+    assertEquals(50.0, monthlyTags.stream().filter(t -> t.getTagName().equals("Foodmarket")).findFirst().get().getAmount());
+    assertEquals(2.5, monthlyTags.stream().filter(t -> t.getTagName().equals("Untagged")).findFirst().get().getAmount());
   }
 
   private void setValuesForMedianTests() {

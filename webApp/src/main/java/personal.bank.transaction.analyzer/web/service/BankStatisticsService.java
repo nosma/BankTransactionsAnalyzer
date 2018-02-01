@@ -11,14 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import personal.bank.transaction.analyzer.web.controller.BankStatisticsInterface;
+import personal.bank.transaction.analyzer.web.controller.TagObject;
 
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class BankStatisticsService implements BankStatisticsInterface {
 
     private static final Logger log = LoggerFactory.getLogger(BankStatisticsService.class);
+    private static final String UNTAGGED = "Untagged";
 
     @Value("${initial.balance}")
     private double initialBalance;
@@ -153,5 +158,20 @@ public class BankStatisticsService implements BankStatisticsInterface {
             log.warn("MonthStats database table is empty. ", exception);
         }
         return monthStats;
+    }
+
+    @Override
+    public List<TagObject> getMonthlyTagsGroupedByTag(int month, int year) {
+        final Map<String, Double> collect = bankTransactionDao.findAllByOrderByTransactiondateDesc().stream()
+            .filter(t -> t.getTransactiondate().getYear() == year)
+            .filter(t -> t.getTransactiondate().getMonthValue() == month)
+            .map(t -> t.getTagRule() != null ?
+                new TagObject(t.getTagRule().getDescription(), t.getCost()) :
+                new TagObject(UNTAGGED, t.getCost()))
+            .collect(Collectors.groupingBy(TagObject::getTagName, Collectors.summingDouble(TagObject::getAmount)));
+
+        return collect.entrySet().stream()
+            .map(t -> new TagObject(t.getKey(), Double.valueOf(new DecimalFormat("#.##").format(t.getValue()))))
+            .collect(Collectors.toList());
     }
 }

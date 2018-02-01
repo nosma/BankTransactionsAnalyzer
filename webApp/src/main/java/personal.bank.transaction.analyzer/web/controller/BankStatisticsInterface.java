@@ -25,4 +25,6 @@ public interface BankStatisticsInterface {
   double getMedianMonthlyExpense();
 
   double getMedianMonthlyIncome();
+
+  List<TagObject> getMonthlyTagsGroupedByTag(int month, int year);
 }
