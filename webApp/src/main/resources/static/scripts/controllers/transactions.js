@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('transactions', function ($scope, $resource, $http, $route, TagService, BankService) {
+app.controller('transactions', function ($scope, $resource, $http, $route, TagService, TransactionService) {
 
   $scope.transactionTags = [];
   $scope.numOfTagged = -1;
@@ -58,7 +58,7 @@ app.controller('transactions', function ($scope, $resource, $http, $route, TagSe
   }
 
   function getAllTransactions(){
-    BankService.getAllTransactions().then(function successCallback(response) {
+    TransactionService.getAllTransactions().then(function successCallback(response) {
       populateTransactionsTable(response.data);
     }, function errorCallback(response) {
       console.log("Error while retrieving transactions: " + response.data);
