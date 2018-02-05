@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/bank/")
+@RequestMapping("/api/transactions/")
 public class BankController {
 
     @Inject

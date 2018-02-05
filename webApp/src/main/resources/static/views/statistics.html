@@ -52,10 +52,8 @@
           <tr data-ng-repeat="stats in gridOptions.data">
             <td>{{stats.yearMonth.year}}</td>
             <td>{{stats.yearMonth.monthValue}}</td>
-            <td ng-click="callMonthlyIncome(stats.yearMonth.year,stats.yearMonth.monthValue);
-                          callMonthlyTags(stats.yearMonth.year,stats.yearMonth.monthValue);">{{stats.income}}</td>
-            <td ng-click="callMonthlyExpenses(stats.yearMonth.year,stats.yearMonth.monthValue);
-                          callMonthlyTags(stats.yearMonth.year,stats.yearMonth.monthValue);">{{stats.expense}}</td>
+            <td ng-click="getMonthlyIncomeInfo(stats.yearMonth.year,stats.yearMonth.monthValue)">{{stats.income}}</td>
+            <td ng-click="getMonthlyExpenseInfo(stats.yearMonth.year,stats.yearMonth.monthValue)">{{stats.expense}}</td>
             <td>{{stats.profit}}</td>
           </tr>
           <tr>

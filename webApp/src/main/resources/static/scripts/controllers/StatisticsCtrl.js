@@ -1,28 +1,28 @@
 'use strict';
 
-app.controller('StatisticsCtrl', ['$scope','$http','$resource', function ($scope, $http, $resource) {
+app.controller('StatisticsCtrl', function ($scope, $http, $resource, StatisticsService, TransactionService) {
 
   $scope.showMonthTransactions = false;
   $scope.showMonthTags = false;
   $scope.sortType = 'date';
   $scope.sortReverse = false;
 
-  $http({method: 'GET', url: "/api/statistics/initialBalance"
-  }).then(function successCallback(response) {
+  StatisticsService.getInitialBalance()
+  .then(function successCallback(response) {
     $scope.initialBalance = response.data;
   }, function errorCallback(response) {
     $scope.initialBalance = response.data;
   });
 
-  $http({method: 'GET', url: "/api/statistics/medianMonthlyExpense"
-  }).then(function successCallback(response) {
+  StatisticsService.getMedianMonthlyExpense()
+  .then(function successCallback(response) {
     $scope.averageMonthlyExpense = roundNumber(response.data);
   }, function errorCallback(response) {
     $scope.averageMonthlyExpense = response.data;
   });
 
-  $http({method: 'GET', url: "/api/statistics/medianMonthlyIncome"
-  }).then(function successCallback(response) {
+  StatisticsService.getMedianMonthlyIncome()
+  .then(function successCallback(response) {
     $scope.averageMonthlyIncome = roundNumber(response.data);
   }, function errorCallback(response) {
     $scope.averageMonthlyIncome = response.data;
@@ -57,7 +57,18 @@ app.controller('StatisticsCtrl', ['$scope','$http','$resource', function ($scope
     return roundNumber(total);
   };
 
-  $resource("/api/statistics/monthly").query(function(result) {
+  $scope.getMonthlyIncomeInfo = function (year, month) {
+    getMonthlyIncome(year, month);
+    getMonthlyTags(year, month);
+  };
+
+  $scope.getMonthlyExpenseInfo = function (year, month) {
+    getMonthlyExpenses(year, month);
+    getMonthlyTags(year, month);
+  };
+
+  StatisticsService.monthlyPnL()
+    .query(function(result) {
     $scope.gridOptions.data = result;
     $scope.transactionsStats = result;
 
@@ -68,44 +79,38 @@ app.controller('StatisticsCtrl', ['$scope','$http','$resource', function ($scope
     $scope.displayedTransactionsStats = [].concat($scope.transactionsStats);
   });
 
-  $scope.callMonthlyIncome = function (year,month) {
-    $http({
-      method: 'GET',
-      url: '/api/bank/monthlyIncomeList/'+year+'/'+month
-    }).then(function successCallback(response) {
+  function getMonthlyIncome (year, month) {
+    TransactionService.getMonthlyIncome(year, month)
+    .then(function successCallback(response) {
       $scope.monthList = response.data;
       $scope.displayedMonthList = [].concat(response.data);
     }, function errorCallback(response) {
       $scope.monthList = response.data;
     });
     $scope.showMonthTransactions = true;
-  };
+  }
 
-  $scope.callMonthlyExpenses = function (year,month) {
-    $http({
-      method: 'GET',
-      url: '/api/bank/monthlyExpensesList/'+year+'/'+month
-    }).then(function successCallback(response) {
+  function getMonthlyExpenses (year, month) {
+    TransactionService.getMonthlyExpenses(year, month)
+    .then(function successCallback(response) {
       $scope.monthList = response.data;
       $scope.displayedMonthList = [].concat(response.data);
     }, function errorCallback(response) {
       $scope.monthList = response.data;
     });
   $scope.showMonthTransactions = true;
-  };
+  }
 
-  $scope.callMonthlyTags = function (year,month) {
-    $http({
-      method: 'GET',
-      url: '/api/statistics/monthlyTags/' + year + '/' + month
-    }).then(function successCallback(response) {
+  function getMonthlyTags (year, month) {
+    StatisticsService.getMonthlyTags(year,month)
+      .then(function successCallback(response) {
       $scope.monthlyTags = response.data;
       $scope.displayedmonthlyTags = [].concat(response.data);
     }, function errorCallback(response) {
       $scope.monthlyTags = response.data;
     });
     $scope.showMonthTags = true;
-  };
+  }
 
   $scope.gridOptions = {
     showGridFooter: true,
@@ -144,4 +149,4 @@ app.controller('StatisticsCtrl', ['$scope','$http','$resource', function ($scope
     ]
   };
 
-}]);
+});
