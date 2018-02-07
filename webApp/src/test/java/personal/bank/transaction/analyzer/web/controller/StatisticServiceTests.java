@@ -135,9 +135,11 @@ public class StatisticServiceTests {
             .setTagRule(new TagRule("Foodmarket", new ArrayList<>(Arrays.asList("Expenses", "Food"))))
     ));
     final List<TagObject> monthlyTags = bankStatisticsService.getMonthlyTagsGroupedByTag(1, 2018);
-    assertEquals(3, monthlyTags.size());
-    assertEquals(50.0, monthlyTags.stream().filter(t -> t.getTagName().equals("Foodmarket")).findFirst().get().getAmount());
-    assertEquals(2.5, monthlyTags.stream().filter(t -> t.getTagName().equals("Untagged")).findFirst().get().getAmount());
+    assertEquals(monthlyTags.size(), 4);
+    assertEquals(monthlyTags.stream().filter(t -> t.getTagName().equals("Untagged")).findFirst().get().getAmount(), 2.5);
+    assertEquals(monthlyTags.stream().filter(t -> t.getTagName().equals("Expenses")).findFirst().get().getAmount(), 51.5);
+    assertEquals(monthlyTags.stream().filter(t -> t.getTagName().equals("Commute")).findFirst().get().getAmount(), 1.5);
+    assertEquals(monthlyTags.stream().filter(t -> t.getTagName().equals("Food")).findFirst().get().getAmount(), 50.0);
   }
 
   private void setValuesForMedianTests() {

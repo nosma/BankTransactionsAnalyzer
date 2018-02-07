@@ -1,20 +1,21 @@
 package personal.bank.transaction.analyzer.web.service;
 
-import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
-import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
-import personal.bank.transaction.analyzer.database.model.BankTransaction;
-import personal.bank.transaction.analyzer.database.model.MonthStat;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
+import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
+import personal.bank.transaction.analyzer.database.model.BankTransaction;
+import personal.bank.transaction.analyzer.database.model.MonthStat;
 import personal.bank.transaction.analyzer.web.controller.BankStatisticsInterface;
 import personal.bank.transaction.analyzer.web.controller.TagObject;
 
 import java.text.DecimalFormat;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -162,15 +163,25 @@ public class BankStatisticsService implements BankStatisticsInterface {
 
     @Override
     public List<TagObject> getMonthlyTagsGroupedByTag(int month, int year) {
-        final Map<String, Double> collect = bankTransactionDao.findAllByOrderByTransactiondateDesc().stream()
-            .filter(t -> t.getTransactiondate().getYear() == year)
-            .filter(t -> t.getTransactiondate().getMonthValue() == month)
-            .map(t -> t.getTagRule() != null ?
-                new TagObject(t.getTagRule().getDescription(), t.getCost()) :
-                new TagObject(UNTAGGED, t.getCost()))
-            .collect(Collectors.groupingBy(TagObject::getTagName, Collectors.summingDouble(TagObject::getAmount)));
+      List<BankTransaction> transactions = bankTransactionDao.findAllByOrderByTransactiondateDesc().stream()
+          .filter(t -> t.getTransactiondate().getYear() == year)
+          .filter(t -> t.getTransactiondate().getMonthValue() == month)
+          .collect(Collectors.toList());
 
-        return collect.entrySet().stream()
+      Map<String, Double> tagObjects = new HashMap<>();
+      for (BankTransaction transaction : transactions) {
+        List<String> transactionTags = transaction.getTags();
+        if (transactionTags.size() > 0) {
+          transactionTags.forEach(transactionTag -> {
+            Double tagValue = tagObjects.get(transactionTag);
+            tagObjects.put(transactionTag, tagValue != null ? tagValue + transaction.getCost() : transaction.getCost());
+          });
+        } else {
+          tagObjects.put(UNTAGGED, transaction.getCost());
+        }
+      }
+
+      return tagObjects.entrySet().stream()
             .map(t -> new TagObject(t.getKey(), Double.valueOf(new DecimalFormat("#.##").format(t.getValue()))))
             .collect(Collectors.toList());
     }
