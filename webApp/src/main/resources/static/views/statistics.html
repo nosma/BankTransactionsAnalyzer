@@ -103,21 +103,29 @@
         <th st-sort="date">Date</th>
         <th st-sort="description">Description</th>
         <th st-sort="cost">Cost</th>
+        <th st-sort="tags">Tags</th>
       </tr>
       <tr>
         <th style="width:20%;"><input st-search="date" placeholder="search for date" class="input-sm form-control" type="search"/></th>
-        <th style="width:60%;"><input st-search="description" placeholder="search for description" class="input-sm form-control" type="search"/></th>
+        <th style="width:40%;"><input st-search="description" placeholder="search for description" class="input-sm form-control" type="search"/></th>
         <th style="width:20%;"><input st-search="cost" placeholder="search for cost" class="input-sm form-control" type="search"/></th>
+        <th style="width:20%;"><input st-search="tags" placeholder="search for tags" class="input-sm form-control" type="search"/></th>
       </tr>
       </thead>
       <tbody>
       <tr  data-ng-repeat="monthTransaction in monthList">
         <td style="width:20%;">{{monthTransaction.date}}</td>
-        <td style="width:60%;">{{monthTransaction.description}}</td>
+        <td style="width:40%;">{{monthTransaction.description}}</td>
         <td style="width:20%;">{{monthTransaction.cost}}</td>
+        <td style="width:20%;">
+          <span class="label label-info" data-ng-repeat="tag in monthTransaction.tags track by $index">
+              {{tag}}
+            </span>
+        </td>
       </tr>
       <td style="width:20%;"></td>
-      <td style="width:60%;"></td>
+      <td style="width:40%;"></td>
+      <td style="width:20%;"></td>
       <td style="width:20%;"></td>
       <tr>
       </tr>
