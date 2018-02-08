@@ -66,8 +66,13 @@ public class BankStatisticsController {
     return bankStatisticsInterface.getMedianMonthlyIncome();
   }
 
-  @RequestMapping(value = "monthlyTags/{year}/{month}")
-  public List<TagObject> getMonthlyTags(@PathVariable int month, @PathVariable int year){
-    return bankStatisticsInterface.getMonthlyTagsGroupedByTag(month, year);
+  @RequestMapping(value = "monthlyIncomeTags/{year}/{month}")
+  public List<TagObject> getMonthlyIncomeTags(@PathVariable int month, @PathVariable int year){
+    return bankStatisticsInterface.getMonthlyIncomeTagsGroupedByTag(month, year);
+  }
+
+  @RequestMapping(value = "monthlyExpenseTags/{year}/{month}")
+  public List<TagObject> getMonthlyExpenseTags(@PathVariable int month, @PathVariable int year){
+    return bankStatisticsInterface.getMonthlyExpenseTagsGroupedByTag(month, year);
   }
 }

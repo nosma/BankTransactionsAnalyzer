@@ -59,12 +59,12 @@ app.controller('StatisticsCtrl', function ($scope, $http, $resource, StatisticsS
 
   $scope.getMonthlyIncomeInfo = function (year, month) {
     getMonthlyIncome(year, month);
-    getMonthlyTags(year, month);
+    getMonthlyIncomeTags(year, month);
   };
 
   $scope.getMonthlyExpenseInfo = function (year, month) {
     getMonthlyExpenses(year, month);
-    getMonthlyTags(year, month);
+    getMonthlyExpenseTags(year, month);
   };
 
   StatisticsService.monthlyPnL()
@@ -101,14 +101,25 @@ app.controller('StatisticsCtrl', function ($scope, $http, $resource, StatisticsS
   $scope.showMonthTransactions = true;
   }
 
-  function getMonthlyTags (year, month) {
-    StatisticsService.getMonthlyTags(year,month)
+  function getMonthlyIncomeTags (year, month) {
+    StatisticsService.getMonthlyIncomeTags(year,month)
       .then(function successCallback(response) {
       $scope.monthlyTags = response.data;
       $scope.displayedmonthlyTags = [].concat(response.data);
     }, function errorCallback(response) {
       $scope.monthlyTags = response.data;
     });
+    $scope.showMonthTags = true;
+  }
+
+  function getMonthlyExpenseTags (year, month) {
+    StatisticsService.getMonthlyExpenseTags(year,month)
+      .then(function successCallback(response) {
+        $scope.monthlyTags = response.data;
+        $scope.displayedmonthlyTags = [].concat(response.data);
+      }, function errorCallback(response) {
+        $scope.monthlyTags = response.data;
+      });
     $scope.showMonthTags = true;
   }
 

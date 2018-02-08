@@ -126,20 +126,20 @@ public class StatisticServiceTests {
   @Test
   public void testMonthlyTagsMatchExpected() {
     bankTransactionList.addAll(Arrays.asList(
-        new BankTransaction(LocalDate.of(2018,1,1), "TFL", 1.5)
+        new BankTransaction(LocalDate.of(2018,1,1), "TFL", -1.5)
             .setTagRule(new TagRule("Bus", new ArrayList<>(Arrays.asList("Expenses", "Commute"))))
-        ,new BankTransaction(LocalDate.of(2018,1,5), "TFL", 2.5)
-        ,new BankTransaction(LocalDate.of(2018,1,11), "SAINTS", 20.0)
+        ,new BankTransaction(LocalDate.of(2018,1,5), "TFL", -2.5)
+        ,new BankTransaction(LocalDate.of(2018,1,11), "SAINTS", -20.0)
             .setTagRule(new TagRule("Foodmarket", new ArrayList<>(Arrays.asList("Expenses", "Food"))))
-        ,new BankTransaction(LocalDate.of(2018,1,21), "TESCO", 30.0)
+        ,new BankTransaction(LocalDate.of(2018,1,21), "TESCO", -30.0)
             .setTagRule(new TagRule("Foodmarket", new ArrayList<>(Arrays.asList("Expenses", "Food"))))
     ));
-    final List<TagObject> monthlyTags = bankStatisticsService.getMonthlyTagsGroupedByTag(1, 2018);
+    final List<TagObject> monthlyTags = bankStatisticsService.getMonthlyExpenseTagsGroupedByTag(1, 2018);
     assertEquals(monthlyTags.size(), 4);
-    assertEquals(monthlyTags.stream().filter(t -> t.getTagName().equals("Untagged")).findFirst().get().getAmount(), 2.5);
-    assertEquals(monthlyTags.stream().filter(t -> t.getTagName().equals("Expenses")).findFirst().get().getAmount(), 51.5);
-    assertEquals(monthlyTags.stream().filter(t -> t.getTagName().equals("Commute")).findFirst().get().getAmount(), 1.5);
-    assertEquals(monthlyTags.stream().filter(t -> t.getTagName().equals("Food")).findFirst().get().getAmount(), 50.0);
+    assertEquals(monthlyTags.stream().filter(t -> t.getTagName().equals("Untagged")).findFirst().get().getAmount(), -2.5);
+    assertEquals(monthlyTags.stream().filter(t -> t.getTagName().equals("Expenses")).findFirst().get().getAmount(), -51.5);
+    assertEquals(monthlyTags.stream().filter(t -> t.getTagName().equals("Commute")).findFirst().get().getAmount(), -1.5);
+    assertEquals(monthlyTags.stream().filter(t -> t.getTagName().equals("Food")).findFirst().get().getAmount(), -50.0);
   }
 
   private void setValuesForMedianTests() {

@@ -4,9 +4,15 @@ app.factory('StatisticsService', function ($http, $resource) {
 
   return {
 
-    getMonthlyTags: function (year, month) {
+    getMonthlyIncomeTags: function (year, month) {
       return $http({method: 'POST',
-        url: STATISTICS_API + 'monthlyTags/' + year + '/' + month
+        url: STATISTICS_API + 'monthlyIncomeTags/' + year + '/' + month
+      });
+    },
+
+    getMonthlyExpenseTags: function (year, month) {
+      return $http({method: 'POST',
+        url: STATISTICS_API + 'monthlyExpenseTags/' + year + '/' + month
       });
     },
 
