@@ -39,7 +39,7 @@ public class UploadController {
     this.midataWriter = midataWriter;
   }
 
-  @RequestMapping(value = "/transactions", method = RequestMethod.POST)
+  @PostMapping(value = "/transactions")
   @ResponseBody
   public void uploadTransactions(@RequestParam("file") MultipartFile multipartFile) throws IOException, ParseException {
     File file = getFileFromMultipart(multipartFile);
