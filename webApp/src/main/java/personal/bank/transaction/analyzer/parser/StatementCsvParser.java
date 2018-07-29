@@ -1,7 +1,7 @@
 package personal.bank.transaction.analyzer.parser;
 
 import personal.bank.transaction.analyzer.database.model.BankTransaction;
-import personal.bank.transaction.analyzer.util.DateUtilsImpl;
+import personal.bank.transaction.analyzer.util.DateConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Component;
@@ -16,8 +16,6 @@ import java.util.List;
 @Transactional
 public class StatementCsvParser extends CsvParser {
 
-  private DateUtilsImpl dateUtils = new DateUtilsImpl();
-
   /**
    * Statement parser expect to have 3 headers
    * date : DD/MM/YYYY
@@ -28,7 +26,7 @@ public class StatementCsvParser extends CsvParser {
    * @return BankTransaction list
    */
   @Override
-  public List<BankTransaction> parse(File file) throws IOException, ParseException, java.text.ParseException {
+  public List<BankTransaction> parse(File file) throws IOException, ParseException {
     List<BankTransaction> transactionList = new ArrayList<>();
     FileInputStream fileInputStream = new FileInputStream(file);
     try (BufferedReader br = new BufferedReader(new InputStreamReader(fileInputStream))) {
@@ -47,8 +45,7 @@ public class StatementCsvParser extends CsvParser {
   }
 
   private Double getCost(String line) {
-    return Double.valueOf(line.substring(StringUtils.ordinalIndexOf(line, ",", 2)+1,
-        line.length()));
+    return Double.valueOf(line.substring(StringUtils.ordinalIndexOf(line, ",", 2) + 1));
   }
 
   private String getDescription(String line) {
@@ -57,7 +54,7 @@ public class StatementCsvParser extends CsvParser {
   }
 
   private LocalDate getTransactionDate(String line) {
-    return dateUtils.getStatementDate(line.substring(0, line.indexOf(",")));
+    return DateConverter.getStatementDate(line.substring(0, line.indexOf(',')));
   }
 
   private boolean isStatementLine(String line) {

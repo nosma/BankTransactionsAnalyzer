@@ -1,8 +1,8 @@
 package personal.bank.transaction.analyzer.parser;
 
-import personal.bank.transaction.analyzer.database.model.MidataTransaction;
-import personal.bank.transaction.analyzer.util.DateUtilsImpl;
 import org.apache.commons.lang3.StringUtils;
+import personal.bank.transaction.analyzer.database.model.MidataTransaction;
+import personal.bank.transaction.analyzer.util.DateConverter;
 
 import java.io.*;
 import java.text.ParseException;
@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MidataCsvParser extends CsvParser {
-
-  private DateUtilsImpl dateUtils = new DateUtilsImpl();
 
   /**
    * Midata parser expects to have 5 headers
@@ -54,8 +52,7 @@ public class MidataCsvParser extends CsvParser {
   }
 
   private double getBalance(String line) {
-    String balance = line.substring(StringUtils.ordinalIndexOf(line, ",", 4) + 1,
-        line.length());
+    String balance = line.substring(StringUtils.ordinalIndexOf(line, ",", 4) + 1);
     return Double.valueOf(balance.replace("£", ""));
   }
 
@@ -76,7 +73,7 @@ public class MidataCsvParser extends CsvParser {
   }
 
   private LocalDate getDate(String line) {
-    return dateUtils.getMidataDate(line.substring(0, line.indexOf(",")));
+    return DateConverter.getMidataDate(line.substring(0, line.indexOf(',')));
   }
 
 }
