@@ -28,12 +28,12 @@ public class StatementGenerator {
     try {
       if(!transactionsFile.exists()) {
         if(transactionsFile.createNewFile()) {
-          FileWriter writer = new FileWriter(transactionsFile);
-          while(transactionsFile.length() < MINIMUM_FILE_SIZE) {
-            writer.write(getRandomDate() + "," + getRandomDescription() + "," + getRandomCost() + "\n");
+          try (FileWriter writer = new FileWriter(transactionsFile)) {
+            while (transactionsFile.length() < MINIMUM_FILE_SIZE) {
+              writer.write(getRandomDate() + "," + getRandomDescription() + "," + getRandomCost() + "\n");
+            }
+            writer.flush();
           }
-          writer.flush();
-          writer.close();
           log.info("Big Statement File file created!");
         } else {
           log.error("File " + transactionsFile.getName() + " did not created.");
