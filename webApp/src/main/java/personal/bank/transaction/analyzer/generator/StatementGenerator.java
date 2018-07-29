@@ -17,32 +17,35 @@ public class StatementGenerator {
   private static File transactionsFile = new File(Paths.get(FILENAME).toString());
 
   private static final Logger log = LoggerFactory.getLogger(StatementGenerator.class);
-  private static long MINIMUM_FILE_SIZE = 157286400L; // 150 MB
-  //  private static long MINIMUM_FILE_SIZE = 15728640; // 15 MB
+  private static long minimumFileSize = 157286400L; // 150 MB
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
     generateFile();
   }
 
   private static void generateFile() {
     try {
+      String transactionsFileName = transactionsFile.getName();
       if(!transactionsFile.exists()) {
         if(transactionsFile.createNewFile()) {
           try (FileWriter writer = new FileWriter(transactionsFile)) {
-            while (transactionsFile.length() < MINIMUM_FILE_SIZE) {
+            while (transactionsFile.length() < minimumFileSize) {
               writer.write(getRandomDate() + "," + getRandomDescription() + "," + getRandomCost() + "\n");
             }
             writer.flush();
           }
           log.info("Big Statement File file created!");
         } else {
-          log.error("File " + transactionsFile.getName() + " did not created.");
+          String exception = String.format("File %s did not created.", transactionsFileName);
+          log.error(exception);
         }
       } else {
-        log.warn("File " + transactionsFile.getName() + " already exists.");
+        String exception = String.format("File %s already exists.", transactionsFileName);
+        log.warn(exception);
       }
     } catch(IOException e) {
-      log.error("Error while creating file: " + e);
+      String exception = "Error while creating file." + e;
+      log.error(exception);
     }
   }
 
