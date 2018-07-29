@@ -1,4 +1,4 @@
-package personal.bank.transaction.analyzer.it;
+package personal.it;
 
 import org.springframework.mock.web.MockMultipartFile;
 import org.testng.annotations.BeforeClass;
@@ -7,7 +7,7 @@ import personal.bank.transaction.analyzer.database.dao.BankTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MidataTransactionDao;
 import personal.bank.transaction.analyzer.database.dao.MonthStatDao;
 import personal.bank.transaction.analyzer.database.model.BankTransaction;
-import personal.bank.transaction.analyzer.file.parser.MidataCsvParser;
+import personal.bank.transaction.analyzer.parser.MidataCsvParser;
 import personal.bank.transaction.analyzer.web.service.MidataWriterService;
 import personal.bank.transaction.analyzer.web.service.StatementWriterService;
 import personal.bank.transaction.analyzer.web.controller.UploadController;

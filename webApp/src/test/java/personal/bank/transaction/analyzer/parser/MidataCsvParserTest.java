@@ -1,4 +1,4 @@
-package personal.bank.transaction.analyzer.file.parser;
+package personal.bank.transaction.analyzer.parser;
 
 import org.springframework.mock.web.MockMultipartFile;
 import org.testng.annotations.AfterMethod;

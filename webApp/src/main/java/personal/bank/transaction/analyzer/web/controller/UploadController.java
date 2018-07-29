@@ -11,9 +11,9 @@ import javax.inject.Inject;
 
 import personal.bank.transaction.analyzer.database.model.BankTransaction;
 import personal.bank.transaction.analyzer.database.model.MidataTransaction;
-import personal.bank.transaction.analyzer.file.parser.FileParser;
-import personal.bank.transaction.analyzer.file.parser.MidataCsvParser;
-import personal.bank.transaction.analyzer.file.parser.StatementCsvParser;
+import personal.bank.transaction.analyzer.parser.FileParser;
+import personal.bank.transaction.analyzer.parser.MidataCsvParser;
+import personal.bank.transaction.analyzer.parser.StatementCsvParser;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;

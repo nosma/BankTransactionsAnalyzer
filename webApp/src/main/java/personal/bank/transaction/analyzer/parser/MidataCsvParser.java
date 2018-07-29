@@ -1,4 +1,4 @@
-package personal.bank.transaction.analyzer.file.parser;
+package personal.bank.transaction.analyzer.parser;
 
 import personal.bank.transaction.analyzer.database.model.MidataTransaction;
 import personal.bank.transaction.analyzer.util.DateUtilsImpl;
