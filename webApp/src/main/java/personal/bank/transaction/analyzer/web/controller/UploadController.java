@@ -76,7 +76,7 @@ public class UploadController {
   public File getFileFromMultipart(MultipartFile multipartFile) {
     String path = inputDirectory + File.separator;
     String pathToFile = path + multipartFile.getOriginalFilename();
-    if(Files.notExists(Paths.get(pathToFile))) {
+    if(!Paths.get(pathToFile).toFile().exists()) {
       createPathAndFile(path, pathToFile);
       writeFile(multipartFile, pathToFile);
     } else {
