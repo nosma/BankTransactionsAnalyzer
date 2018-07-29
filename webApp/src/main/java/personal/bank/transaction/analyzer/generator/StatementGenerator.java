@@ -59,12 +59,11 @@ public class StatementGenerator {
 
   // DESCRIPTION FORMAT: NEXT RETAIL LTD STRATFORD
   private static String getRandomDescription() {
-    String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    String saltChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
     StringBuilder salt = new StringBuilder();
-    Random rnd = new Random();
     while (salt.length() < 18) {
-      int index = (int) (rnd.nextFloat() * SALTCHARS.length());
-      salt.append(SALTCHARS.charAt(index));
+      int index = (new Random().nextInt() * saltChars.length());
+      salt.append(saltChars.charAt(index));
     }
     return salt.toString();
   }
