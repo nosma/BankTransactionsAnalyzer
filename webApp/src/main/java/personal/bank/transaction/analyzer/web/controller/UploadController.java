@@ -64,13 +64,13 @@ public class UploadController {
   private boolean saveMidata(File file) throws IOException, ParseException {
     List<MidataTransaction> midataTransactions = new MidataCsvParser().parse(file);
     midataWriter.processTransactions(midataTransactions);
-    return midataTransactions.size() > 0;
+    return midataTransactions.isEmpty();
   }
 
   private boolean saveStatements(File file) throws IOException, ParseException {
     List<BankTransaction> statements = new StatementCsvParser().parse(file);
     statementWriter.processTransactions(statements);
-    return statements.size() > 0;
+    return statements.isEmpty();
   }
 
   public File getFileFromMultipart(MultipartFile multipartFile) {
