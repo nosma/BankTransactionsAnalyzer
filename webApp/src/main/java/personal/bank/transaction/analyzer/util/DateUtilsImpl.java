@@ -13,9 +13,6 @@ public class DateUtilsImpl implements DateUtils {
   private static final String STATEMENT_DATE_PATTERN = "yyyy-MM-dd";
   private static final Logger logger = Logger.getLogger(DateUtilsImpl.class);
 
-  public DateUtilsImpl() {
-  }
-
   public LocalDate getStatementDate(String date) {
     LocalDate statementDate = null;
     try {
