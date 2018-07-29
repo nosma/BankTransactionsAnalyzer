@@ -95,11 +95,8 @@ public class UploadController {
   }
 
   private void writeFile(MultipartFile multipartFile, String pathToFile) {
-    FileOutputStream outputStream;
-    try {
-      outputStream = new FileOutputStream(pathToFile);
+    try (FileOutputStream outputStream = new FileOutputStream(pathToFile)) {
       outputStream.write(multipartFile.getBytes());
-      outputStream.close();
     } catch(IOException e) {
       log.error("Error while writing to file: " + e);
     }
