@@ -13,14 +13,13 @@ public class YearMonthAttributeConverter implements AttributeConverter<YearMonth
   @Override
   public Date convertToDatabaseColumn(YearMonth yearMonth) {
     LocalDate localDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), 1);
-    return (yearMonth == null ? null : Date.valueOf(localDate));
+    return Date.valueOf(localDate);
   }
 
   @Override
   public YearMonth convertToEntityAttribute(Date sqlDate) {
     Calendar cal = Calendar.getInstance();
     cal.setTime(sqlDate);
-    YearMonth yearMonth = YearMonth.of(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1);
-    return (sqlDate == null ? null : yearMonth);
+    return YearMonth.of(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1);
   }
 }
